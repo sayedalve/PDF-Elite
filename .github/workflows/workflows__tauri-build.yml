@@ -1,51 +1,42 @@
 name: Build Tauri Applications
 
-# Multi-OS Tauri desktop bundle build matrix (Windows / macOS universal /
-# Linux). Called from build.yml on PRs that touch desktop sources (gated
-# via the `tauri` filter in .github/config/.files.yaml). Also runnable
-# on demand via workflow_dispatch with a per-platform selector.
-#
-# Note: editing this file is itself enough to make the `tauri` path filter
-# match, which is how non-desktop PRs (e.g. backend-only fixes) opt into a
-# desktop smoke build.
+# Windows-only Tauri desktop bundle build.
+# Called from build.yml on PRs that touch desktop sources.
+# Also runnable on demand via workflow_dispatch.
 on:
   workflow_call:
     inputs:
       platform:
-        description: "Platform to build (windows, macos, linux, windows-macos, or all)."
+        description: "Platform to build (windows only)."
         required: false
         type: string
-        default: "all"
+        default: "windows"
       sign:
-        description: "Sign and notarize the bundles."
+        description: "Sign the bundles."
         required: false
         type: boolean
         default: true
       minimal:
-        description: "Fast smoke build: Linux deb only, skip rpm and the flaky AppImage pass. Used by PR builds."
+        description: "Fast smoke build. Used by PR builds."
         required: false
         type: boolean
         default: false
   workflow_dispatch:
     inputs:
       platform:
-        description: "Platform to build (windows, macos, linux, windows-macos, or all)"
+        description: "Platform to build (windows only)"
         required: true
-        default: "all"
+        default: "windows"
         type: choice
         options:
-          - all
           - windows
-          - macos
-          - linux
-          - windows-macos
       sign:
-        description: "Sign and notarize the bundles."
+        description: "Sign the bundles."
         required: false
         default: true
         type: boolean
       minimal:
-        description: "Fast smoke build: Linux deb only, skip rpm and the flaky AppImage pass."
+        description: "Fast smoke build."
         required: false
         default: false
         type: boolean
@@ -69,30 +60,19 @@ jobs:
       - name: Determine build matrix
         id: set-matrix
         env:
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           PLATFORM: ${{ inputs.platform }}
         run: |
           WINDOWS='{"platform":"windows-latest","args":"--target x86_64-pc-windows-msvc","name":"windows-x86_64","jpdfium_platforms":"windows-x64"}'
-          MACOS='{"platform":"macos-15","args":"--target universal-apple-darwin","name":"macos-universal","jpdfium_platforms":"darwin-arm64,darwin-x64"}'
-          LINUX='{"platform":"ubuntu-22.04","args":"","name":"linux-x86_64","jpdfium_platforms":"linux-x64"}'
 
           case "$PLATFORM" in
-            windows)       ENTRIES=("$WINDOWS") ;;
-            macos)         ENTRIES=("$MACOS") ;;
-            linux)         ENTRIES=("$LINUX") ;;
-            windows-macos) ENTRIES=("$WINDOWS" "$MACOS") ;;
-            *)             ENTRIES=("$WINDOWS" "$MACOS" "$LINUX") ;;
+            windows|all)
+              ENTRIES=("$WINDOWS")
+              ;;
+            *)
+              echo "⚠️ Only Windows builds are enabled."
+              ENTRIES=("$WINDOWS")
+              ;;
           esac
-
-          # Drop macOS entries when Apple certificate secret is unavailable
-          if [ -z "$APPLE_CERTIFICATE" ]; then
-            echo "⚠️ APPLE_CERTIFICATE secret not available - skipping macOS builds"
-            FILTERED=()
-            for entry in "${ENTRIES[@]}"; do
-              [[ "$entry" != *'"macos'* ]] && FILTERED+=("$entry")
-            done
-            ENTRIES=("${FILTERED[@]}")
-          fi
 
           JOINED=$(IFS=','; echo "${ENTRIES[*]}")
           echo "matrix={\"include\":[$JOINED]}" >> $GITHUB_OUTPUT
