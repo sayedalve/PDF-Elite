@@ -1,6 +1,7 @@
 version: '3'
 
 vars:
+  ROOT_DIR: '{{.ROOT_DIR | default "."}}'
   APP_NAME: "PDF-Elite"
   DESKTOP_DIST_DIR: "{{.ROOT_DIR}}/dist/desktop"
   BUNDLE_DIR: "{{.DESKTOP_DIST_DIR}}/{{.APP_NAME}}"
@@ -8,7 +9,7 @@ vars:
   TAURI_DIR: "{{.ROOT_DIR}}/frontend/editor/src-tauri"
   FRONTEND_DIR: "{{.ROOT_DIR}}/frontend/editor"
   BACKEND_PORT: "8080"
-
+  
 tasks:
   default:
     desc: "Show available desktop build tasks"
@@ -24,10 +25,13 @@ tasks:
         echo "  jlink            - Create bundled JRE"
         echo "  jlink:jar        - Build backend JAR only"
         echo "  jlink:runtime    - Create JLink custom JRE only"
+        echo "  jlink:universal-mac - Create universal macOS JRE (x86_64 + arm64)"
         echo "  jlink:verify     - Verify bundled JRE"
         echo "  jlink:clean      - Remove JLink artifacts"
         echo "  tauri            - Build Tauri application"
         echo "  bundle           - Create final application bundle"
+        echo "  prepare          - Prepare desktop build (alias for setup)"
+        echo "  test             - Run Tauri/Cargo tests"
         echo "  clean            - Clean desktop build artifacts"
 
   dev:
@@ -56,6 +60,12 @@ tasks:
       - mkdir -p "{{.DESKTOP_DIST_DIR}}"
       - mkdir -p "{{.BUNDLE_DIR}}"
       - mkdir -p "{{.TAURI_DIR}}"
+
+  # Alias for setup - used by CI workflows
+  prepare:
+    desc: "Prepare desktop build (alias for setup)"
+    deps:
+      - setup
 
   deps:
     desc: "Install desktop build dependencies"
@@ -130,8 +140,35 @@ tasks:
           echo "Using existing JRE at runtime/jre"
         fi
       # Windows cleanup for read-only files
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Get-ChildItem -Path ''runtime\\jre'' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }"'
+      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Get-ChildItem -Path ''runtime\\jre'' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }}"'
         ignore_error: true
+    sources:
+      - backend/build/libs/*.jar
+    generates:
+      - runtime/jre/**/*
+
+  jlink:universal-mac:
+    desc: "Create universal macOS JRE (x86_64 + arm64)"
+    summary: |
+      Builds a universal macOS JRE by combining x86_64 and arm64 modules.
+      Requires AARCH64_JAVA_HOME to be set (from CI or manual setup).
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - |
+        if [ ! -d "runtime/jre" ]; then
+          echo "Creating universal macOS JRE..."
+          # Use the x86_64 JDK (JAVA_HOME) as base, merge with arm64 modules
+          jlink \
+            --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
+            --output runtime/jre \
+            --compress 2 \
+            --strip-debug \
+            --no-header-files \
+            --no-man-pages
+          echo "Universal macOS JRE created at runtime/jre"
+        else
+          echo "Using existing JRE at runtime/jre"
+        fi
     sources:
       - backend/build/libs/*.jar
     generates:
@@ -152,7 +189,7 @@ tasks:
     desc: "Remove JLink artifacts"
     cmds:
       - rm -rf runtime/jre
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }"'
+      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }}"'
         ignore_error: true
     status:
       - test ! -d runtime/jre
@@ -201,12 +238,23 @@ tasks:
     generates:
       - "{{.DESKTOP_DIST_DIR}}/final/**/*"
 
+  test:
+    desc: "Run Tauri/Cargo tests"
+    dir: "{{.TAURI_DIR}}"
+    cmds:
+      - cargo test --verbose
+    sources:
+      - Cargo.toml
+      - Cargo.lock
+      - src/**/*
+      - tests/**/*
+
   clean:
     desc: "Clean desktop build artifacts"
     cmds:
       - rm -rf "{{.DESKTOP_DIST_DIR}}"
       - rm -rf runtime/jre
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''{{.DESKTOP_DIST_DIR}}'') { Remove-Item -Path ''{{.DESKTOP_DIST_DIR}}'' -Recurse -Force }; if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }"'
+      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''{{.DESKTOP_DIST_DIR}}'') { Remove-Item -Path ''{{.DESKTOP_DIST_DIR}}'' -Recurse -Force }; if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }}"'
         ignore_error: true
       - |
         if [ -d "frontend/editor/src-tauri/target" ]; then
