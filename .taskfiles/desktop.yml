@@ -37,10 +37,10 @@ tasks:
   dev:
     desc: "Start desktop app in development mode"
     deps:
-      - task: backend:dev
+      - task: :backend:dev
         vars:
           PORT: "{{.BACKEND_PORT}}"
-      - task: frontend:dev
+      - task: :frontend:dev:desktop
         vars:
           PORT: "5173"
           BACKEND_URL: "http://localhost:{{.BACKEND_PORT}}"
@@ -80,19 +80,19 @@ tasks:
   backend:
     desc: "Build backend components for desktop"
     deps:
-      - task: backend:build
+      - task: :backend:build
     dir: "{{.ROOT_DIR}}"
     sources:
       - backend/**/*
-      - build.gradle.kts
-      - settings.gradle.kts
+      - build.gradle
+      - settings.gradle
     generates:
       - backend/build/libs/*.jar
 
   frontend:
     desc: "Build frontend components for desktop"
     deps:
-      - task: frontend:build:desktop
+      - task: :frontend:build:desktop
     dir: "{{.FRONTEND_DIR}}"
     sources:
       - src/**/*
@@ -110,13 +110,14 @@ tasks:
   jlink:jar:
     desc: "Build backend JAR only"
     deps:
-      - task: backend:build
+      - task: :backend:build
     dir: "{{.ROOT_DIR}}"
     cmds:
       - echo "Backend JAR built at backend/build/libs/"
     sources:
       - backend/**/*
-      - build.gradle.kts
+      - build.gradle
+      - settings.gradle
     generates:
       - backend/build/libs/*.jar
 
