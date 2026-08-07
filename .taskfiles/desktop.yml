@@ -113,13 +113,14 @@ tasks:
       - task: :backend:build
     dir: "{{.ROOT_DIR}}"
     cmds:
-      - echo "Backend JAR built at backend/build/libs/"
+      - echo "Backend JAR built at app/core/build/libs/"
     sources:
-      - backend/**/*
+      - app/core/**/*
+      - app/common/**/*
       - build.gradle
       - settings.gradle
     generates:
-      - backend/build/libs/*.jar
+      - app/core/build/libs/*.jar
 
   jlink:runtime:
     desc: "Create JLink custom JRE only"
