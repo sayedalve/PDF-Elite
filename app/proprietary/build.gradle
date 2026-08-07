@@ -51,7 +51,7 @@ dependencies {
     api "io.jsonwebtoken:jjwt-api:${rootProject.ext.jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${rootProject.ext.jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:${rootProject.ext.jwtVersion}"
-    runtimeOnly 'com.h2database:h2:2.3.232'
+    runtimeOnly 'com.h2database:h2:2.4.240'
     runtimeOnly 'org.postgresql:postgresql:42.7.13'
     implementation('com.coveo:saml-client:5.0.0') {
         exclude group: 'org.opensaml', module: 'opensaml-core'
