@@ -204,6 +204,7 @@ jobs:
           DISABLE_ADDITIONAL_FEATURES: true
           JPDFIUM_PLATFORMS: ${{ matrix.jpdfium_platforms }}
         run: task desktop:prepare
+        shell: bash
 
       - name: Build backend JAR for Tauri
         env:
