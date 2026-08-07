@@ -200,6 +200,7 @@ tasks:
     deps:
       - frontend
       - jlink
+      - copy-jar
     dir: "{{.TAURI_DIR}}"
     cmds:
       - cargo tauri build --verbose
@@ -211,8 +212,29 @@ tasks:
       - ../src/**/*
       - ../dist/**/*
       - ../runtime/jre/**
+      - libs/*.jar
     generates:
       - target/release/bundle/**/*
+
+  copy-jar:
+    desc: "Copy backend JAR to Tauri libs directory"
+    deps:
+      - jlink:jar
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - |
+        mkdir -p frontend/editor/src-tauri/libs
+        BUILT_JAR=$$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
+        if [ -z "$$BUILT_JAR" ]; then
+          echo "Error: Backend JAR not found in app/core/build/libs/"
+          exit 1
+        fi
+        cp "$$BUILT_JAR" frontend/editor/src-tauri/libs/
+        echo "Copied $$(basename $$BUILT_JAR) to frontend/editor/src-tauri/libs/"
+    sources:
+      - app/core/build/libs/*.jar
+    generates:
+      - frontend/editor/src-tauri/libs/*.jar
 
   bundle:
     desc: "Create final application bundle"
