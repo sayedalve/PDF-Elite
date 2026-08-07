@@ -205,9 +205,9 @@ jobs:
           JPDFIUM_PLATFORMS: ${{ matrix.jpdfium_platforms }}
         run: task desktop:prepare
 
-      - name: Run Tauri/Cargo tests
-        working-directory: frontend/editor
-        run: task desktop:test
+      - name: Run Tauri/Cargo tests (direct)
+        working-directory: frontend/editor/src-tauri
+        run: cargo test --verbose
 
       # DigiCert KeyLocker Setup (Cloud HSM)
       - name: Setup DigiCert KeyLocker
