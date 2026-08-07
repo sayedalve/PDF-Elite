@@ -217,6 +217,7 @@ jobs:
       - name: Run Tauri/Cargo tests (direct)
         working-directory: frontend/editor/src-tauri
         run: cargo test --verbose
+        shell: bash
 
       # DigiCert KeyLocker Setup (Cloud HSM)
       - name: Setup DigiCert KeyLocker
