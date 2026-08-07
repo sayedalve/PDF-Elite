@@ -211,16 +211,8 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           MAVEN_PUBLIC_URL: ${{ secrets.MAVEN_PUBLIC_URL }}
           DISABLE_ADDITIONAL_FEATURES: true
-        run: |
-          ./gradlew :stirling-pdf:bootJar -x test --no-daemon
-          mkdir -p frontend/editor/src-tauri/libs
-          BUILT_JAR=$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
-          if [ -z "$BUILT_JAR" ]; then
-            echo "Error: Backend JAR not found"
-            exit 1
-          fi
-          cp "$BUILT_JAR" frontend/editor/src-tauri/libs/
-          echo "Copied $(basename "$BUILT_JAR") to frontend/editor/src-tauri/libs/"
+        run: task desktop:copy-jar
+        shell: bash
 
       - name: Run Tauri/Cargo tests (direct)
         working-directory: frontend/editor/src-tauri
