@@ -151,7 +151,8 @@ jobs:
       # Cache the Cargo registry and compiled dependency crates so the build
       # only recompiles the app crate. Written on main; PRs and the merge queue
       # restore from it.
-      - name: Cache Rust build
+      - name: Cache Rust build (skip on Windows)
+        if: matrix.platform != 'windows-latest'
         uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
         with:
           workspaces: frontend/editor/src-tauri
@@ -205,6 +206,7 @@ jobs:
         run: task desktop:prepare
 
       - name: Run Tauri/Cargo tests
+        working-directory: frontend/editor
         run: task desktop:test
 
       # DigiCert KeyLocker Setup (Cloud HSM)
