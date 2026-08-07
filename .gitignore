@@ -1,52 +1,52 @@
 ```
-# Configuration and system files
-*.tmp
-*.log
-*.swp
-*.swo
-
-# Environment files
+# Environment
 .env
 .env.local
 *.env.*
 
 # Dependencies
 node_modules/
-venv/
 .venv/
+venv/
 __pycache__/
 .mypy_cache/
 .pytest_cache/
-target/
-.gradle/
+.julia/
+zig*/
+julia-*/
 
 # Build artifacts
 dist/
 build/
+target/
+*.o
+*.obj
+*.out
 *.pyc
 *.class
-*.o
 *.exe
 *.dll
 *.so
 *.a
-*.obj
-*.out
 
-# Editor/IDE files
-.vscode/
-.idea/
+# Logs and temporary files
+*.log
+*.tmp
 *.swp
 *.swo
 
-# System files
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Coverage
+# Coverage reports
 coverage/
 htmlcov/
 .coverage
+
+# Editors
+.vscode/
+.idea/
 
 # Compressed files
 *.zip
