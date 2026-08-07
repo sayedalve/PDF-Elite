@@ -57,11 +57,11 @@ tasks:
     deps:
       - deps
     cmds:
-      - mkdir -p "{{.DESKTOP_DIST_DIR}}"
-      - mkdir -p "{{.BUNDLE_DIR}}"
-      - mkdir -p "{{.TAURI_DIR}}"
+      - cmd: mkdir -p "{{.DESKTOP_DIST_DIR}}" "{{.BUNDLE_DIR}}" "{{.TAURI_DIR}}"
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "$dirs = @('{{.DESKTOP_DIST_DIR}}', '{{.BUNDLE_DIR}}', '{{.TAURI_DIR}}'); foreach ($dir in $dirs) { if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null } }"
+        platforms: [windows]
 
-  # Alias for setup - used by CI workflows
   prepare:
     desc: "Prepare desktop build (alias for setup)"
     deps:
@@ -70,12 +70,15 @@ tasks:
   deps:
     desc: "Install desktop build dependencies"
     cmds:
-      - |
-        if [ ! -f "{{.ROOT_DIR}}/node_modules/.bin/tauri" ]; then
-          npm install @tauri-apps/cli --save-dev
-        fi
+      - cmd: |
+          if [ ! -f "{{.ROOT_DIR}}/node_modules/.bin/tauri" ]; then
+            npm install @tauri-apps/cli --save-dev
+          fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (-not (Test-Path '{{.ROOT_DIR}}/node_modules/.bin/tauri.cmd')) { npm install @tauri-apps/cli --save-dev }"
+        platforms: [windows]
     status:
-      - test -f "{{.ROOT_DIR}}/node_modules/.bin/tauri"
+      - test -f "{{.ROOT_DIR}}/node_modules/.bin/tauri" || test -f "{{.ROOT_DIR}}/node_modules/.bin/tauri.cmd"
 
   backend:
     desc: "Build backend components for desktop"
@@ -128,22 +131,25 @@ tasks:
       - jlink:jar
     dir: "{{.ROOT_DIR}}"
     cmds:
-      - |
-        if [ ! -d "runtime/jre" ]; then
-          echo "Creating bundled JRE..."
-          jlink \
-            --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
-            --output runtime/jre \
-            --compress 2 \
-            --strip-debug \
-            --no-header-files \
-            --no-man-pages
-        else
-          echo "Using existing JRE at runtime/jre"
-        fi
-      # Windows cleanup for read-only files
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Get-ChildItem -Path ''runtime\\jre'' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }}"'
+      - cmd: |
+          if [ ! -d "runtime/jre" ]; then
+            echo "Creating bundled JRE..."
+            jlink \
+              --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
+              --output runtime/jre \
+              --compress 2 \
+              --strip-debug \
+              --no-header-files \
+              --no-man-pages
+          else
+            echo "Using existing JRE at runtime/jre"
+          fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (-not (Test-Path 'runtime/jre')) { Write-Host 'Creating bundled JRE...'; jlink --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs --output runtime/jre --compress 2 --strip-debug --no-header-files --no-man-pages } else { Write-Host 'Using existing JRE at runtime/jre' }"
+        platforms: [windows]
+      - cmd: powershell -NoProfile -Command "if (Test-Path 'runtime\jre') { Get-ChildItem -Path 'runtime\jre' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }"
         ignore_error: true
+        platforms: [windows]
     sources:
       - backend/build/libs/*.jar
     generates:
@@ -156,21 +162,22 @@ tasks:
       Requires AARCH64_JAVA_HOME to be set (from CI or manual setup).
     dir: "{{.ROOT_DIR}}"
     cmds:
-      - |
-        if [ ! -d "runtime/jre" ]; then
-          echo "Creating universal macOS JRE..."
-          # Use the x86_64 JDK (JAVA_HOME) as base, merge with arm64 modules
-          jlink \
-            --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
-            --output runtime/jre \
-            --compress 2 \
-            --strip-debug \
-            --no-header-files \
-            --no-man-pages
-          echo "Universal macOS JRE created at runtime/jre"
-        else
-          echo "Using existing JRE at runtime/jre"
-        fi
+      - cmd: |
+          if [ ! -d "runtime/jre" ]; then
+            echo "Creating universal macOS JRE..."
+            # Use the x86_64 JDK (JAVA_HOME) as base, merge with arm64 modules
+            jlink \
+              --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
+              --output runtime/jre \
+              --compress 2 \
+              --strip-debug \
+              --no-header-files \
+              --no-man-pages
+            echo "Universal macOS JRE created at runtime/jre"
+          else
+            echo "Using existing JRE at runtime/jre"
+          fi
+        platforms: [darwin]
     sources:
       - backend/build/libs/*.jar
     generates:
@@ -190,9 +197,11 @@ tasks:
   jlink:clean:
     desc: "Remove JLink artifacts"
     cmds:
-      - rm -rf runtime/jre
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }}"'
+      - cmd: rm -rf runtime/jre
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (Test-Path 'runtime/jre') { Remove-Item -Path 'runtime/jre' -Recurse -Force }"
         ignore_error: true
+        platforms: [windows]
     status:
       - test ! -d runtime/jre
 
@@ -223,15 +232,18 @@ tasks:
       - jlink:jar
     dir: "{{.ROOT_DIR}}"
     cmds:
-      - |
-        mkdir -p frontend/editor/src-tauri/libs
-        BUILT_JAR=$$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
-        if [ -z "$$BUILT_JAR" ]; then
-          echo "Error: Backend JAR not found in app/core/build/libs/"
-          exit 1
-        fi
-        cp "$$BUILT_JAR" frontend/editor/src-tauri/libs/
-        echo "Copied $$(basename $$BUILT_JAR) to frontend/editor/src-tauri/libs/"
+      - cmd: |
+          mkdir -p frontend/editor/src-tauri/libs
+          BUILT_JAR=$$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
+          if [ -z "$$BUILT_JAR" ]; then
+            echo "Error: Backend JAR not found in app/core/build/libs/"
+            exit 1
+          fi
+          cp "$$BUILT_JAR" frontend/editor/src-tauri/libs/
+          echo "Copied $$(basename $$BUILT_JAR) to frontend/editor/src-tauri/libs/"
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (-not (Test-Path 'frontend/editor/src-tauri/libs')) { New-Item -ItemType Directory -Force -Path 'frontend/editor/src-tauri/libs' | Out-Null }; $builtJar = Get-ChildItem -Path 'app/core/build/libs/stirling-pdf-*.jar' | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if ($null -eq $builtJar) { Write-Error 'Error: Backend JAR not found in app/core/build/libs/'; exit 1 }; Copy-Item -Path $builtJar.FullName -Destination 'frontend/editor/src-tauri/libs/' -Force; Write-Host 'Copied JAR to frontend/editor/src-tauri/libs/'"
+        platforms: [windows]
     sources:
       - app/core/build/libs/*.jar
     generates:
@@ -243,18 +255,19 @@ tasks:
       - tauri
     dir: "{{.ROOT_DIR}}"
     cmds:
-      - |
-        echo "Creating application bundle..."
-        mkdir -p "{{.DESKTOP_DIST_DIR}}/final"
-        cp -r runtime/jre "{{.DESKTOP_DIST_DIR}}/final/"
-        cp -r frontend/editor/dist "{{.DESKTOP_DIST_DIR}}/final/web"
-        if [ "{{OS}}" = "windows" ]; then
-          cp frontend/editor/src-tauri/target/release/bundle/msi/*.msi "{{.DESKTOP_DIST_DIR}}/final/"
-        elif [ "{{OS}}" = "darwin" ]; then
-          cp frontend/editor/src-tauri/target/release/bundle/macos/*.app "{{.DESKTOP_DIST_DIR}}/final/"
-        else
-          cp frontend/editor/src-tauri/target/release/bundle/deb/*.deb "{{.DESKTOP_DIST_DIR}}/final/"
-        fi
+      - cmd: |
+          echo "Creating application bundle..."
+          mkdir -p "{{.DESKTOP_DIST_DIR}}/final"
+          cp -r runtime/jre "{{.DESKTOP_DIST_DIR}}/final/"
+          cp -r frontend/editor/dist "{{.DESKTOP_DIST_DIR}}/final/web"
+          if [ "{{OS}}" = "darwin" ]; then
+            cp -R frontend/editor/src-tauri/target/release/bundle/macos/*.app "{{.DESKTOP_DIST_DIR}}/final/"
+          else
+            cp frontend/editor/src-tauri/target/release/bundle/deb/*.deb "{{.DESKTOP_DIST_DIR}}/final/"
+          fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "Write-Host 'Creating application bundle...'; if (-not (Test-Path '{{.DESKTOP_DIST_DIR}}/final')) { New-Item -ItemType Directory -Force -Path '{{.DESKTOP_DIST_DIR}}/final' | Out-Null }; Copy-Item -Path 'runtime/jre' -Destination '{{.DESKTOP_DIST_DIR}}/final/' -Recurse -Force; Copy-Item -Path 'frontend/editor/dist' -Destination '{{.DESKTOP_DIST_DIR}}/final/web' -Recurse -Force; if (Test-Path 'frontend/editor/src-tauri/target/release/bundle/msi/*.msi') { Copy-Item -Path 'frontend/editor/src-tauri/target/release/bundle/msi/*.msi' -Destination '{{.DESKTOP_DIST_DIR}}/final/' -Force }"
+        platforms: [windows]
     sources:
       - runtime/jre/**
       - frontend/editor/dist/**/*
@@ -276,13 +289,14 @@ tasks:
   clean:
     desc: "Clean desktop build artifacts"
     cmds:
-      - rm -rf "{{.DESKTOP_DIST_DIR}}"
-      - rm -rf runtime/jre
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''{{.DESKTOP_DIST_DIR}}'') { Remove-Item -Path ''{{.DESKTOP_DIST_DIR}}'' -Recurse -Force }; if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }}"'
-        ignore_error: true
-      - |
-        if [ -d "frontend/editor/src-tauri/target" ]; then
-          cd frontend/editor/src-tauri && cargo clean
-        fi
+      - cmd: |
+          rm -rf "{{.DESKTOP_DIST_DIR}}"
+          rm -rf runtime/jre
+          if [ -d "frontend/editor/src-tauri/target" ]; then
+            cd frontend/editor/src-tauri && cargo clean
+          fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (Test-Path '{{.DESKTOP_DIST_DIR}}') { Remove-Item -Path '{{.DESKTOP_DIST_DIR}}' -Recurse -Force }; if (Test-Path 'runtime/jre') { Remove-Item -Path 'runtime/jre' -Recurse -Force }; if (Test-Path 'frontend/editor/src-tauri/target') { Set-Location -Path 'frontend/editor/src-tauri'; cargo clean }"
+        platforms: [windows]
     status:
       - test ! -d "{{.DESKTOP_DIST_DIR}}"
