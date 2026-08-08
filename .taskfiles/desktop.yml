@@ -1,13 +1,12 @@
 version: '3'
 
 vars:
-  ROOT_DIR: '{{.ROOT_DIR | default "."}}'
   APP_NAME: "PDF-Elite"
-  DESKTOP_DIST_DIR: "{{.ROOT_DIR}}/dist/desktop"
+  DESKTOP_DIST_DIR: "dist/desktop"
   BUNDLE_DIR: "{{.DESKTOP_DIST_DIR}}/{{.APP_NAME}}"
-  JRE_HOME: "{{.ROOT_DIR}}/runtime/jre"
-  TAURI_DIR: "{{.ROOT_DIR}}/frontend/editor/src-tauri"
-  FRONTEND_DIR: "{{.ROOT_DIR}}/frontend/editor"
+  JRE_HOME: "runtime/jre"
+  TAURI_DIR: "frontend/editor/src-tauri"
+  FRONTEND_DIR: "frontend/editor"
   BACKEND_PORT: "8080"
   
 tasks:
@@ -71,17 +70,17 @@ tasks:
     desc: "Install desktop build dependencies"
     cmds:
       - |
-        if [ ! -f "{{.ROOT_DIR}}/node_modules/.bin/tauri" ]; then
+        if [ ! -f "node_modules/.bin/tauri" ]; then
           npm install @tauri-apps/cli --save-dev
         fi
     status:
-      - test -f "{{.ROOT_DIR}}/node_modules/.bin/tauri"
+      - test -f "node_modules/.bin/tauri"
 
   backend:
     desc: "Build backend components for desktop"
     deps:
       - task: :backend:build
-    dir: "{{.ROOT_DIR}}"
+    dir: "."
     sources:
       - backend/**/*
       - build.gradle
