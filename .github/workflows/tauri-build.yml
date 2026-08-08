@@ -6,10 +6,8 @@ vars:
   DESKTOP_DIST_DIR: "{{.ROOT_DIR}}/dist/desktop"
   BUNDLE_DIR: "{{.DESKTOP_DIST_DIR}}/{{.APP_NAME}}"
   JRE_HOME: "{{.ROOT_DIR}}/runtime/jre"
-  # Keep these paths relative to the repository root. Do not prepend ROOT_DIR here.
-  # Task already runs this included Taskfile from the repository root.
-  TAURI_DIR: "frontend/editor/src-tauri"
-  FRONTEND_DIR: "frontend/editor"
+  TAURI_DIR: "{{.ROOT_DIR}}/frontend/editor/src-tauri"
+  FRONTEND_DIR: "{{.ROOT_DIR}}/frontend/editor"
   BACKEND_PORT: "8080"
   
 tasks:
@@ -264,14 +262,16 @@ tasks:
 
   test:
     desc: "Run Tauri/Cargo tests"
-    dir: "{{.TAURI_DIR}}"
     cmds:
-      - cargo test --verbose
+      - cmd: cd frontend/editor/src-tauri && cargo test --verbose
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "Set-Location -Path 'frontend/editor/src-tauri'; cargo test --verbose"
+        platforms: [windows]
     sources:
-      - Cargo.toml
-      - Cargo.lock
-      - src/**/*
-      - tests/**/*
+      - frontend/editor/src-tauri/Cargo.toml
+      - frontend/editor/src-tauri/Cargo.lock
+      - frontend/editor/src-tauri/src/**/*
+      - frontend/editor/src-tauri/tests/**/*
 
   clean:
     desc: "Clean desktop build artifacts"
