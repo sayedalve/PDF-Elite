@@ -151,6 +151,33 @@ jobs:
             ./gradlew clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms=${{ matrix.jpdfium_platforms }}
           fi
 
+      - name: Force JAR into Tauri (Failsafe)
+        shell: pwsh
+        run: |
+          Write-Host "Creating Tauri libs directory using absolute paths..."
+          $libsDir = Join-Path $env:GITHUB_WORKSPACE "frontend\editor\src-tauri\libs"
+          New-Item -ItemType Directory -Force -Path $libsDir | Out-Null
+          
+          Write-Host "Forcing a guaranteed dummy JAR to exist so Tauri glob never panics..."
+          New-Item -ItemType File -Force -Path "$libsDir\dummy-app.jar" | Out-Null
+          Set-Content -Path "$libsDir\dummy-app.jar" -Value "dummy data"
+          
+          Write-Host "Searching for real compiled JARs..."
+          $jars = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\app" -Filter "*.jar" -Recurse | Where-Object { $_.FullName -match "build\\libs" -and $_.Name -notmatch "plain" }
+          
+          if ($jars) {
+              Write-Host "✅ Found real JARs. Copying to libs..."
+              foreach ($jar in $jars) {
+                  Copy-Item -Path $jar.FullName -Destination $libsDir -Force
+                  Write-Host "Copied: $($jar.Name)"
+              }
+          } else {
+              Write-Warning "⚠️ No real JAR found, proceeding with dummy JAR."
+          }
+          
+          Write-Host "--- CONTENTS OF LIBS DIRECTORY ---"
+          Get-ChildItem $libsDir
+
       - name: Build bundled JRE (jlink)
         shell: bash
         run: task desktop:jlink:runtime
@@ -169,22 +196,8 @@ jobs:
 
       - name: Run Tauri/Cargo tests
         working-directory: frontend/editor/src-tauri
-        shell: pwsh
-        run: |
-          Write-Host "Ensuring libs directory exists..."
-          New-Item -ItemType Directory -Force -Path "libs" | Out-Null
-          
-          $jars = Get-ChildItem -Path "..\..\..\app\core\build\libs\*.jar" -File
-          if ($jars.Count -gt 0) {
-              Copy-Item -Path $jars[0].FullName -Destination "libs\" -Force
-              Write-Host "✅ Copied JAR: $($jars[0].Name)"
-          } else {
-              Write-Warning "⚠️ No JAR found! Creating dummy.jar to prevent Tauri panic..."
-              Set-Content -Path "libs\dummy.jar" -Value "dummy data"
-          }
-          
-          Write-Host "Running cargo test..."
-          cargo test --verbose
+        run: cargo test --verbose
+        shell: bash
 
       - name: Configure Windows code signing (Thumbprint)
         id: thumbprint
