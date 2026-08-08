@@ -91,16 +91,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Un-ignore JAR files for Tauri
+      - name: Neutralize .gitignore for Tauri Bundler
         shell: bash
         run: |
-          echo "Tauri's bundler respects .gitignore. Because *.jar is gitignored,"
-          echo "Tauri cannot see the backend JAR and panics with a glob error."
-          echo "Removing *.jar from .gitignore so Tauri can bundle it..."
-          sed -i 's/\*\.jar//g' .gitignore || true
-          if [ -f frontend/editor/src-tauri/.gitignore ]; then
-            sed -i 's/\*\.jar//g' frontend/editor/src-tauri/.gitignore || true
-          fi
+          echo "Tauri's glob resolver ignores files listed in .gitignore."
+          echo "We must explicitly un-ignore JARs so Tauri can see them!"
+          echo "" >> .gitignore
+          echo "!*.jar" >> .gitignore
+          echo "!frontend/editor/src-tauri/libs/**" >> .gitignore
+          
+          echo "Injecting a dummy JAR so rust-cache doesn't panic early..."
+          mkdir -p frontend/editor/src-tauri/libs
+          echo "dummy" > frontend/editor/src-tauri/libs/dummy-app.jar
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -165,10 +167,8 @@ jobs:
       - name: Copy backend JAR to Tauri libs
         shell: bash
         run: |
-          mkdir -p frontend/editor/src-tauri/libs
-          echo "Copying fat JAR (ignoring -plain.jar)..."
+          echo "Copying actual JAR files from Gradle build output..."
           find app/core/build/libs/ -name "*.jar" ! -name "*-plain.jar" -exec cp {} frontend/editor/src-tauri/libs/ \;
-          echo "Contents of src-tauri/libs:"
           ls -la frontend/editor/src-tauri/libs/
 
       - name: Build bundled JRE (jlink)
@@ -178,7 +178,7 @@ jobs:
           DISABLE_ADDITIONAL_FEATURES: true
 
       - name: Build Windows provisioner and thumbnail handler
-        if: matrix.builds_provisioner == true
+        if: matrix.builds_provisioner
         working-directory: frontend
         shell: bash
         run: node editor/scripts/build-provisioner.mjs
