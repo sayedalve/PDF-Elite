@@ -152,17 +152,25 @@ jobs:
           fi
 
       - name: Copy backend JAR to Tauri libs
-        shell: pwsh
+        shell: bash
         run: |
-          New-Item -ItemType Directory -Force -Path "frontend/editor/src-tauri/libs"
-          $jarPath = Get-ChildItem -Path "app/core/build/libs/*.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-          if ($jarPath) {
-              Copy-Item -Path $jarPath.FullName -Destination "frontend/editor/src-tauri/libs/" -Force
-              Write-Host "Successfully copied JAR: $($jarPath.Name)"
-          } else {
-              Write-Warning "JAR file not found! Creating a dummy JAR to prevent Tauri build panic."
-              New-Item -Path "frontend/editor/src-tauri/libs/dummy.jar" -ItemType File
-          }
+          echo "Creating libs directory..."
+          mkdir -p frontend/editor/src-tauri/libs
+          
+          # Find any built JARs in the build/libs directories
+          BUILT_JAR=$(find app -path "*/build/libs/*.jar" -type f 2>/dev/null | grep -v "plain" | head -n 1 || true)
+          
+          if [ -n "$BUILT_JAR" ]; then
+            echo "✅ Found JAR: $BUILT_JAR"
+            cp "$BUILT_JAR" frontend/editor/src-tauri/libs/
+          else
+            echo "⚠️ WARNING: No backend JAR found!"
+            echo "Creating a placeholder with actual content to prevent Tauri crash..."
+            echo "dummy data" > frontend/editor/src-tauri/libs/pdf-elite-dummy.jar
+          fi
+          
+          echo "Contents of Tauri libs directory:"
+          ls -la frontend/editor/src-tauri/libs/
 
       - name: Build bundled JRE (jlink)
         shell: bash
@@ -235,3 +243,111 @@ jobs:
             frontend/editor/src-tauri/target/release/bundle/**/*.msi
             frontend/editor/src-tauri/target/release/bundle/**/*.nsis
           if-no-files-found: warn
+
+  pr-comment:
+    needs: build
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'pull_request' &&
+      needs.build.result == 'success' &&
+      !github.event.pull_request.head.repo.fork &&
+      github.actor != 'dependabot[bot]'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920
+        with:
+          egress-policy: audit
+
+      - name: Post/Update PR Comment with Download Links
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = context.issue.number;
+            const runId = context.runId;
+
+            const { data: artifactsList } = await github.rest.actions.listWorkflowRunArtifacts({
+              owner,
+              repo,
+              run_id: runId
+            });
+
+            const artifactMap = {
+              'PDF-Elite-windows-x86_64': { icon: '🪟', platform: 'Windows x64', files: '.exe, .msi' },
+              'PDF-Elite-windows-arm64': { icon: '🪟', platform: 'Windows ARM64', files: '-setup.exe (NSIS)' }
+            };
+
+            let commentBody = `## 📦 Tauri Desktop Builds Ready!\n\n`;
+            commentBody += `The desktop applications have been built and are ready for testing.\n\n`;
+            commentBody += `### Download Artifacts:\n\n`;
+
+            let foundArtifacts = 0;
+            for (const artifact of artifactsList.artifacts) {
+              const info = artifactMap[artifact.name];
+              if (info) {
+                foundArtifacts++;
+                const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${runId}/artifacts/${artifact.id}`;
+                commentBody += `${info.icon} **${info.platform}**: [Download ${artifact.name}](${artifactUrl}) `;
+                commentBody += `(${info.files}) - ${(artifact.size_in_bytes / 1024 / 1024).toFixed(1)} MB\n`;
+              }
+            }
+
+            if (foundArtifacts === 0) {
+              commentBody += `⚠️ **Warning**: No artifacts found in workflow run.\n`;
+              commentBody += `[View workflow run](https://github.com/${owner}/${repo}/actions/runs/${runId})\n`;
+            }
+
+            commentBody += `\n---\n`;
+            commentBody += `_Built from commit ${context.sha.substring(0, 7)}_\n`;
+            commentBody += `_Artifacts expire in 7 days`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number: prNumber
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('📦 Tauri Desktop Builds Ready!')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: botComment.id,
+                body: commentBody
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: commentBody
+              });
+            }
+
+  report:
+    needs: build
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920
+        with:
+          egress-policy: audit
+
+      - name: Report build results
+        run: |
+          if [ "${{ needs.build.result }}" = "success" ]; then
+            echo "✅ All Tauri builds completed successfully!"
+          elif [ "${{ needs.build.result }}" = "skipped" ]; then
+            echo "⏭️  Tauri builds skipped"
+          else
+            echo "❌ Some Tauri builds failed."
+            exit 1
+          fi
