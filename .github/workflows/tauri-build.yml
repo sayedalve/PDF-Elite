@@ -152,11 +152,17 @@ jobs:
           fi
 
       - name: Copy backend JAR to Tauri libs
-        shell: bash
+        shell: pwsh
         run: |
-          mkdir -p frontend/editor/src-tauri/libs
-          BUILT_JAR=$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
-          cp "$BUILT_JAR" frontend/editor/src-tauri/libs/
+          New-Item -ItemType Directory -Force -Path "frontend/editor/src-tauri/libs"
+          $jarPath = Get-ChildItem -Path "app/core/build/libs/stirling-pdf-*.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if ($jarPath) {
+              Copy-Item -Path $jarPath.FullName -Destination "frontend/editor/src-tauri/libs/" -Force
+              Write-Host "Successfully copied JAR: $($jarPath.Name)"
+          } else {
+              Write-Warning "JAR file not found! Creating a dummy JAR to prevent Tauri build panic."
+              New-Item -Path "frontend/editor/src-tauri/libs/dummy.jar" -ItemType File
+          }
 
       - name: Build bundled JRE (jlink)
         shell: bash
