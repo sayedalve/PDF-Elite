@@ -151,27 +151,6 @@ jobs:
             ./gradlew clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms=${{ matrix.jpdfium_platforms }}
           fi
 
-      - name: Copy backend JAR to Tauri libs
-        shell: bash
-        run: |
-          echo "Creating libs directory..."
-          mkdir -p frontend/editor/src-tauri/libs
-          
-          # Find any built JARs in the build/libs directories
-          BUILT_JAR=$(find app -path "*/build/libs/*.jar" -type f 2>/dev/null | grep -v "plain" | head -n 1 || true)
-          
-          if [ -n "$BUILT_JAR" ]; then
-            echo "✅ Found JAR: $BUILT_JAR"
-            cp "$BUILT_JAR" frontend/editor/src-tauri/libs/
-          else
-            echo "⚠️ WARNING: No backend JAR found!"
-            echo "Creating a placeholder with actual content to prevent Tauri crash..."
-            echo "dummy data" > frontend/editor/src-tauri/libs/pdf-elite-dummy.jar
-          fi
-          
-          echo "Contents of Tauri libs directory:"
-          ls -la frontend/editor/src-tauri/libs/
-
       - name: Build bundled JRE (jlink)
         shell: bash
         run: task desktop:jlink:runtime
@@ -190,8 +169,22 @@ jobs:
 
       - name: Run Tauri/Cargo tests
         working-directory: frontend/editor/src-tauri
-        run: cargo test --verbose
-        shell: bash
+        shell: pwsh
+        run: |
+          Write-Host "Ensuring libs directory exists..."
+          New-Item -ItemType Directory -Force -Path "libs" | Out-Null
+          
+          $jars = Get-ChildItem -Path "..\..\..\app\core\build\libs\*.jar" -File
+          if ($jars.Count -gt 0) {
+              Copy-Item -Path $jars[0].FullName -Destination "libs\" -Force
+              Write-Host "✅ Copied JAR: $($jars[0].Name)"
+          } else {
+              Write-Warning "⚠️ No JAR found! Creating dummy.jar to prevent Tauri panic..."
+              Set-Content -Path "libs\dummy.jar" -Value "dummy data"
+          }
+          
+          Write-Host "Running cargo test..."
+          cargo test --verbose
 
       - name: Configure Windows code signing (Thumbprint)
         id: thumbprint
