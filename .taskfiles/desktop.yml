@@ -82,11 +82,11 @@ tasks:
       - task: :backend:build
     dir: "."
     sources:
-      - backend/**/*
+      - app/**/*
       - build.gradle
       - settings.gradle
     generates:
-      - backend/build/libs/*.jar
+      - app/core/build/libs/*.jar
 
   frontend:
     desc: "Build frontend components for desktop"
@@ -112,13 +112,18 @@ tasks:
       - task: :backend:build
     dir: "{{.ROOT_DIR}}"
     cmds:
-      - echo "Backend JAR built at backend/build/libs/"
+      # Copy the built JAR to Tauri libs directory
+      - mkdir -p "{{.TAURI_DIR}}/libs"
+      - cmd: 'cp app/core/build/libs/*.jar {{.TAURI_DIR}}/libs/'
+        platforms: [linux, darwin]
+      - cmd: 'powershell -NoProfile -Command "Copy-Item ''app/core/build/libs/*.jar'' -Destination ''{{.TAURI_DIR}}\\libs\\'' -Force"'
+        platforms: [windows]
     sources:
-      - backend/**/*
+      - app/core/**/*
       - build.gradle
       - settings.gradle
     generates:
-      - backend/build/libs/*.jar
+      - "{{.TAURI_DIR}}/libs/*.jar"
 
   jlink:runtime:
     desc: "Create JLink custom JRE only"
@@ -143,7 +148,7 @@ tasks:
       - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Get-ChildItem -Path ''runtime\\jre'' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }}"'
         ignore_error: true
     sources:
-      - backend/build/libs/*.jar
+      - app/core/build/libs/*.jar
     generates:
       - runtime/jre/**/*
 
@@ -170,7 +175,7 @@ tasks:
           echo "Using existing JRE at runtime/jre"
         fi
     sources:
-      - backend/build/libs/*.jar
+      - app/core/build/libs/*.jar
     generates:
       - runtime/jre/**/*
 
