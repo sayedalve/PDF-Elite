@@ -91,23 +91,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: 🚀 CRITICAL FIX - Pre-populate Tauri Resources
+      - name: 🚀 THE NUCLEAR FIX - Nuke Gitignores & Force Resource
         shell: bash
         run: |
-          echo "Tauri's build.rs script runs during 'Cache Rust build' and will PANIC"
-          echo "if the resource globs (libs/*.jar) match zero files."
+          echo "1. Destroying all .gitignore files so Tauri's bundler cannot possibly ignore JARs."
+          find . -name ".gitignore" -type f -delete
           
+          echo "2. Forcing the libs directory and a dummy JAR to exist BEFORE cache step."
           mkdir -p frontend/editor/src-tauri/libs
-          mkdir -p frontend/editor/src-tauri/runtime/jre
+          echo "dummy data" > frontend/editor/src-tauri/libs/dummy-app.jar
           
-          echo "dummy file data" > frontend/editor/src-tauri/libs/dummy-app.jar
-          echo "dummy file data" > frontend/editor/src-tauri/runtime/jre/dummy.txt
-          
-          echo "Forcing the Rust 'ignore' crate to see these files..."
-          echo "!*.jar" > frontend/editor/src-tauri/.ignore
-          echo "!*.jar" > frontend/editor/src-tauri/libs/.ignore
-          echo "!*.*" > frontend/editor/src-tauri/runtime/jre/.ignore
-          echo "✅ Failsafe applied."
+          echo "✅ Environment completely sanitized for Tauri build.rs"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -170,18 +164,27 @@ jobs:
           fi
 
       - name: Copy backend JAR to Tauri libs
-        shell: bash
+        shell: pwsh
         run: |
-          echo "Copying actual JAR files from Gradle build output..."
-          cp app/core/build/libs/*.jar frontend/editor/src-tauri/libs/ 2>/dev/null || true
+          $libsDir = Join-Path $env:GITHUB_WORKSPACE "frontend\editor\src-tauri\libs"
+          Write-Host "Target Libs Dir: $libsDir"
           
-          if ls frontend/editor/src-tauri/libs/ | grep -q "pdf"; then
-            echo "✅ Real JAR copied, removing dummy."
-            rm -f frontend/editor/src-tauri/libs/dummy-app.jar
-          fi
+          $jars = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\app\core\build\libs" -Filter "*.jar" -File | Where-Object { $_.Name -notmatch "plain" }
           
-          echo "Contents of src-tauri/libs:"
-          ls -la frontend/editor/src-tauri/libs/
+          if ($jars) {
+              Write-Host "✅ Found real JARs! Copying..."
+              foreach ($jar in $jars) {
+                  Copy-Item -Path $jar.FullName -Destination $libsDir -Force
+                  Write-Host "Copied: $($jar.Name)"
+              }
+              Write-Host "Removing dummy JAR..."
+              Remove-Item -Path "$libsDir\dummy-app.jar" -Force -ErrorAction SilentlyContinue
+          } else {
+              Write-Warning "⚠️ No real JAR found in build output. Tauri will run using the dummy JAR."
+          }
+          
+          Write-Host "--- CONTENTS OF LIBS DIRECTORY ---"
+          Get-ChildItem -Path $libsDir
 
       - name: Build bundled JRE (jlink)
         shell: bash
