@@ -131,26 +131,27 @@ tasks:
       - jlink:jar
     dir: "{{.ROOT_DIR}}"
     cmds:
+      # Create JRE in the Tauri resource directory where tauri.conf.json expects it
       - |
-        if [ ! -d "runtime/jre" ]; then
-          echo "Creating bundled JRE..."
+        if [ ! -d "{{.TAURI_DIR}}/runtime/jre" ]; then
+          echo "Creating bundled JRE at {{.TAURI_DIR}}/runtime/jre..."
           jlink \
             --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
-            --output runtime/jre \
+            --output "{{.TAURI_DIR}}/runtime/jre" \
             --compress 2 \
             --strip-debug \
             --no-header-files \
             --no-man-pages
         else
-          echo "Using existing JRE at runtime/jre"
+          echo "Using existing JRE at {{.TAURI_DIR}}/runtime/jre"
         fi
-      # Windows cleanup for read-only files
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Get-ChildItem -Path ''runtime\\jre'' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }}"'
+      # Windows cleanup for read-only files (fixed extra brace)
+      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''{{.TAURI_DIR}}\\runtime\\jre'') { Get-ChildItem -Path ''{{.TAURI_DIR}}\\runtime\\jre'' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }"'
         ignore_error: true
     sources:
       - app/core/build/libs/*.jar
     generates:
-      - runtime/jre/**/*
+      - "{{.TAURI_DIR}}/runtime/jre/**/*"
 
   jlink:universal-mac:
     desc: "Create universal macOS JRE (x86_64 + arm64)"
@@ -160,24 +161,24 @@ tasks:
     dir: "{{.ROOT_DIR}}"
     cmds:
       - |
-        if [ ! -d "runtime/jre" ]; then
-          echo "Creating universal macOS JRE..."
+        if [ ! -d "{{.TAURI_DIR}}/runtime/jre" ]; then
+          echo "Creating universal macOS JRE at {{.TAURI_DIR}}/runtime/jre..."
           # Use the x86_64 JDK (JAVA_HOME) as base, merge with arm64 modules
           jlink \
             --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
-            --output runtime/jre \
+            --output "{{.TAURI_DIR}}/runtime/jre" \
             --compress 2 \
             --strip-debug \
             --no-header-files \
             --no-man-pages
-          echo "Universal macOS JRE created at runtime/jre"
+          echo "Universal macOS JRE created at {{.TAURI_DIR}}/runtime/jre"
         else
-          echo "Using existing JRE at runtime/jre"
+          echo "Using existing JRE at {{.TAURI_DIR}}/runtime/jre"
         fi
     sources:
       - app/core/build/libs/*.jar
     generates:
-      - runtime/jre/**/*
+      - "{{.TAURI_DIR}}/runtime/jre/**/*"
 
   jlink:verify:
     desc: "Verify bundled JRE compatibility"
@@ -187,17 +188,17 @@ tasks:
     cmds:
       - node frontend/editor/scripts/verify-bundled-jre.mjs
     sources:
-      - runtime/jre/**
+      - "{{.TAURI_DIR}}/runtime/jre/**"
       - frontend/editor/scripts/verify-bundled-jre.mjs
 
   jlink:clean:
     desc: "Remove JLink artifacts"
     cmds:
-      - rm -rf runtime/jre
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }}"'
+      - rm -rf "{{.TAURI_DIR}}/runtime/jre"
+      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''{{.TAURI_DIR}}\\runtime\\jre'') { Remove-Item -Path ''{{.TAURI_DIR}}\\runtime\\jre'' -Recurse -Force }}"'
         ignore_error: true
     status:
-      - test ! -d runtime/jre
+      - test ! -d "{{.TAURI_DIR}}/runtime/jre"
 
   tauri:
     desc: "Build Tauri application"
@@ -214,7 +215,7 @@ tasks:
       - rust-toolchain.toml
       - ../src/**/*
       - ../dist/**/*
-      - ../runtime/jre/**
+      - runtime/jre/**
     generates:
       - target/release/bundle/**/*
 
@@ -227,7 +228,7 @@ tasks:
       - |
         echo "Creating application bundle..."
         mkdir -p "{{.DESKTOP_DIST_DIR}}/final"
-        cp -r runtime/jre "{{.DESKTOP_DIST_DIR}}/final/"
+        cp -r "{{.TAURI_DIR}}/runtime/jre" "{{.DESKTOP_DIST_DIR}}/final/"
         cp -r frontend/editor/dist "{{.DESKTOP_DIST_DIR}}/final/web"
         if [ "{{OS}}" = "windows" ]; then
           cp frontend/editor/src-tauri/target/release/bundle/msi/*.msi "{{.DESKTOP_DIST_DIR}}/final/"
@@ -237,7 +238,7 @@ tasks:
           cp frontend/editor/src-tauri/target/release/bundle/deb/*.deb "{{.DESKTOP_DIST_DIR}}/final/"
         fi
     sources:
-      - runtime/jre/**
+      - "{{.TAURI_DIR}}/runtime/jre/**"
       - frontend/editor/dist/**/*
       - frontend/editor/src-tauri/target/release/bundle/**/*
     generates:
@@ -245,6 +246,8 @@ tasks:
 
   test:
     desc: "Run Tauri/Cargo tests"
+    deps:
+      - jlink
     dir: "{{.TAURI_DIR}}"
     cmds:
       - cargo test --verbose
@@ -258,8 +261,8 @@ tasks:
     desc: "Clean desktop build artifacts"
     cmds:
       - rm -rf "{{.DESKTOP_DIST_DIR}}"
-      - rm -rf runtime/jre
-      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''{{.DESKTOP_DIST_DIR}}'') { Remove-Item -Path ''{{.DESKTOP_DIST_DIR}}'' -Recurse -Force }; if (Test-Path ''runtime\\jre'') { Remove-Item -Path ''runtime\\jre'' -Recurse -Force }}"'
+      - rm -rf "{{.TAURI_DIR}}/runtime/jre"
+      - cmd: 'powershell -NoProfile -Command "if (Test-Path ''{{.DESKTOP_DIST_DIR}}'') { Remove-Item -Path ''{{.DESKTOP_DIST_DIR}}'' -Recurse -Force }; if (Test-Path ''{{.TAURI_DIR}}\\runtime\\jre'') { Remove-Item -Path ''{{.TAURI_DIR}}\\runtime\\jre'' -Recurse -Force }}"'
         ignore_error: true
       - |
         if [ -d "frontend/editor/src-tauri/target" ]; then
