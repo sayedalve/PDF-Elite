@@ -65,11 +65,12 @@ jobs:
 
           case "$PLATFORM" in
             windows-arm64) ENTRIES=("$WINDOWS_ARM64") ;;
+            windows)       ENTRIES=("$WINDOWS") ;;
             *)             ENTRIES=("$WINDOWS" "$WINDOWS_ARM64") ;;
           esac
 
           JOINED=$(IFS=','; echo "${ENTRIES[*]}")
-          echo "matrix={\"include\":[$JOINED]}" >> $GITHUB_OUTPUT
+          echo "matrix={"include":[$JOINED]}" >> $GITHUB_OUTPUT
 
   build:
     needs: determine-matrix
@@ -96,11 +97,11 @@ jobs:
         run: |
           echo "1. Destroying all .gitignore files so Tauri's bundler cannot possibly ignore JARs."
           find . -name ".gitignore" -type f -delete
-          
+
           echo "2. Forcing the libs directory and a dummy JAR to exist BEFORE cache step."
           mkdir -p frontend/editor/src-tauri/libs
           echo "dummy data" > frontend/editor/src-tauri/libs/dummy-app.jar
-          
+
           echo "✅ Environment completely sanitized for Tauri build.rs"
 
       - name: Setup Node.js
@@ -109,7 +110,7 @@ jobs:
           node-version: 22
 
       - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
           targets: ${{ matrix.platform == 'windows-11-arm' && 'aarch64-pc-windows-msvc' || 'x86_64-pc-windows-msvc' }}
@@ -141,6 +142,10 @@ jobs:
       - name: Setup Task
         uses: go-task/setup-task@v2
 
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --no-audit --no-fund
+
       - name: Prepare desktop build
         env:
           MAVEN_USER: ${{ secrets.MAVEN_USER }}
@@ -168,9 +173,9 @@ jobs:
         run: |
           $libsDir = Join-Path $env:GITHUB_WORKSPACE "frontend\editor\src-tauri\libs"
           Write-Host "Target Libs Dir: $libsDir"
-          
+
           $jars = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\app\core\build\libs" -Filter "*.jar" -File | Where-Object { $_.Name -notmatch "plain" }
-          
+
           if ($jars) {
               Write-Host "✅ Found real JARs! Copying..."
               foreach ($jar in $jars) {
@@ -182,7 +187,7 @@ jobs:
           } else {
               Write-Warning "⚠️ No real JAR found in build output. Tauri will run using the dummy JAR."
           }
-          
+
           Write-Host "--- CONTENTS OF LIBS DIRECTORY ---"
           Get-ChildItem -Path $libsDir
 
@@ -222,7 +227,7 @@ jobs:
           $configPath = "frontend/editor/src-tauri/tauri.conf.json"
           $content = Get-Content $configPath -Raw
           $thumbprint = "${{ steps.thumbprint.outputs.thumbprint }}"
-          $content = $content -replace '\"certificateThumbprint\":\s*null', "`\"certificateThumbprint`\": `"$thumbprint`""
+          $content = $content -replace '"certificateThumbprint":\s*null', "`"certificateThumbprint`": `"$thumbprint`""
           Set-Content $configPath -Value $content -NoNewline
 
       - name: Build Tauri app (signed)
