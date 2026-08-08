@@ -111,6 +111,7 @@ tasks:
     deps:
       - task: :backend:build
     dir: "{{.ROOT_DIR}}"
+    method: none
     cmds:
       # Copy the built JAR to Tauri libs directory
       - mkdir -p "{{.TAURI_DIR}}/libs"
@@ -118,12 +119,6 @@ tasks:
         platforms: [linux, darwin]
       - cmd: 'powershell -NoProfile -Command "Copy-Item ''app/core/build/libs/*.jar'' -Destination ''{{.TAURI_DIR}}\\libs\\'' -Force"'
         platforms: [windows]
-    sources:
-      - app/core/**/*
-      - build.gradle
-      - settings.gradle
-    generates:
-      - "{{.TAURI_DIR}}/libs/*.jar"
 
   jlink:runtime:
     desc: "Create JLink custom JRE only"
