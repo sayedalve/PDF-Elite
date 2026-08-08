@@ -155,7 +155,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "frontend/editor/src-tauri/libs"
-          $jarPath = Get-ChildItem -Path "app/core/build/libs/stirling-pdf-*.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          $jarPath = Get-ChildItem -Path "app/core/build/libs/*.jar" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
           if ($jarPath) {
               Copy-Item -Path $jarPath.FullName -Destination "frontend/editor/src-tauri/libs/" -Force
               Write-Host "Successfully copied JAR: $($jarPath.Name)"
