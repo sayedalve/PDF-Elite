@@ -1,12 +1,62 @@
 ```
 # Dependencies
 node_modules/
+target/
+.gradle/
 
-# Editors
-.vscode/
+# Build artifacts
+build/
+dist/
+
+# Logs
+*.log
 
 # Environment
 .env
 .env.local
 *.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Rust (for Tauri)
+**/Cargo.lock
+**/target/
+
+# Tauri specific
+**/src-tauri/target/
+**/src-tauri/Cargo.lock
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# MyPy
+.mypy_cache/
+
+# PyTest
+.pytest_cache/
 ```

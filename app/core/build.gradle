@@ -107,9 +107,7 @@ sourceSets {
 }
 
 // Disable regular jar
-jar {
-    enabled = false
-}
+// bootJar is configured and enabled in app/core/build.gradle
 
 // Configure and enable bootJar for this project
 bootJar {

@@ -180,7 +180,7 @@ jobs:
     # The full signed multi-OS matrix runs on release;
     # nightly still warms the Rust cache with all-OS defaults.
     with:
-      platform: windows-macos
+      platform: windows
       sign: true
 
   ai-engine:

@@ -111,47 +111,32 @@ tasks:
       - jlink:runtime
 
   jlink:jar:
-    desc: "Build backend JAR only"
-    deps:
-      - task: :backend:build
+    desc: "Build backend JAR only (no tests, no spotless)"
     dir: "{{.ROOT_DIR}}"
     cmds:
-      - echo "Backend JAR built at app/core/build/libs/"
-    sources:
-      - app/core/**/*
-      - app/common/**/*
-      - build.gradle
-      - settings.gradle
-    generates:
-      - app/core/build/libs/*.jar
+      - cmd: cmd /c ".\gradlew.bat clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms={{.JPDFIUM_PLATFORMS | default \"all\"}}"
+        platforms: [windows]
+      - cmd: ./gradlew clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms={{.JPDFIUM_PLATFORMS | default "all"}}
+        platforms: [linux, darwin]
+    env:
+      DISABLE_ADDITIONAL_FEATURES: "true"
 
   jlink:runtime:
-    desc: "Create JLink custom JRE only"
+    desc: "Create JLink custom JRE only (output at frontend/editor/src-tauri/runtime/jre)"
     deps:
       - jlink:jar
-    dir: "{{.ROOT_DIR}}"
+    dir: "{{.TAURI_DIR}}"
     cmds:
       - cmd: |
           if [ ! -d "runtime/jre" ]; then
-            echo "Creating bundled JRE..."
-            jlink \
-              --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
-              --output runtime/jre \
-              --compress 2 \
-              --strip-debug \
-              --no-header-files \
-              --no-man-pages
-          else
-            echo "Using existing JRE at runtime/jre"
+            jlink --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs,java.management,java.sql,java.transaction.xa,java.net.http,java.security.jgms \
+              --output runtime/jre --compress 2 --strip-debug --no-header-files --no-man-pages
           fi
         platforms: [linux, darwin]
-      - cmd: powershell -NoProfile -Command "if (-not (Test-Path 'runtime/jre')) { Write-Host 'Creating bundled JRE...'; jlink --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs --output runtime/jre --compress 2 --strip-debug --no-header-files --no-man-pages } else { Write-Host 'Using existing JRE at runtime/jre' }"
-        platforms: [windows]
-      - cmd: powershell -NoProfile -Command "if (Test-Path 'runtime\jre') { Get-ChildItem -Path 'runtime\jre' -Recurse -File | ForEach-Object { [System.IO.File]::SetAttributes($_.FullName, ([System.IO.File]::GetAttributes($_.FullName) -band -bnot [System.IO.FileAttributes]::ReadOnly)) } }"
-        ignore_error: true
+      - cmd: powershell -NoProfile -Command "if (-not (Test-Path 'runtime/jre')) { jlink --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs,java.management,java.sql,java.transaction.xa,java.net.http,java.security.jgms --output runtime/jre --compress 2 --strip-debug --no-header-files --no-man-pages }"
         platforms: [windows]
     sources:
-      - backend/build/libs/*.jar
+      - ../app/core/build/libs/*.jar
     generates:
       - runtime/jre/**/*
 
@@ -234,13 +219,13 @@ tasks:
     cmds:
       - cmd: |
           mkdir -p frontend/editor/src-tauri/libs
-          BUILT_JAR=$$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
-          if [ -z "$$BUILT_JAR" ]; then
+          BUILT_JAR=$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
+          if [ -z "$BUILT_JAR" ]; then
             echo "Error: Backend JAR not found in app/core/build/libs/"
             exit 1
           fi
-          cp "$$BUILT_JAR" frontend/editor/src-tauri/libs/
-          echo "Copied $$(basename $$BUILT_JAR) to frontend/editor/src-tauri/libs/"
+          cp "$BUILT_JAR" frontend/editor/src-tauri/libs/
+          echo "Copied $(basename $BUILT_JAR) to frontend/editor/src-tauri/libs/"
         platforms: [linux, darwin]
       - cmd: powershell -NoProfile -Command "if (-not (Test-Path 'frontend/editor/src-tauri/libs')) { New-Item -ItemType Directory -Force -Path 'frontend/editor/src-tauri/libs' | Out-Null }; $builtJar = Get-ChildItem -Path 'app/core/build/libs/stirling-pdf-*.jar' | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if ($null -eq $builtJar) { Write-Error 'Error: Backend JAR not found in app/core/build/libs/'; exit 1 }; Copy-Item -Path $builtJar.FullName -Destination 'frontend/editor/src-tauri/libs/' -Force; Write-Host 'Copied JAR to frontend/editor/src-tauri/libs/'"
         platforms: [windows]
