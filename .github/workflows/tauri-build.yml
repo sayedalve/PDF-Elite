@@ -1,372 +1,289 @@
-name: Build Tauri Applications (Windows Only)
+version: '3'
 
-on:
-  workflow_call:
-    inputs:
-      platform:
-        description: "Platform to build (windows or windows-arm64)."
-        required: false
-        type: string
-        default: "windows"
-      sign:
-        description: "Sign the bundles."
-        required: false
-        type: boolean
-        default: true
-      minimal:
-        description: "Fast smoke build."
-        required: false
-        type: boolean
-        default: false
-  workflow_dispatch:
-    inputs:
-      platform:
-        description: "Platform to build (windows or windows-arm64)"
-        required: true
-        default: "windows"
-        type: choice
-        options:
-          - windows
-          - windows-arm64
-      sign:
-        description: "Sign the bundles."
-        required: false
-        default: true
-        type: boolean
-      minimal:
-        description: "Fast smoke build."
-        required: false
-        default: false
-        type: boolean
+vars:
+  ROOT_DIR: '{{.ROOT_DIR | default "."}}'
+  APP_NAME: "PDF-Elite"
+  DESKTOP_DIST_DIR: "{{.ROOT_DIR}}/dist/desktop"
+  BUNDLE_DIR: "{{.DESKTOP_DIST_DIR}}/{{.APP_NAME}}"
+  JRE_HOME: "{{.ROOT_DIR}}/runtime/jre"
+  # Keep these paths relative to the repository root. Do not prepend ROOT_DIR here.
+  # Task already runs this included Taskfile from the repository root.
+  TAURI_DIR: "frontend/editor/src-tauri"
+  FRONTEND_DIR: "frontend/editor"
+  BACKEND_PORT: "8080"
+  
+tasks:
+  default:
+    desc: "Show available desktop build tasks"
+    silent: true
+    cmds:
+      - |
+        echo "Available desktop tasks:"
+        echo "  dev              - Start desktop app in development mode"
+        echo "  setup            - Initialize desktop build environment"
+        echo "  deps             - Install desktop build dependencies"
+        echo "  backend          - Build backend components"
+        echo "  frontend         - Build frontend components"
+        echo "  jlink            - Create bundled JRE"
+        echo "  jlink:jar        - Build backend JAR only"
+        echo "  jlink:runtime    - Create JLink custom JRE only"
+        echo "  jlink:universal-mac - Create universal macOS JRE (x86_64 + arm64)"
+        echo "  jlink:verify     - Verify bundled JRE"
+        echo "  jlink:clean      - Remove JLink artifacts"
+        echo "  tauri            - Build Tauri application"
+        echo "  bundle           - Create final application bundle"
+        echo "  prepare          - Prepare desktop build (alias for setup)"
+        echo "  test             - Run Tauri/Cargo tests"
+        echo "  clean            - Clean desktop build artifacts"
 
-permissions:
-  contents: read
-  pull-requests: write
-
-jobs:
-  determine-matrix:
-    if: ${{ vars.CI_PROFILE != 'lite' }}
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: Harden the runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920
-        with:
-          egress-policy: audit
-
-      - name: Determine build matrix
-        id: set-matrix
-        env:
-          PLATFORM: ${{ inputs.platform }}
-        run: |
-          WINDOWS='{"platform":"windows-latest","args":"--target x86_64-pc-windows-msvc","name":"windows-x86_64","jpdfium_platforms":"windows-x64","builds_provisioner":true}'
-          WINDOWS_ARM64='{"platform":"windows-11-arm","args":"--target aarch64-pc-windows-msvc --bundles nsis","name":"windows-arm64","jpdfium_platforms":"none","builds_provisioner":false}'
-
-          case "$PLATFORM" in
-            windows-arm64) ENTRIES=("$WINDOWS_ARM64") ;;
-            windows)       ENTRIES=("$WINDOWS") ;;
-            *)             ENTRIES=("$WINDOWS" "$WINDOWS_ARM64") ;;
-          esac
-
-          JOINED=$(IFS=','; echo "${ENTRIES[*]}")
-          echo "matrix={"include":[$JOINED]}" >> $GITHUB_OUTPUT
-
-  build:
-    needs: determine-matrix
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJson(needs.determine-matrix.outputs.matrix) }}
-    runs-on: ${{ matrix.platform }}
+  dev:
+    desc: "Start desktop app in development mode"
+    deps:
+      - task: :backend:dev
+        vars:
+          PORT: "{{.BACKEND_PORT}}"
+      - task: :frontend:dev:desktop
+        vars:
+          PORT: "5173"
+          BACKEND_URL: "http://localhost:{{.BACKEND_PORT}}"
+          VITE_DESKTOP_MODE: "true"
+    dir: "{{.TAURI_DIR}}"
+    cmds:
+      - cargo tauri dev
     env:
-      SM_API_KEY: ${{ secrets.SM_API_KEY }}
-      WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
-      RELEASE_GPG_PRIVATE_KEY: ${{ secrets.RELEASE_GPG_PRIVATE_KEY }}
-      SIGN_BUNDLE: ${{ inputs.sign && github.ref == 'refs/heads/main' }}
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920
-        with:
-          egress-policy: audit
+      VITE_BACKEND_URL: "http://localhost:{{.BACKEND_PORT}}"
+      VITE_DESKTOP_MODE: "true"
 
-      - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+  setup:
+    desc: "Initialize desktop build environment"
+    deps:
+      - deps
+    cmds:
+      - cmd: mkdir -p "{{.DESKTOP_DIST_DIR}}" "{{.BUNDLE_DIR}}" "{{.TAURI_DIR}}"
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "$dirs = @('{{.DESKTOP_DIST_DIR}}', '{{.BUNDLE_DIR}}', '{{.TAURI_DIR}}'); foreach ($dir in $dirs) { if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null } }"
+        platforms: [windows]
 
-      - name: 🚀 THE NUCLEAR FIX - Nuke Gitignores & Force Resource
-        shell: bash
-        run: |
-          echo "1. Destroying all .gitignore files so Tauri's bundler cannot possibly ignore JARs."
-          find . -name ".gitignore" -type f -delete
+  prepare:
+    desc: "Prepare desktop build (alias for setup)"
+    deps:
+      - setup
 
-          echo "2. Forcing the libs directory and a dummy JAR to exist BEFORE cache step."
-          mkdir -p frontend/editor/src-tauri/libs
-          echo "dummy data" > frontend/editor/src-tauri/libs/dummy-app.jar
-
-          echo "✅ Environment completely sanitized for Tauri build.rs"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: stable
-          targets: ${{ matrix.platform == 'windows-11-arm' && 'aarch64-pc-windows-msvc' || 'x86_64-pc-windows-msvc' }}
-
-      - name: Cache Rust build
-        uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4
-        with:
-          workspaces: frontend/editor/src-tauri
-          shared-key: tauri-${{ matrix.name }}
-          save-if: ${{ github.ref == 'refs/heads/main' }}
-          cache-on-failure: true
-
-      - name: Set up JDK 25
-        uses: actions/setup-java@v5
-        with:
-          java-version: "25"
-          distribution: ${{ matrix.platform == 'windows-11-arm' && 'microsoft' || 'temurin' }}
-
-      - name: Cache Gradle User Home
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ runner.arch }}-jdk-25-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties', 'gradle/libs.versions.toml', 'settings.gradle', 'build.gradle', 'app/**/build.gradle', 'gradle/**/*.gradle') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-${{ runner.arch }}-jdk-25-
-
-      - name: Setup Task
-        uses: go-task/setup-task@v2
-
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm install --no-audit --no-fund
-
-      - name: Prepare desktop build
-        env:
-          MAVEN_USER: ${{ secrets.MAVEN_USER }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          MAVEN_PUBLIC_URL: ${{ secrets.MAVEN_PUBLIC_URL }}
-          DISABLE_ADDITIONAL_FEATURES: true
-          JPDFIUM_PLATFORMS: ${{ matrix.jpdfium_platforms }}
-        run: task desktop:prepare
-        shell: bash
-
-      - name: Build backend JAR
-        working-directory: ${{ github.workspace }}
-        env:
-          DISABLE_ADDITIONAL_FEATURES: true
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            cmd //c ".\\gradlew.bat clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms=${{ matrix.jpdfium_platforms }}"
-          else
-            ./gradlew clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms=${{ matrix.jpdfium_platforms }}
+  deps:
+    desc: "Install desktop build dependencies"
+    cmds:
+      - cmd: |
+          if [ ! -f "{{.ROOT_DIR}}/node_modules/.bin/tauri" ]; then
+            npm install @tauri-apps/cli --save-dev
           fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (-not (Test-Path '{{.ROOT_DIR}}/node_modules/.bin/tauri.cmd')) { npm install @tauri-apps/cli --save-dev }"
+        platforms: [windows]
+    status:
+      - test -f "{{.ROOT_DIR}}/node_modules/.bin/tauri" || test -f "{{.ROOT_DIR}}/node_modules/.bin/tauri.cmd"
 
-      - name: Copy backend JAR to Tauri libs
-        shell: pwsh
-        run: |
-          $libsDir = Join-Path $env:GITHUB_WORKSPACE "frontend\editor\src-tauri\libs"
-          Write-Host "Target Libs Dir: $libsDir"
+  backend:
+    desc: "Build backend components for desktop"
+    deps:
+      - task: :backend:build
+    dir: "{{.ROOT_DIR}}"
+    sources:
+      - backend/**/*
+      - build.gradle
+      - settings.gradle
+    generates:
+      - backend/build/libs/*.jar
 
-          $jars = Get-ChildItem -Path "$env:GITHUB_WORKSPACE\app\core\build\libs" -Filter "*.jar" -File | Where-Object { $_.Name -notmatch "plain" }
+  frontend:
+    desc: "Build frontend components for desktop"
+    deps:
+      - task: :frontend:build:desktop
+    dir: "{{.FRONTEND_DIR}}"
+    sources:
+      - src/**/*
+      - package.json
+      - vite.config.ts
+    generates:
+      - dist/**/*
 
-          if ($jars) {
-              Write-Host "✅ Found real JARs! Copying..."
-              foreach ($jar in $jars) {
-                  Copy-Item -Path $jar.FullName -Destination $libsDir -Force
-                  Write-Host "Copied: $($jar.Name)"
-              }
-              Write-Host "Removing dummy JAR..."
-              Remove-Item -Path "$libsDir\dummy-app.jar" -Force -ErrorAction SilentlyContinue
-          } else {
-              Write-Warning "⚠️ No real JAR found in build output. Tauri will run using the dummy JAR."
-          }
+  jlink:
+    desc: "Create bundled JRE"
+    deps:
+      - jlink:jar
+      - jlink:runtime
 
-          Write-Host "--- CONTENTS OF LIBS DIRECTORY ---"
-          Get-ChildItem -Path $libsDir
+  jlink:jar:
+    desc: "Build backend JAR only (no tests, no spotless)"
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - cmd: cmd /c ".\gradlew.bat clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms={{.JPDFIUM_PLATFORMS | default \"all\"}}"
+        platforms: [windows]
+      - cmd: ./gradlew clean bootJar -x test -x spotlessApply -x spotlessCheck -PnoSpotless -PjpdfiumPlatforms={{.JPDFIUM_PLATFORMS | default "all"}}
+        platforms: [linux, darwin]
+    env:
+      DISABLE_ADDITIONAL_FEATURES: "true"
 
-      - name: Build bundled JRE (jlink)
-        shell: bash
-        run: task desktop:jlink:runtime
-        env:
-          DISABLE_ADDITIONAL_FEATURES: true
+  jlink:runtime:
+    desc: "Create JLink custom JRE only (output at frontend/editor/src-tauri/runtime/jre)"
+    deps:
+      - jlink:jar
+    dir: "{{.TAURI_DIR}}"
+    cmds:
+      - cmd: |
+          if [ ! -d "runtime/jre" ]; then
+            jlink --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs,java.management,java.sql,java.transaction.xa,java.net.http,java.security.jgms \
+              --output runtime/jre --compress 2 --strip-debug --no-header-files --no-man-pages
+          fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (-not (Test-Path 'runtime/jre')) { jlink --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs,java.management,java.sql,java.transaction.xa,java.net.http,java.security.jgms --output runtime/jre --compress 2 --strip-debug --no-header-files --no-man-pages }"
+        platforms: [windows]
+    sources:
+      - ../app/core/build/libs/*.jar
+    generates:
+      - runtime/jre/**/*
 
-      - name: Build Windows provisioner and thumbnail handler
-        if: matrix.builds_provisioner == true
-        working-directory: frontend
-        shell: bash
-        run: node editor/scripts/build-provisioner.mjs
-
-      - name: Build frontend (desktop mode)
-        shell: bash
-        run: task frontend:build:desktop
-
-      - name: Run Tauri/Cargo tests
-        working-directory: frontend/editor/src-tauri
-        run: cargo test --verbose
-        shell: bash
-
-      - name: Configure Windows code signing (Thumbprint)
-        id: thumbprint
-        if: ${{ inputs.sign && startsWith(matrix.platform, 'windows') && env.SM_API_KEY != '' && github.ref == 'refs/heads/main' }}
-        shell: pwsh
-        run: |
-          $thumbprint = (& smctl windows certcurrent -alias "${{ secrets.SM_KEYPAIR_ALIAS }}" | Select-String -Pattern "Thumbprint" | ForEach-Object { $_.Line.Split(':')[1].Trim() })
-          echo "thumbprint=$thumbprint" >> $env:GITHUB_OUTPUT
-
-      - name: Inject certificate thumbprint into Tauri config
-        if: ${{ inputs.sign && startsWith(matrix.platform, 'windows') && env.SM_API_KEY != '' && github.ref == 'refs/heads/main' }}
-        shell: pwsh
-        run: |
-          $configPath = "frontend/editor/src-tauri/tauri.conf.json"
-          $content = Get-Content $configPath -Raw
-          $thumbprint = "${{ steps.thumbprint.outputs.thumbprint }}"
-          $content = $content -replace '"certificateThumbprint":\s*null', "`"certificateThumbprint`": `"$thumbprint`""
-          Set-Content $configPath -Value $content -NoNewline
-
-      - name: Build Tauri app (signed)
-        if: env.SIGN_BUNDLE == 'true'
-        uses: tauri-apps/tauri-action@84b9d35b5fc46c1e45415bdb6144030364f7ebc5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CI: true
-        with:
-          projectPath: ./frontend/editor
-          tauriScript: npx tauri
-          args: ${{ matrix.args }}
-
-      - name: Build Tauri app (unsigned)
-        if: env.SIGN_BUNDLE != 'true'
-        uses: tauri-apps/tauri-action@84b9d35b5fc46c1e45415bdb6144030364f7ebc5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SIGN: "0"
-          CI: true
-        with:
-          projectPath: ./frontend/editor
-          tauriScript: npx tauri
-          args: ${{ matrix.args }} --config '{"bundle":{"createUpdaterArtifacts":false}}'
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: PDF-Elite-${{ matrix.name }}
-          path: |
-            frontend/editor/src-tauri/target/release/bundle/**/*.exe
-            frontend/editor/src-tauri/target/release/bundle/**/*.msi
-            frontend/editor/src-tauri/target/release/bundle/**/*.nsis
-          if-no-files-found: warn
-
-  pr-comment:
-    needs: build
-    runs-on: ubuntu-latest
-    if: >-
-      github.event_name == 'pull_request' &&
-      needs.build.result == 'success' &&
-      !github.event.pull_request.head.repo.fork &&
-      github.actor != 'dependabot[bot]'
-    permissions:
-      pull-requests: write
-    steps:
-      - name: Harden the runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920
-        with:
-          egress-policy: audit
-
-      - name: Post/Update PR Comment with Download Links
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const prNumber = context.issue.number;
-            const runId = context.runId;
-
-            const { data: artifactsList } = await github.rest.actions.listWorkflowRunArtifacts({
-              owner,
-              repo,
-              run_id: runId
-            });
-
-            const artifactMap = {
-              'PDF-Elite-windows-x86_64': { icon: '🪟', platform: 'Windows x64', files: '.exe, .msi' },
-              'PDF-Elite-windows-arm64': { icon: '🪟', platform: 'Windows ARM64', files: '-setup.exe (NSIS)' }
-            };
-
-            let commentBody = `## 📦 Tauri Desktop Builds Ready!\n\n`;
-            commentBody += `The desktop applications have been built and are ready for testing.\n\n`;
-            commentBody += `### Download Artifacts:\n\n`;
-
-            let foundArtifacts = 0;
-            for (const artifact of artifactsList.artifacts) {
-              const info = artifactMap[artifact.name];
-              if (info) {
-                foundArtifacts++;
-                const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${runId}/artifacts/${artifact.id}`;
-                commentBody += `${info.icon} **${info.platform}**: [Download ${artifact.name}](${artifactUrl}) `;
-                commentBody += `(${info.files}) - ${(artifact.size_in_bytes / 1024 / 1024).toFixed(1)} MB\n`;
-              }
-            }
-
-            if (foundArtifacts === 0) {
-              commentBody += `⚠️ **Warning**: No artifacts found in workflow run.\n`;
-              commentBody += `[View workflow run](https://github.com/${owner}/${repo}/actions/runs/${runId})\n`;
-            }
-
-            commentBody += `\n---\n`;
-            commentBody += `_Built from commit ${context.sha.substring(0, 7)}_\n`;
-            commentBody += `_Artifacts expire in 7 days`;
-
-            const { data: comments } = await github.rest.issues.listComments({
-              owner,
-              repo,
-              issue_number: prNumber
-            });
-
-            const botComment = comments.find(comment =>
-              comment.user.type === 'Bot' &&
-              comment.body.includes('📦 Tauri Desktop Builds Ready!')
-            );
-
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id: botComment.id,
-                body: commentBody
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number: prNumber,
-                body: commentBody
-              });
-            }
-
-  report:
-    needs: build
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Harden the runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920
-        with:
-          egress-policy: audit
-
-      - name: Report build results
-        run: |
-          if [ "${{ needs.build.result }}" = "success" ]; then
-            echo "✅ All Tauri builds completed successfully!"
-          elif [ "${{ needs.build.result }}" = "skipped" ]; then
-            echo "⏭️  Tauri builds skipped"
+  jlink:universal-mac:
+    desc: "Create universal macOS JRE (x86_64 + arm64)"
+    summary: |
+      Builds a universal macOS JRE by combining x86_64 and arm64 modules.
+      Requires AARCH64_JAVA_HOME to be set (from CI or manual setup).
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - cmd: |
+          if [ ! -d "runtime/jre" ]; then
+            echo "Creating universal macOS JRE..."
+            # Use the x86_64 JDK (JAVA_HOME) as base, merge with arm64 modules
+            jlink \
+              --add-modules java.base,java.desktop,java.naming,java.logging,java.xml,java.prefs \
+              --output runtime/jre \
+              --compress 2 \
+              --strip-debug \
+              --no-header-files \
+              --no-man-pages
+            echo "Universal macOS JRE created at runtime/jre"
           else
-            echo "❌ Some Tauri builds failed."
+            echo "Using existing JRE at runtime/jre"
+          fi
+        platforms: [darwin]
+    sources:
+      - backend/build/libs/*.jar
+    generates:
+      - runtime/jre/**/*
+
+  jlink:verify:
+    desc: "Verify bundled JRE compatibility"
+    deps:
+      - jlink:runtime
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - node frontend/editor/scripts/verify-bundled-jre.mjs
+    sources:
+      - runtime/jre/**
+      - frontend/editor/scripts/verify-bundled-jre.mjs
+
+  jlink:clean:
+    desc: "Remove JLink artifacts"
+    cmds:
+      - cmd: rm -rf runtime/jre
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (Test-Path 'runtime/jre') { Remove-Item -Path 'runtime/jre' -Recurse -Force }"
+        ignore_error: true
+        platforms: [windows]
+    status:
+      - test ! -d runtime/jre
+
+  tauri:
+    desc: "Build Tauri application"
+    deps:
+      - frontend
+      - jlink
+      - copy-jar
+    dir: "{{.TAURI_DIR}}"
+    cmds:
+      - cargo tauri build --verbose
+    sources:
+      - Cargo.toml
+      - Cargo.lock
+      - tauri.conf.json
+      - rust-toolchain.toml
+      - ../src/**/*
+      - ../dist/**/*
+      - ../runtime/jre/**
+      - libs/*.jar
+    generates:
+      - target/release/bundle/**/*
+
+  copy-jar:
+    desc: "Copy backend JAR to Tauri libs directory"
+    deps:
+      - jlink:jar
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - cmd: |
+          mkdir -p frontend/editor/src-tauri/libs
+          BUILT_JAR=$(ls -t app/core/build/libs/stirling-pdf-*.jar 2>/dev/null | head -1)
+          if [ -z "$BUILT_JAR" ]; then
+            echo "Error: Backend JAR not found in app/core/build/libs/"
             exit 1
           fi
+          cp "$BUILT_JAR" frontend/editor/src-tauri/libs/
+          echo "Copied $(basename $BUILT_JAR) to frontend/editor/src-tauri/libs/"
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (-not (Test-Path 'frontend/editor/src-tauri/libs')) { New-Item -ItemType Directory -Force -Path 'frontend/editor/src-tauri/libs' | Out-Null }; $builtJar = Get-ChildItem -Path 'app/core/build/libs/stirling-pdf-*.jar' | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if ($null -eq $builtJar) { Write-Error 'Error: Backend JAR not found in app/core/build/libs/'; exit 1 }; Copy-Item -Path $builtJar.FullName -Destination 'frontend/editor/src-tauri/libs/' -Force; Write-Host 'Copied JAR to frontend/editor/src-tauri/libs/'"
+        platforms: [windows]
+    sources:
+      - app/core/build/libs/*.jar
+    generates:
+      - frontend/editor/src-tauri/libs/*.jar
+
+  bundle:
+    desc: "Create final application bundle"
+    deps:
+      - tauri
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - cmd: |
+          echo "Creating application bundle..."
+          mkdir -p "{{.DESKTOP_DIST_DIR}}/final"
+          cp -r runtime/jre "{{.DESKTOP_DIST_DIR}}/final/"
+          cp -r frontend/editor/dist "{{.DESKTOP_DIST_DIR}}/final/web"
+          if [ "{{OS}}" = "darwin" ]; then
+            cp -R frontend/editor/src-tauri/target/release/bundle/macos/*.app "{{.DESKTOP_DIST_DIR}}/final/"
+          else
+            cp frontend/editor/src-tauri/target/release/bundle/deb/*.deb "{{.DESKTOP_DIST_DIR}}/final/"
+          fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "Write-Host 'Creating application bundle...'; if (-not (Test-Path '{{.DESKTOP_DIST_DIR}}/final')) { New-Item -ItemType Directory -Force -Path '{{.DESKTOP_DIST_DIR}}/final' | Out-Null }; Copy-Item -Path 'runtime/jre' -Destination '{{.DESKTOP_DIST_DIR}}/final/' -Recurse -Force; Copy-Item -Path 'frontend/editor/dist' -Destination '{{.DESKTOP_DIST_DIR}}/final/web' -Recurse -Force; if (Test-Path 'frontend/editor/src-tauri/target/release/bundle/msi/*.msi') { Copy-Item -Path 'frontend/editor/src-tauri/target/release/bundle/msi/*.msi' -Destination '{{.DESKTOP_DIST_DIR}}/final/' -Force }"
+        platforms: [windows]
+    sources:
+      - runtime/jre/**
+      - frontend/editor/dist/**/*
+      - frontend/editor/src-tauri/target/release/bundle/**/*
+    generates:
+      - "{{.DESKTOP_DIST_DIR}}/final/**/*"
+
+  test:
+    desc: "Run Tauri/Cargo tests"
+    dir: "{{.TAURI_DIR}}"
+    cmds:
+      - cargo test --verbose
+    sources:
+      - Cargo.toml
+      - Cargo.lock
+      - src/**/*
+      - tests/**/*
+
+  clean:
+    desc: "Clean desktop build artifacts"
+    cmds:
+      - cmd: |
+          rm -rf "{{.DESKTOP_DIST_DIR}}"
+          rm -rf runtime/jre
+          if [ -d "frontend/editor/src-tauri/target" ]; then
+            cd frontend/editor/src-tauri && cargo clean
+          fi
+        platforms: [linux, darwin]
+      - cmd: powershell -NoProfile -Command "if (Test-Path '{{.DESKTOP_DIST_DIR}}') { Remove-Item -Path '{{.DESKTOP_DIST_DIR}}' -Recurse -Force }; if (Test-Path 'runtime/jre') { Remove-Item -Path 'runtime/jre' -Recurse -Force }; if (Test-Path 'frontend/editor/src-tauri/target') { Set-Location -Path 'frontend/editor/src-tauri'; cargo clean }"
+        platforms: [windows]
+    status:
+      - test ! -d "{{.DESKTOP_DIST_DIR}}"
