@@ -91,18 +91,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Neutralize .gitignore for Tauri Bundler
+      - name: 🚀 CRITICAL FIX - Pre-populate Tauri Resources
         shell: bash
         run: |
-          echo "Tauri's glob resolver ignores files listed in .gitignore."
-          echo "We must explicitly un-ignore JARs so Tauri can see them!"
-          echo "" >> .gitignore
-          echo "!*.jar" >> .gitignore
-          echo "!frontend/editor/src-tauri/libs/**" >> .gitignore
+          echo "Tauri's build.rs script runs during 'Cache Rust build' and will PANIC"
+          echo "if the resource globs (libs/*.jar) match zero files."
           
-          echo "Injecting a dummy JAR so rust-cache doesn't panic early..."
           mkdir -p frontend/editor/src-tauri/libs
-          echo "dummy" > frontend/editor/src-tauri/libs/dummy-app.jar
+          mkdir -p frontend/editor/src-tauri/runtime/jre
+          
+          echo "dummy file data" > frontend/editor/src-tauri/libs/dummy-app.jar
+          echo "dummy file data" > frontend/editor/src-tauri/runtime/jre/dummy.txt
+          
+          echo "Forcing the Rust 'ignore' crate to see these files..."
+          echo "!*.jar" > frontend/editor/src-tauri/.ignore
+          echo "!*.jar" > frontend/editor/src-tauri/libs/.ignore
+          echo "!*.*" > frontend/editor/src-tauri/runtime/jre/.ignore
+          echo "✅ Failsafe applied."
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -168,7 +173,14 @@ jobs:
         shell: bash
         run: |
           echo "Copying actual JAR files from Gradle build output..."
-          find app/core/build/libs/ -name "*.jar" ! -name "*-plain.jar" -exec cp {} frontend/editor/src-tauri/libs/ \;
+          cp app/core/build/libs/*.jar frontend/editor/src-tauri/libs/ 2>/dev/null || true
+          
+          if ls frontend/editor/src-tauri/libs/ | grep -q "pdf"; then
+            echo "✅ Real JAR copied, removing dummy."
+            rm -f frontend/editor/src-tauri/libs/dummy-app.jar
+          fi
+          
+          echo "Contents of src-tauri/libs:"
           ls -la frontend/editor/src-tauri/libs/
 
       - name: Build bundled JRE (jlink)
@@ -178,7 +190,7 @@ jobs:
           DISABLE_ADDITIONAL_FEATURES: true
 
       - name: Build Windows provisioner and thumbnail handler
-        if: matrix.builds_provisioner
+        if: matrix.builds_provisioner == true
         working-directory: frontend
         shell: bash
         run: node editor/scripts/build-provisioner.mjs
