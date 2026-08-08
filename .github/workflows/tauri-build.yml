@@ -91,13 +91,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      # THIS IS THE CRITICAL FIX: Creates a dummy file so `rust-cache` doesn't crash build.rs
-      - name: Create Dummy JAR (Failsafe for rust-cache)
+      - name: Un-ignore JAR files for Tauri
         shell: bash
         run: |
-          mkdir -p frontend/editor/src-tauri/libs
-          touch frontend/editor/src-tauri/libs/dummy.jar
-          echo "✅ Injected dummy JAR to prevent early Tauri glob panics."
+          echo "Tauri's bundler respects .gitignore. Because *.jar is gitignored,"
+          echo "Tauri cannot see the backend JAR and panics with a glob error."
+          echo "Removing *.jar from .gitignore so Tauri can bundle it..."
+          sed -i 's/\*\.jar//g' .gitignore || true
+          if [ -f frontend/editor/src-tauri/.gitignore ]; then
+            sed -i 's/\*\.jar//g' frontend/editor/src-tauri/.gitignore || true
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -162,14 +165,11 @@ jobs:
       - name: Copy backend JAR to Tauri libs
         shell: bash
         run: |
-          echo "Copying actual JAR files from Gradle build output..."
-          cp app/core/build/libs/*.jar frontend/editor/src-tauri/libs/ 2>/dev/null || true
-          
-          # Clean up the dummy if the real JAR successfully copied
-          if [ $(ls frontend/editor/src-tauri/libs/*.jar 2>/dev/null | wc -l) -gt 1 ]; then
-            rm -f frontend/editor/src-tauri/libs/dummy.jar
-            echo "✅ Real JAR copied, dummy removed."
-          fi
+          mkdir -p frontend/editor/src-tauri/libs
+          echo "Copying fat JAR (ignoring -plain.jar)..."
+          find app/core/build/libs/ -name "*.jar" ! -name "*-plain.jar" -exec cp {} frontend/editor/src-tauri/libs/ \;
+          echo "Contents of src-tauri/libs:"
+          ls -la frontend/editor/src-tauri/libs/
 
       - name: Build bundled JRE (jlink)
         shell: bash
