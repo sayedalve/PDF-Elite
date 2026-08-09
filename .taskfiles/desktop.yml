@@ -106,7 +106,6 @@ tasks:
     desc: "Create bundled JRE"
     deps:
       - jlink:jar
-      - jlink:runtime
 
   jlink:jar:
     desc: "Build backend JAR only"
