@@ -1,0 +1,1 @@
+Update LoginDisclaimerController to avoid Java record (compatibility)

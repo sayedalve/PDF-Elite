@@ -7,7 +7,36 @@ import stirling.software.common.service.LoginAgreementService;
  */
 public class LoginDisclaimerController {
 
-    public static record LoginDisclaimerResponse(boolean enabled, String content, boolean showInAnonymousMode, String format) {}
+    public static class LoginDisclaimerResponse {
+        private final boolean enabled;
+        private final String content;
+        private final boolean showInAnonymousMode;
+        private final String format;
+
+        public LoginDisclaimerResponse(
+                boolean enabled, String content, boolean showInAnonymousMode, String format) {
+            this.enabled = enabled;
+            this.content = content;
+            this.showInAnonymousMode = showInAnonymousMode;
+            this.format = format;
+        }
+
+        public boolean enabled() {
+            return enabled;
+        }
+
+        public String content() {
+            return content;
+        }
+
+        public boolean showInAnonymousMode() {
+            return showInAnonymousMode;
+        }
+
+        public String format() {
+            return format;
+        }
+    }
 
     private final LoginAgreementService loginAgreementService;
 
