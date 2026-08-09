@@ -12,6 +12,8 @@ repositories {
 
 dependencies {
     api project(':common')
+    // Ensure proprietary module has access to the core stirling-pdf project sources/tests
+    api project(':stirling-pdf')
     api "com.google.guava:guava:${rootProject.ext.guavaVersion}"
 
     api 'org.springframework:spring-jdbc'
