@@ -169,15 +169,6 @@ jobs:
           JPDFIUM_PLATFORMS: ${{ matrix.jpdfium_platforms }}
         run: task desktop:prepare
 
-      - name: Build backend JAR and JRE for Tauri
-        env:
-          MAVEN_USER: ${{ secrets.MAVEN_USER }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          MAVEN_PUBLIC_URL: ${{ secrets.MAVEN_PUBLIC_URL }}
-          DISABLE_ADDITIONAL_FEATURES: true
-          JPDFIUM_PLATFORMS: ${{ matrix.jpdfium_platforms }}
-        run: task desktop:jlink
-
       - name: Run Tauri/Cargo tests
         run: task desktop:test
 

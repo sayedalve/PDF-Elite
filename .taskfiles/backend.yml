@@ -85,9 +85,9 @@ tasks:
   build:
     desc: "Full backend build"
     cmds:
-      - cmd: cmd /c ".\gradlew.bat clean build"
+      - cmd: cmd /c ".\gradlew.bat clean build -PnoSpotless"
         platforms: [windows]
-      - cmd: ./gradlew clean build
+      - cmd: ./gradlew clean build -PnoSpotless
         platforms: [linux, darwin]
 
   build:fast:
