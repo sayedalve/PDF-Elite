@@ -61,10 +61,12 @@ tasks:
       - mkdir -p "{{.TAURI_DIR}}"
 
   # Alias for setup - used by CI workflows
+  # This task ensures the backend JAR and JRE are available before Tauri builds/tests
   prepare:
-    desc: "Prepare desktop build (alias for setup)"
+    desc: "Prepare desktop build (ensures backend JAR + JRE are available)"
     deps:
       - setup
+      - jlink
 
   deps:
     desc: "Install desktop build dependencies"
@@ -113,11 +115,35 @@ tasks:
     dir: "{{.ROOT_DIR}}"
     method: none
     cmds:
-      # Copy the built JAR to Tauri libs directory
-      - mkdir -p "{{.TAURI_DIR}}/libs"
-      - cmd: 'cp app/core/build/libs/*.jar {{.TAURI_DIR}}/libs/'
-        platforms: [linux, darwin]
-      - cmd: 'powershell -NoProfile -Command "Copy-Item ''app/core/build/libs/*.jar'' -Destination ''{{.TAURI_DIR}}\\libs\\'' -Force"'
+      # Copy the built JAR to Tauri libs directory with robust error handling
+      - |
+        mkdir -p "{{.TAURI_DIR}}/libs"
+        
+        # Find the actual bootJar from the correct backend path (app/core/build/libs)
+        JAR=$(find app/core/build/libs -maxdepth 1 -type f -name 'stirling-pdf*.jar' -print -quit 2>/dev/null || true)
+        
+        if [ -z "$JAR" ]; then
+          echo "ERROR: No Stirling-PDF bootJar found in app/core/build/libs after backend build"
+          echo "Available files in app/core/build/libs:"
+          ls -la app/core/build/libs 2>/dev/null || echo "Directory does not exist"
+          exit 1
+        fi
+        
+        echo "Found backend JAR: $JAR"
+        cp "$JAR" "{{.TAURI_DIR}}/libs/"
+        echo "Copied JAR to {{.TAURI_DIR}}/libs/"
+      - cmd: |
+          powershell -NoProfile -Command @"
+            $jarPath = Get-ChildItem -Path 'app/core/build/libs' -Filter 'stirling-pdf*.jar' -File -ErrorAction SilentlyContinue | Select-Object -First 1
+            if (-not $jarPath) {
+              Write-Host "ERROR: No Stirling-PDF bootJar found in app/core/build/libs after backend build"
+              exit 1
+            }
+            Write-Host "Found backend JAR: $($jarPath.FullName)"
+            New-Item -ItemType Directory -Force -Path '{{.TAURI_DIR}}\libs' | Out-Null
+            Copy-Item -Path $jarPath.FullName -Destination '{{.TAURI_DIR}}\libs\' -Force
+            Write-Host "Copied JAR to {{.TAURI_DIR}}\libs\"
+          "@
         platforms: [windows]
 
   jlink:runtime:
