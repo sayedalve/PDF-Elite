@@ -210,12 +210,12 @@ public class AiWorkflowService {
             case ANSWER -> onAnswer(response, filesById, request, listener);
             case GENERATE_FILE -> onGenerateFile(response, listener);
             case NOT_FOUND,
-                    NEED_CLARIFICATION,
-                    CANNOT_DO,
-                    DRAFT,
-                    COMPLETED,
-                    UNSUPPORTED_CAPABILITY,
-                    CANNOT_CONTINUE ->
+                            NEED_CLARIFICATION,
+                            CANNOT_DO,
+                            DRAFT,
+                            COMPLETED,
+                            UNSUPPORTED_CAPABILITY,
+                            CANNOT_CONTINUE ->
                     new WorkflowState.Terminal(response);
         };
     }

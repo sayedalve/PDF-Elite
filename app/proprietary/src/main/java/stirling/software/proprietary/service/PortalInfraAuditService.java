@@ -136,7 +136,7 @@ public class PortalInfraAuditService {
             case USER_LOGIN, USER_LOGOUT, USER_FAILED_LOGIN -> "auth";
             case SETTINGS_CHANGED, USER_PROFILE_UPDATE -> "config";
             case PDF_PROCESS, FILE_OPERATION -> isSecurityPath(path) ? "security" : "processing";
-            // UI_DATA / HTTP_REQUEST are filtered out before mapping.
+                // UI_DATA / HTTP_REQUEST are filtered out before mapping.
             default -> "processing";
         };
     }

@@ -12,8 +12,6 @@ repositories {
 
 dependencies {
     api project(':common')
-    // Ensure proprietary module has access to the core stirling-pdf project sources/tests
-    api project(':stirling-pdf')
     api "com.google.guava:guava:${rootProject.ext.guavaVersion}"
 
     api 'org.springframework:spring-jdbc'
@@ -82,7 +80,9 @@ tasks.register('prepareKotlinBuildScriptModel') {}
 tasks.register('type3SignatureTool', JavaExec) {
     group = 'type3'
     description = 'Dump Type3 font signatures and glyph coverage for the Type3 library'
-    classpath = sourceSets.main.runtimeClasspath
+    // Type3SignatureTool lives in :stirling-pdf; reference its full runtime classpath directly
+    // without adding a circular module-level dependency on :stirling-pdf.
+    classpath = project(':stirling-pdf').sourceSets.main.runtimeClasspath
     mainClass = 'stirling.software.SPDF.service.pdfjson.type3.tool.Type3SignatureTool'
     standardInput = System.in
 }

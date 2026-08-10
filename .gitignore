@@ -1,4 +1,246 @@
-```
-# Configuration files
-.taskfiles/
-```
+# ============================================================
+# PDF Elite .gitignore
+# ============================================================
+
+# ------------------------------------------------------------
+# Environment variables and secrets
+# ------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+
+# API keys and local secrets
+*.pem
+*.key
+*.p12
+*.pfx
+
+
+# ------------------------------------------------------------
+# Rust / Cargo
+# ------------------------------------------------------------
+
+# Rust build output
+target/
+
+# Cargo backup files
+**/*.rs.bk
+
+# Rust profiling / generated files
+*.profraw
+
+
+# ------------------------------------------------------------
+# Tauri
+# ------------------------------------------------------------
+
+# Tauri generated build output
+src-tauri/target/
+
+# Tauri generated bundles
+src-tauri/target/release/bundle/
+
+# Tauri generated metadata
+src-tauri/gen/
+
+# NOTE:
+# Keep src-tauri/Cargo.toml
+# Keep src-tauri/Cargo.lock
+
+
+# ------------------------------------------------------------
+# Node.js
+# ------------------------------------------------------------
+
+node_modules/
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Package manager caches
+.npm/
+.yarn/
+.pnpm-store/
+
+
+# ------------------------------------------------------------
+# Frontend build output
+# ------------------------------------------------------------
+
+dist/
+build/
+out/
+.output/
+.nuxt/
+.next/
+.svelte-kit/
+.vite/
+
+# Generic generated frontend output
+**/dist/
+**/build/
+**/out/
+
+
+# ------------------------------------------------------------
+# Test / coverage output
+# ------------------------------------------------------------
+
+coverage/
+.nyc_output/
+*.lcov
+
+
+# ------------------------------------------------------------
+# Logs
+# ------------------------------------------------------------
+
+*.log
+logs/
+log/
+
+
+# ------------------------------------------------------------
+# Temporary files
+# ------------------------------------------------------------
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+
+# ------------------------------------------------------------
+# Windows
+# ------------------------------------------------------------
+
+# Windows thumbnail cache
+Thumbs.db
+ehthumbs.db
+
+# Windows Explorer metadata
+Desktop.ini
+
+
+# ------------------------------------------------------------
+# VS Code
+# ------------------------------------------------------------
+
+.vscode/
+
+# Keep shared VS Code configuration if you want it tracked:
+# !.vscode/extensions.json
+# !.vscode/settings.json
+
+
+# ------------------------------------------------------------
+# JetBrains IDEs
+# ------------------------------------------------------------
+
+.idea/
+*.iml
+*.iws
+*.ipr
+
+
+# ------------------------------------------------------------
+# Visual Studio
+# ------------------------------------------------------------
+
+.vs/
+*.user
+*.userosscache
+*.suo
+
+
+# ------------------------------------------------------------
+# OS generated files
+# ------------------------------------------------------------
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+
+# ------------------------------------------------------------
+# Temporary archives
+# ------------------------------------------------------------
+
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+
+
+# ------------------------------------------------------------
+# Generated installers / executables
+# ------------------------------------------------------------
+
+*.exe
+*.msi
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+
+
+# ------------------------------------------------------------
+# Generated PDFs / exports
+# ------------------------------------------------------------
+
+# Ignore generated/exported PDFs only if they are build artifacts
+# Uncomment if your application generates PDFs locally:
+# *.pdf
+
+
+# ------------------------------------------------------------
+# Local application data
+# ------------------------------------------------------------
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
+
+# Local caches
+.cache/
+.cache/*
+tmp/
+temp/
+
+
+# ------------------------------------------------------------
+# Tauri / frontend generated files
+# ------------------------------------------------------------
+
+**/.tauri/
+**/.turbo/
+**/.parcel-cache/
+**/.vite/
+
+
+# ------------------------------------------------------------
+# Testing
+# ------------------------------------------------------------
+
+playwright-report/
+test-results/
+blob-report/
+
+
+# ------------------------------------------------------------
+# Misc generated files
+# ------------------------------------------------------------
+
+*.pid
+*.seed
+*.pid.lock

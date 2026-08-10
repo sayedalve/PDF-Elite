@@ -2,13 +2,13 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "PDF Elite",
   "mainBinaryName": "PDF Elite",
-  "version": "1.0.0",
+  "version": "2.14.2",
   "identifier": "com.pdfelite.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
     "beforeDevCommand": "npm ci && npx vite --mode desktop",
-    "beforeBuildCommand": "npm ci && npx vite build --mode desktop"
+    "beforeBuildCommand": "npx vite build --mode desktop"
   },
   "app": {
     "windows": [

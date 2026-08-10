@@ -2,9 +2,7 @@ package stirling.software.SPDF.controller.api.misc;
 
 import stirling.software.common.service.LoginAgreementService;
 
-/**
- * Restores LoginDisclaimerController expected by tests.
- */
+/** Restores LoginDisclaimerController expected by tests. */
 public class LoginDisclaimerController {
 
     public static class LoginDisclaimerResponse {

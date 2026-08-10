@@ -16,7 +16,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -177,18 +176,26 @@ public class SecurityConfiguration {
             configuredOrigins = applicationProperties.getSystem().getCorsAllowedOrigins();
         }
 
+        boolean hasSpecificOrigins = configuredOrigins != null && !configuredOrigins.isEmpty();
+
         CorsConfiguration cfg = new CorsConfiguration();
-        if (configuredOrigins != null && !configuredOrigins.isEmpty()) {
+        if (hasSpecificOrigins) {
+            // Specific origins are configured: allow credentials (cookies, auth headers).
             cfg.setAllowedOriginPatterns(configuredOrigins);
+            cfg.setAllowCredentials(true);
             log.debug(
                     "CORS configured with allowed origin patterns from settings.yml: {}",
                     configuredOrigins);
         } else {
-            // Default to allowing all origins when nothing is configured
+            // No specific origins configured: allow all origins WITHOUT credentials.
+            // Combining allowCredentials(true) with a wildcard origin pattern is forbidden by
+            // the CORS spec (RFC 6454 §7.2, Fetch §3.2.5) and rejected by all browsers.
             cfg.setAllowedOriginPatterns(List.of("*"));
+            cfg.setAllowCredentials(false);
             log.info(
                     "No CORS allowed origins configured in settings.yml"
-                            + " (system.corsAllowedOrigins); allowing all origins.");
+                            + " (system.corsAllowedOrigins); allowing all origins without"
+                            + " credentials. Set corsAllowedOrigins to enable credential support.");
         }
 
         // Explicitly configure supported HTTP methods (include OPTIONS for preflight)
@@ -215,7 +222,6 @@ public class SecurityConfiguration {
                         "Content-Disposition",
                         "Content-Type"));
 
-        cfg.setAllowCredentials(true);
         cfg.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -257,14 +263,8 @@ public class SecurityConfiguration {
             @Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
             SessionCreationPolicy sessionPolicy)
             throws Exception {
-        // Enable CORS only if we have configured origins
-        CorsConfigurationSource corsSource = corsConfigurationSource();
-        if (corsSource != null) {
-            http.cors(cors -> cors.configurationSource(corsSource));
-        } else {
-            // Explicitly disable CORS when no origins are configured
-            http.cors(CorsConfigurer::disable);
-        }
+        // CORS: corsConfigurationSource() always returns a non-null source; apply it directly.
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         http.csrf(CsrfConfigurer::disable);
 

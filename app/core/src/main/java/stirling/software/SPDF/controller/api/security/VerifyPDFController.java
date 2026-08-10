@@ -11,9 +11,7 @@ import stirling.software.SPDF.model.api.security.PDFVerificationRequest;
 import stirling.software.SPDF.model.api.security.PDFVerificationResult;
 import stirling.software.SPDF.service.VeraPDFService;
 
-/**
- * Restores VerifyPDFController expected by tests. Exposes verifyPDF(PDFVerificationRequest).
- */
+/** Restores VerifyPDFController expected by tests. Exposes verifyPDF(PDFVerificationRequest). */
 public class VerifyPDFController {
 
     private final VeraPDFService veraPDFService;
@@ -22,7 +20,8 @@ public class VerifyPDFController {
         this.veraPDFService = veraPDFService;
     }
 
-    public ResponseEntity<List<PDFVerificationResult>> verifyPDF(@RequestBody PDFVerificationRequest request) {
+    public ResponseEntity<List<PDFVerificationResult>> verifyPDF(
+            @RequestBody PDFVerificationRequest request) {
         if (request == null || request.getFileInput() == null) {
             throw new RuntimeException("fileInput is required");
         }

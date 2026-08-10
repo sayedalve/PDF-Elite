@@ -210,10 +210,12 @@ public class ResourceAccessService {
             return false;
         }
         return switch (policy) {
-            // Deployment-wide only where the resolver treats everyone as one org; saas resolvers
-            // return false, so ORG_ALL cannot leak a tenant's resource to another tenant's users.
+                // Deployment-wide only where the resolver treats everyone as one org; saas
+                // resolvers
+                // return false, so ORG_ALL cannot leak a tenant's resource to another tenant's
+                // users.
             case ORG_ALL -> principalResolver.allowsDeploymentWideAccess();
-            // Admins already pass above; only team leads here, scoped to the owning team.
+                // Admins already pass above; only team leads here, scoped to the owning team.
             case ADMINS_AND_TEAM_LEADS -> matchesTeamLeadDefault(owner, user);
             case EXPLICIT_ONLY -> false;
         };

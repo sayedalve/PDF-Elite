@@ -34,8 +34,8 @@ COPY app/core/build.gradle                  app/core/
 COPY app/common/build.gradle                app/common/
 COPY app/proprietary/build.gradle           app/proprietary/
 
-# Use system gradle instead of gradlew to avoid SSL issues downloading gradle distribution on emulated arm64
-RUN gradle dependencies --no-daemon || true
+# Use the project's Gradle wrapper to ensure version consistency with gradle-wrapper.properties.
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon || true
 
 COPY . .
 
@@ -50,7 +50,7 @@ ARG BUILD_PORTAL=false
 ARG TARGETARCH
 RUN JPDFIUM_PLATFORM="$([ "$TARGETARCH" = arm64 ] && echo linux-arm64 || echo linux-x64)" && \
     STIRLING_FLAVOR=${STIRLING_FLAVOR} \
-    gradle clean build \
+    ./gradlew clean build \
       -PbuildWithFrontend=true \
       -PbuildWithPortal=${BUILD_PORTAL} \
       -PjpdfiumPlatforms="$JPDFIUM_PLATFORM" \
