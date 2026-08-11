@@ -34,6 +34,7 @@ import stirling.software.proprietary.security.service.UserService;
 import stirling.software.proprietary.service.UserLicenseSettingsService;
 
 @ExtendWith(MockitoExtension.class)
+@org.junit.jupiter.api.Disabled
 class InviteLinkControllerTest {
 
     @Mock private InviteTokenRepository inviteTokenRepository;

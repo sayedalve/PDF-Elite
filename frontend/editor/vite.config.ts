@@ -94,39 +94,153 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
   const manifestFile = isSaas
     ? "public/og-metadata.saas.json"
     : "public/og-metadata.json";
+
+  let resolvedOutDir = "dist";
+  let resolvedRoot = __dirname;
+
   return {
     name: "prerender-og",
     apply: "build" as const,
-    async closeBundle() {
-      const { prerenderOg } = await import("./scripts/og-prerender.mjs");
-      const ogBase = (
-        process.env.VITE_OG_BASE_URL ||
-        process.env.CF_PAGES_URL ||
-        ""
-      ).replace(/\/+$/, "");
-      // Absolute deploy base for nested routes' <base href> (matches vite `base`).
-      const subpath = (process.env.RUN_SUBPATH || "").replace(/^\/+|\/+$/g, "");
-      const baseHref = subpath ? `/${subpath}/` : "/";
-      let manifest;
-      try {
-        manifest = JSON.parse(
-          await fs.readFile(path.resolve(__dirname, manifestFile), "utf8"),
+    configResolved(config) {
+      // Capture the real outDir and root from Vite's resolved config so the
+      // plugin is not sensitive to how the config file was loaded/cached.
+      resolvedRoot = config.root;
+      resolvedOutDir = config.build.outDir ?? "dist";
+    },
+    // Use generateBundle (order: "post") instead of closeBundle.
+    // In Vite 7 the HTML asset is emitted into the Rollup bundle BEFORE
+    // writeBundle runs; closeBundle fires after all writes but Vite 7's
+    // internal HTML plugin may still be in flight.  Accessing the bundle
+    // object directly here is race-free and disk-I/O-free.
+    generateBundle: {
+      order: "post" as const,
+      async handler(_options: object, bundle: Record<string, { type: string; source?: string | Uint8Array; fileName?: string }>) {
+        const { buildOgTags, injectOg } = await import(
+          "./scripts/og-prerender.mjs"
         );
-      } catch {
-        console.warn(
-          `[prerender-og] ${manifestFile} missing; skipping OG prerender. ` +
-            "Run `node scripts/generate-og-metadata.mjs`.",
+
+        const ogBase = (
+          process.env.VITE_OG_BASE_URL ||
+          process.env.CF_PAGES_URL ||
+          ""
+        ).replace(/\/+$/, "");
+        const subpath = (process.env.RUN_SUBPATH || "").replace(
+          /^\/+|\/+$/g,
+          "",
         );
-        return;
-      }
-      const distDir = path.resolve(__dirname, "dist");
-      const count = await prerenderOg({ distDir, manifest, ogBase, baseHref });
-      console.log(
-        `[prerender-og] wrote ${count} prerendered route pages` +
-          (ogBase
-            ? ` (absolute URLs, base=${ogBase})`
-            : " (root-relative URLs)"),
-      );
+        const baseHref = subpath ? `/${subpath}/` : "/";
+
+        let manifest: {
+          default: { title: string; description: string; image: string; ogTitle?: string };
+          byPath?: Record<string, string>;
+          byTool?: Record<string, { title: string; description: string; image: string; ogTitle?: string }>;
+        };
+        try {
+          manifest = JSON.parse(
+            await fs.readFile(
+              path.resolve(resolvedRoot, manifestFile),
+              "utf8",
+            ),
+          );
+        } catch {
+          console.warn(
+            `[prerender-og] ${manifestFile} missing; skipping OG prerender. ` +
+              "Run `node scripts/generate-og-metadata.mjs`.",
+          );
+          return;
+        }
+
+        // Find the index.html entry in the bundle (Vite emits it as an asset).
+        const htmlEntry = Object.values(bundle).find(
+          (chunk) =>
+            chunk.type === "asset" &&
+            (chunk as { fileName?: string }).fileName === "index.html",
+        ) as { type: string; source: string | Uint8Array; fileName: string } | undefined;
+
+        if (!htmlEntry || htmlEntry.type !== "asset") {
+          console.warn(
+            "[prerender-og] index.html not found in bundle; skipping OG prerender.",
+          );
+          return;
+        }
+
+        const template = String(htmlEntry.source);
+
+        // Inject OG tags into the root index.html in-bundle (no disk read needed).
+        htmlEntry.source = injectOg(template, manifest.default, {
+          ogBase,
+          pageUrlPath: ogBase ? "/" : null,
+        });
+
+        // Also write per-route HTML files into the bundle so Rollup/Vite
+        // writes them alongside index.html.
+        const BASE_HREF_RE = /<base\s+href="[^"]*"\s*\/?>/i;
+        let count = 0;
+        const distDir = path.resolve(resolvedRoot, resolvedOutDir);
+        for (const [routePath, id] of Object.entries(
+          manifest.byPath ?? {},
+        )) {
+          const segments = routePath.replace(/^\//, "").split("/");
+          if (
+            !segments.length ||
+            !segments.every((s) => /^[A-Za-z0-9_-]+$/.test(s))
+          )
+            continue;
+          const entry = manifest.byTool?.[id] ?? manifest.default;
+          let html = injectOg(template, entry, {
+            ogBase,
+            pageUrlPath: ogBase ? routePath : null,
+          });
+          const nested = segments.length > 1;
+          if (nested) html = html.replace(BASE_HREF_RE, `<base href="${baseHref}" />`);
+          // Emit as a Rollup asset so Vite writes it with everything else.
+          this.emitFile({
+            type: "asset",
+            fileName: path.join(...segments) + ".html",
+            source: html,
+          });
+          count++;
+        }
+
+        console.log(
+          `[prerender-og] wrote ${count} prerendered route pages` +
+            (ogBase
+              ? ` (absolute URLs, base=${ogBase})`
+              : " (root-relative URLs)"),
+        );
+
+        // Fallback: also write per-route files to disk (needed for Spring Boot
+        // bundling where Rollup-emitted assets may be post-processed).
+        try {
+          for (const [routePath, id] of Object.entries(
+            manifest.byPath ?? {},
+          )) {
+            const segments = routePath.replace(/^\//, "").split("/");
+            if (
+              !segments.length ||
+              !segments.every((s) => /^[A-Za-z0-9_-]+$/.test(s))
+            )
+              continue;
+            const entry = manifest.byTool?.[id] ?? manifest.default;
+            let html = injectOg(template, entry, {
+              ogBase,
+              pageUrlPath: ogBase ? routePath : null,
+            });
+            const nested = segments.length > 1;
+            if (nested)
+              html = html.replace(
+                BASE_HREF_RE,
+                `<base href="${baseHref}" />`,
+              );
+            const outFile = path.join(distDir, ...segments) + ".html";
+            if (nested)
+              await fs.mkdir(path.dirname(outFile), { recursive: true });
+            await fs.writeFile(outFile, html);
+          }
+        } catch {
+          // Disk write fallback is best-effort; Rollup-emitted assets are canonical.
+        }
+      },
     },
   };
 }

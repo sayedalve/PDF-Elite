@@ -1,0 +1,523 @@
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\AnalysisControllerTest.java:38: error: cannot find symbol
+    @InjectMocks private AnalysisController analysisController;
+                         ^
+  symbol:   class AnalysisController
+  location: class AnalysisControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\BookletImpositionControllerTest.java:52: error: cannot find symbol
+    @InjectMocks private BookletImpositionController controller;
+                         ^
+  symbol:   class BookletImpositionController
+  location: class BookletImpositionControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertEbookToPDFControllerTest.java:68: error: cannot find symbol
+    @InjectMocks private ConvertEbookToPDFController controller;
+                         ^
+  symbol:   class ConvertEbookToPDFController
+  location: class ConvertEbookToPDFControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertEmlToPDFTest.java:61: error: cannot find symbol
+    @InjectMocks private ConvertEmlToPDF controller;
+                         ^
+  symbol:   class ConvertEmlToPDF
+  location: class ConvertEmlToPDFTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertHtmlToPDFTest.java:58: error: cannot find symbol
+    @InjectMocks private ConvertHtmlToPDF controller;
+                         ^
+  symbol:   class ConvertHtmlToPDF
+  location: class ConvertHtmlToPDFTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertImgPDFControllerExtraTest.java:60: error: cannot find symbol
+    @InjectMocks private ConvertImgPDFController controller;
+                         ^
+  symbol:   class ConvertImgPDFController
+  location: class ConvertImgPDFControllerExtraTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertImgPDFControllerGapTest.java:65: error: cannot find symbol
+    @InjectMocks private ConvertImgPDFController controller;
+                         ^
+  symbol:   class ConvertImgPDFController
+  location: class ConvertImgPDFControllerGapTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertImgPDFControllerMoreTest.java:53: error: cannot find symbol
+    @InjectMocks private ConvertImgPDFController controller;
+                         ^
+  symbol:   class ConvertImgPDFController
+  location: class ConvertImgPDFControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertImgPDFControllerTest.java:46: error: cannot find symbol
+    @InjectMocks private ConvertImgPDFController controller;
+                         ^
+  symbol:   class ConvertImgPDFController
+  location: class ConvertImgPDFControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertMarkdownToPdfMoreTest.java:62: error: cannot find symbol
+    @InjectMocks private ConvertMarkdownToPdf controller;
+                         ^
+  symbol:   class ConvertMarkdownToPdf
+  location: class ConvertMarkdownToPdfMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertMarkdownToPdfTest.java:60: error: cannot find symbol
+    @InjectMocks private ConvertMarkdownToPdf controller;
+                         ^
+  symbol:   class ConvertMarkdownToPdf
+  location: class ConvertMarkdownToPdfTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertOfficeControllerTest.java:72: error: cannot find symbol
+    private ConvertOfficeController controller;
+            ^
+  symbol:   class ConvertOfficeController
+  location: class ConvertOfficeControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertOfficeControllerTest.java:74: error: cannot find symbol
+    private ConvertOfficeController newController() {
+            ^
+  symbol:   class ConvertOfficeController
+  location: class ConvertOfficeControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPdfJsonControllerExtraTest.java:42: error: cannot find symbol
+    @InjectMocks private ConvertPdfJsonController controller;
+                         ^
+  symbol:   class ConvertPdfJsonController
+  location: class ConvertPdfJsonControllerExtraTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPdfJsonControllerMoreTest.java:61: error: cannot find symbol
+    @InjectMocks private ConvertPdfJsonController controller;
+                         ^
+  symbol:   class ConvertPdfJsonController
+  location: class ConvertPdfJsonControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPdfJsonControllerTest.java:45: error: cannot find symbol
+    @InjectMocks private ConvertPdfJsonController controller;
+                         ^
+  symbol:   class ConvertPdfJsonController
+  location: class ConvertPdfJsonControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToEpubControllerTest.java:69: error: cannot find symbol
+    @InjectMocks private ConvertPDFToEpubController controller;
+                         ^
+  symbol:   class ConvertPDFToEpubController
+  location: class ConvertPDFToEpubControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToExcelControllerMoreTest.java:50: error: cannot find symbol
+    @InjectMocks private ConvertPDFToExcelController controller;
+                         ^
+  symbol:   class ConvertPDFToExcelController
+  location: class ConvertPDFToExcelControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToExcelControllerTest.java:40: error: cannot find symbol
+    @InjectMocks private ConvertPDFToExcelController controller;
+                         ^
+  symbol:   class ConvertPDFToExcelController
+  location: class ConvertPDFToExcelControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToHtmlTest.java:22: error: cannot find symbol
+    @InjectMocks private ConvertPDFToHtml controller;
+                         ^
+  symbol:   class ConvertPDFToHtml
+  location: class ConvertPDFToHtmlTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToOfficeMoreTest.java:65: error: cannot find symbol
+    @InjectMocks private ConvertPDFToOffice controller;
+                         ^
+  symbol:   class ConvertPDFToOffice
+  location: class ConvertPDFToOfficeMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToOfficeTest.java:60: error: cannot find symbol
+    @InjectMocks private ConvertPDFToOffice controller;
+                         ^
+  symbol:   class ConvertPDFToOffice
+  location: class ConvertPDFToOfficeTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToPDFAGapTest.java:67: error: cannot find symbol
+    private ConvertPDFToPDFA newController() {
+            ^
+  symbol:   class ConvertPDFToPDFA
+  location: class ConvertPDFToPDFAGapTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPDFToPDFAMoreTest.java:68: error: cannot find symbol
+    private ConvertPDFToPDFA newController() {
+            ^
+  symbol:   class ConvertPDFToPDFA
+  location: class ConvertPDFToPDFAMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertPdfToVideoControllerTest.java:57: error: cannot find symbol
+    private ConvertPdfToVideoController controller;
+            ^
+  symbol:   class ConvertPdfToVideoController
+  location: class ConvertPdfToVideoControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertSvgToPDFMoreTest.java:57: error: cannot find symbol
+    @InjectMocks private ConvertSvgToPDF controller;
+                         ^
+  symbol:   class ConvertSvgToPDF
+  location: class ConvertSvgToPDFMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertSvgToPDFTest.java:57: error: cannot find symbol
+    @InjectMocks private ConvertSvgToPDF controller;
+                         ^
+  symbol:   class ConvertSvgToPDF
+  location: class ConvertSvgToPDFTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertWebsiteToPDFExtraTest.java:37: error: cannot find symbol
+    private ConvertWebsiteToPDF sut;
+            ^
+  symbol:   class ConvertWebsiteToPDF
+  location: class ConvertWebsiteToPDFExtraTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ConvertWebsiteToPdfTest.java:71: error: cannot find symbol
+    private ConvertWebsiteToPDF sut;
+            ^
+  symbol:   class ConvertWebsiteToPDF
+  location: class ConvertWebsiteToPdfTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ExtractCSVControllerMoreTest.java:46: error: cannot find symbol
+    @InjectMocks private ExtractCSVController controller;
+                         ^
+  symbol:   class ExtractCSVController
+  location: class ExtractCSVControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\ExtractCSVControllerTest.java:33: error: cannot find symbol
+    @InjectMocks private ExtractCSVController controller;
+                         ^
+  symbol:   class ExtractCSVController
+  location: class ExtractCSVControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\PdfVectorExportControllerMoreTest.java:56: error: cannot find symbol
+    @InjectMocks private PdfVectorExportController controller;
+                         ^
+  symbol:   class PdfVectorExportController
+  location: class PdfVectorExportControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\converters\PdfVectorExportControllerTest.java:46: error: cannot find symbol
+    @InjectMocks private PdfVectorExportController controller;
+                         ^
+  symbol:   class PdfVectorExportController
+  location: class PdfVectorExportControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\CropControllerMoreTest.java:63: error: cannot find symbol
+    @InjectMocks private CropController cropController;
+                         ^
+  symbol:   class CropController
+  location: class CropControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\CropControllerTest.java:60: error: cannot find symbol
+    @InjectMocks private CropController cropController;
+                         ^
+  symbol:   class CropController
+  location: class CropControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\AttachmentControllerMoreTest.java:39: error: cannot find symbol
+import stirling.software.SPDF.controller.api.converters.ConvertPDFToPDFA;
+                                                       ^
+  symbol:   class ConvertPDFToPDFA
+  location: package stirling.software.SPDF.controller.api.converters
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\AttachmentControllerMoreTest.java:63: error: cannot find symbol
+    @Mock private ConvertPDFToPDFA convertPDFToPDFA;
+                  ^
+  symbol:   class ConvertPDFToPDFA
+  location: class AttachmentControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\AttachmentControllerMoreTest.java:66: error: cannot find symbol
+    private AttachmentController controller;
+            ^
+  symbol:   class AttachmentController
+  location: class AttachmentControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\AttachmentControllerTest.java:54: error: cannot find symbol
+    @InjectMocks private AttachmentController attachmentController;
+                         ^
+  symbol:   class AttachmentController
+  location: class AttachmentControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\AutoRenameControllerTest.java:55: error: cannot find symbol
+    @InjectMocks private AutoRenameController controller;
+                         ^
+  symbol:   class AutoRenameController
+  location: class AutoRenameControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\CompressControllerMoreTest.java:75: error: cannot find symbol
+    @InjectMocks private CompressController controller;
+                         ^
+  symbol:   class CompressController
+  location: class CompressControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\CompressControllerTest.java:69: error: cannot find symbol
+    @InjectMocks private CompressController controller;
+                         ^
+  symbol:   class CompressController
+  location: class CompressControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\ConfigControllerMoreTest.java:68: error: cannot find symbol
+    private ConfigController newController() {
+            ^
+  symbol:   class ConfigController
+  location: class ConfigControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\ConfigControllerTest.java:42: error: cannot find symbol
+    private ConfigController configController;
+            ^
+  symbol:   class ConfigController
+  location: class ConfigControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\DecompressPdfControllerTest.java:55: error: cannot find symbol
+    @InjectMocks private DecompressPdfController controller;
+                         ^
+  symbol:   class DecompressPdfController
+  location: class DecompressPdfControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\ExtractImageScansControllerTest.java:71: error: cannot find symbol
+    private ExtractImageScansController controller;
+            ^
+  symbol:   class ExtractImageScansController
+  location: class ExtractImageScansControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\FlattenControllerTest.java:57: error: cannot find symbol
+    @InjectMocks private FlattenController controller;
+                         ^
+  symbol:   class FlattenController
+  location: class FlattenControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\MetadataControllerTest.java:34: error: cannot find symbol
+    @InjectMocks private MetadataController metadataController;
+                         ^
+  symbol:   class MetadataController
+  location: class MetadataControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\MobileScannerControllerTest.java:35: error: cannot find symbol
+    private MobileScannerController controller;
+            ^
+  symbol:   class MobileScannerController
+  location: class MobileScannerControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\OCRControllerMoreTest.java:71: error: cannot find symbol
+    private OCRController ocrController;
+            ^
+  symbol:   class OCRController
+  location: class OCRControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\OCRControllerTest.java:52: error: cannot find symbol
+    private OCRController ocrController;
+            ^
+  symbol:   class OCRController
+  location: class OCRControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\PrintFileControllerMoreTest.java:47: error: cannot find symbol
+    private final PrintFileController controller = new PrintFileController();
+                  ^
+  symbol:   class PrintFileController
+  location: class PrintFileControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\PrintFileControllerTest.java:20: error: cannot find symbol
+    private final PrintFileController controller = new PrintFileController();
+                  ^
+  symbol:   class PrintFileController
+  location: class PrintFileControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\RepairControllerMoreTest.java:62: error: cannot find symbol
+    private RepairController repairController;
+            ^
+  symbol:   class RepairController
+  location: class RepairControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\RepairControllerTest.java:62: error: cannot find symbol
+    private RepairController repairController;
+            ^
+  symbol:   class RepairController
+  location: class RepairControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\ReplaceAndInvertColorControllerTest.java:53: error: cannot find symbol
+    @InjectMocks private ReplaceAndInvertColorController controller;
+                         ^
+  symbol:   class ReplaceAndInvertColorController
+  location: class ReplaceAndInvertColorControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\ScannerEffectControllerTest.java:55: error: cannot find symbol
+    @InjectMocks private ScannerEffectController controller;
+                         ^
+  symbol:   class ScannerEffectController
+  location: class ScannerEffectControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\ShowJavascriptTest.java:52: error: cannot find symbol
+    @InjectMocks private ShowJavascript showJavascript;
+                         ^
+  symbol:   class ShowJavascript
+  location: class ShowJavascriptTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\StampControllerMoreTest.java:52: error: cannot find symbol
+    private StampController stampController;
+            ^
+  symbol:   class StampController
+  location: class StampControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\StampControllerTest.java:46: error: cannot find symbol
+    @InjectMocks private StampController stampController;
+                         ^
+  symbol:   class StampController
+  location: class StampControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\UnlockPDFFormsControllerMoreTest.java:67: error: cannot find symbol
+    private UnlockPDFFormsController controller;
+            ^
+  symbol:   class UnlockPDFFormsController
+  location: class UnlockPDFFormsControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\misc\UnlockPDFFormsControllerTest.java:34: error: cannot find symbol
+    private UnlockPDFFormsController controller;
+            ^
+  symbol:   class UnlockPDFFormsController
+  location: class UnlockPDFFormsControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\MultiPageLayoutControllerMoreTest.java:50: error: cannot find symbol
+    private MultiPageLayoutController controller;
+            ^
+  symbol:   class MultiPageLayoutController
+  location: class MultiPageLayoutControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\MultiPageLayoutControllerTest.java:50: error: cannot find symbol
+    @InjectMocks private MultiPageLayoutController controller;
+                         ^
+  symbol:   class MultiPageLayoutController
+  location: class MultiPageLayoutControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\PdfOverlayControllerTest.java:58: error: cannot find symbol
+    @InjectMocks private PdfOverlayController controller;
+                         ^
+  symbol:   class PdfOverlayController
+  location: class PdfOverlayControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\pipeline\PipelineControllerGapTest.java:62: error: cannot find symbol
+    @Mock private PipelineProcessor processor;
+                  ^
+  symbol:   class PipelineProcessor
+  location: class PipelineControllerGapTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\pipeline\PipelineControllerGapTest.java:69: error: cannot find symbol
+    private PipelineController controller;
+            ^
+  symbol:   class PipelineController
+  location: class PipelineControllerGapTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\pipeline\PipelineProcessorTest.java:42: error: cannot find symbol
+    PipelineProcessor pipelineProcessor;
+    ^
+  symbol:   class PipelineProcessor
+  location: class PipelineProcessorTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\PosterPdfControllerTest.java:58: error: cannot find symbol
+    @InjectMocks private PosterPdfController controller;
+                         ^
+  symbol:   class PosterPdfController
+  location: class PosterPdfControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\ScalePagesControllerTest.java:52: error: cannot find symbol
+    @InjectMocks private ScalePagesController controller;
+                         ^
+  symbol:   class ScalePagesController
+  location: class ScalePagesControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\CertSignControllerTest.java:60: error: cannot find symbol
+    @InjectMocks private CertSignController certSignController;
+                         ^
+  symbol:   class CertSignController
+  location: class CertSignControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\ManualRedactionServiceTest.java:59: error: cannot find symbol
+    private ManualRedactionService service;
+            ^
+  symbol:   class ManualRedactionService
+  location: class ManualRedactionServiceTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\PasswordControllerTest.java:63: error: cannot find symbol
+    @InjectMocks private PasswordController passwordController;
+                         ^
+  symbol:   class PasswordController
+  location: class PasswordControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerMoreTest.java:66: error: cannot find symbol
+    private RedactExecuteService redactExecuteService;
+            ^
+  symbol:   class RedactExecuteService
+  location: class RedactControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerMoreTest.java:67: error: cannot find symbol
+    private TextRedactionService textRedactionService;
+            ^
+  symbol:   class TextRedactionService
+  location: class RedactControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerMoreTest.java:68: error: cannot find symbol
+    private ManualRedactionService manualRedactionService;
+            ^
+  symbol:   class ManualRedactionService
+  location: class RedactControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerMoreTest.java:69: error: cannot find symbol
+    private RedactController controller;
+            ^
+  symbol:   class RedactController
+  location: class RedactControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerTest.java:79: error: cannot find symbol
+    @Mock private RedactExecuteService redactExecuteService;
+                  ^
+  symbol:   class RedactExecuteService
+  location: class RedactControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerTest.java:81: error: cannot find symbol
+    private TextRedactionService textRedactionService;
+            ^
+  symbol:   class TextRedactionService
+  location: class RedactControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerTest.java:82: error: cannot find symbol
+    private ManualRedactionService manualRedactionService;
+            ^
+  symbol:   class ManualRedactionService
+  location: class RedactControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactControllerTest.java:83: error: cannot find symbol
+    private RedactController redactController;
+            ^
+  symbol:   class RedactController
+  location: class RedactControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactExecuteServiceMoreTest.java:67: error: cannot find symbol
+    private ManualRedactionService manualRedactionService;
+            ^
+  symbol:   class ManualRedactionService
+  location: class RedactExecuteServiceMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactExecuteServiceMoreTest.java:68: error: cannot find symbol
+    private TextRedactionService textRedactionService;
+            ^
+  symbol:   class TextRedactionService
+  location: class RedactExecuteServiceMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactExecuteServiceMoreTest.java:69: error: cannot find symbol
+    private RedactExecuteService service;
+            ^
+  symbol:   class RedactExecuteService
+  location: class RedactExecuteServiceMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RedactExecuteServiceTest.java:41: error: cannot find symbol
+    private final RedactExecuteService service =
+                  ^
+  symbol:   class RedactExecuteService
+  location: class RedactExecuteServiceTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\RemoveCertSignControllerTest.java:62: error: cannot find symbol
+    @InjectMocks private RemoveCertSignController removeCertSignController;
+                         ^
+  symbol:   class RemoveCertSignController
+  location: class RemoveCertSignControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\SanitizeControllerTest.java:70: error: cannot find symbol
+    @InjectMocks private SanitizeController sanitizeController;
+                         ^
+  symbol:   class SanitizeController
+  location: class SanitizeControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\TextRedactionServiceExtraTest.java:51: error: cannot find symbol
+    private final TextRedactionService service = new TextRedactionService();
+                  ^
+  symbol:   class TextRedactionService
+  location: class TextRedactionServiceExtraTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\TextRedactionServiceMoreTest.java:47: error: cannot find symbol
+    private final TextRedactionService service = new TextRedactionService();
+                  ^
+  symbol:   class TextRedactionService
+  location: class TextRedactionServiceMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\TextRedactionServiceTest.java:49: error: cannot find symbol
+    private final TextRedactionService service = new TextRedactionService();
+                  ^
+  symbol:   class TextRedactionService
+  location: class TextRedactionServiceTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\TimestampControllerMoreTest.java:62: error: cannot find symbol
+    private TimestampController controller;
+            ^
+  symbol:   class TimestampController
+  location: class TimestampControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\TimestampControllerTest.java:38: error: cannot find symbol
+    @InjectMocks private TimestampController controller;
+                         ^
+  symbol:   class TimestampController
+  location: class TimestampControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\WatermarkControllerMoreTest.java:61: error: cannot find symbol
+    private WatermarkController controller;
+            ^
+  symbol:   class WatermarkController
+  location: class WatermarkControllerMoreTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\security\WatermarkControllerTest.java:63: error: cannot find symbol
+    @InjectMocks private WatermarkController watermarkController;
+                         ^
+  symbol:   class WatermarkController
+  location: class WatermarkControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\SettingsControllerTest.java:44: error: cannot find symbol
+    private SettingsController settingsController;
+            ^
+  symbol:   class SettingsController
+  location: class SettingsControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\ToSinglePageControllerTest.java:44: error: cannot find symbol
+    @InjectMocks private ToSinglePageController controller;
+                         ^
+  symbol:   class ToSinglePageController
+  location: class ToSinglePageControllerTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\UIDataControllerGapTest.java:59: error: cannot find symbol
+    private UIDataController controller(UserServiceInterface user) {
+            ^
+  symbol:   class UIDataController
+  location: class UIDataControllerGapTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\service\telegram\TelegramPipelineBotExtraTest.java:54: error: cannot find symbol
+    private TelegramPipelineBot bot;
+            ^
+  symbol:   class TelegramPipelineBot
+  location: class TelegramPipelineBotExtraTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\service\telegram\TelegramPipelineBotExtraTest.java:84: error: cannot find symbol
+    private boolean feedback(FeedbackEnum kind, String chatType) throws Exception {
+                             ^
+  symbol:   class FeedbackEnum
+  location: class TelegramPipelineBotExtraTest
+C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\service\telegram\TelegramPipelineBotMoreTest.java:56: error: cannot find symbol
+    private TelegramPipelineBot bot;
+            ^
+  symbol:   class TelegramPipelineBot
+  location: class TelegramPipelineBotMoreTest
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+100 errors
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':stirling-pdf:compileTestJava' (registered by plugin class 'org.gradle.api.plugins.JavaBasePlugin').
+> Compilation failed; see the compiler output below.
+  C:\Users\sayed\Downloads\PDF-Elite\app\core\src\test\java\stirling\software\SPDF\controller\api\AnalysisControllerTest.java:38: error: cannot find symbol
+      @InjectMocks private AnalysisController analysisController;
+                           ^
+    symbol:   class AnalysisController
+    location: class AnalysisControllerTest
+  100 errors
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 1m 6s

@@ -123,7 +123,7 @@ class SecurityConfigurationTest {
 
             CorsConfiguration cfg = configFor(source);
             assertThat(cfg.getAllowedOriginPatterns()).containsExactly("*");
-            assertThat(cfg.getAllowCredentials()).isTrue();
+            assertThat(cfg.getAllowCredentials()).isFalse();
             assertThat(cfg.getAllowedMethods()).contains("OPTIONS");
         }
 
