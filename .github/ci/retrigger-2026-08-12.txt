@@ -1,0 +1,5 @@
+Retrigger CI run (update 2)
+
+This file update forces a new push to main and should start a new workflow run that uses the latest commits (including the LocalIcon and workflow changes).
+
+Timestamp: 2026-08-12T17:12:00Z
