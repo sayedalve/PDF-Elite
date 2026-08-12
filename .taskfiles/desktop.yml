@@ -217,7 +217,7 @@ tasks:
       - copy-jar
     dir: "{{.TAURI_DIR}}"
     cmds:
-      - cargo tauri build --verbose
+      - npx tauri build --verbose
     sources:
       - Cargo.toml
       - Cargo.lock
@@ -247,7 +247,7 @@ tasks:
           echo "Copied $$(basename $$BUILT_JAR) to frontend/editor/src-tauri/libs/"
         platforms: [linux, darwin]
       - cmd: >
-          powershell -NoProfile -Command "if (-not (Test-Path 'frontend/editor/src-tauri/libs')) { New-Item -ItemType Directory -Force -Path 'frontend/editor/src-tauri/libs' | Out-Null }; $builtJar = Get-ChildItem -Path 'app/core/build/libs/stirling-pdf-*.jar' | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if ($null -eq $builtJar) { Write-Error 'Error: Backend JAR not found in app/core/build/libs/'; exit 1 }; Copy-Item -Path $builtJar.FullName -Destination 'frontend/editor/src-tauri/libs/' -Force; Write-Host 'Copied JAR to frontend/editor/src-tauri/libs/'"
+          powershell -NoProfile -Command "if (-not (Test-Path 'frontend/editor/src-tauri/libs')) { New-Item -ItemType Directory -Force -Path 'frontend/editor/src-tauri/libs' | Out-Null }; $$builtJar = Get-ChildItem -Path 'app/core/build/libs/stirling-pdf-*.jar' | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if ($$null -eq $$builtJar) { Write-Error 'Error: Backend JAR not found in app/core/build/libs/'; exit 1 }; Copy-Item -Path $$builtJar.FullName -Destination 'frontend/editor/src-tauri/libs/' -Force; Write-Host 'Copied JAR to frontend/editor/src-tauri/libs/'"
         platforms: [windows]
     sources:
       - app/core/build/libs/*.jar

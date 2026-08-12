@@ -244,3 +244,6 @@ blob-report/
 *.pid
 *.seed
 *.pid.lock
+
+# Large runtime dependencies downloaded during build
+frontend/editor/src-tauri/libs/*.jarfrontend/editor/src-tauri/libs/*.jar 
