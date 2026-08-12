@@ -35,6 +35,13 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Prepare frontend generated assets
+        working-directory: frontend/editor
+        run: |
+          # Mirror local developer prebuild: write env and generate icons required by LocalIcon.tsx
+          npx tsx scripts/setup-env.mts --desktop
+          node scripts/generate-icons.js
+
       - name: Build Frontend
         working-directory: frontend
         run: npx vite build editor --mode desktop
