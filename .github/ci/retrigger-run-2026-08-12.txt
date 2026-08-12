@@ -1,0 +1,5 @@
+Force triggering Build Windows Application workflow
+
+This commit is a no-op content change to force GitHub Actions to pick up latest main and run workflows.
+
+Timestamp: 2026-08-12T17:30:00Z
