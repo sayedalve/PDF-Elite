@@ -7,7 +7,7 @@ import { addCollection, Icon } from "@iconify/react";
 // @ts-ignore - import.meta.glob is provided by Vite
 let iconSet: any | undefined;
 try {
-  const modules = (import.meta as any).glob('../../../assets/material-symbols-icons.json', { eager: true, as: 'json' }) as Record<string, any>;
+  const modules = (import.meta as any).glob('../../assets/material-symbols-icons.json', { eager: true, as: 'json' }) as Record<string, any>;
   const keys = Object.keys(modules || {});
   if (keys.length > 0) {
     iconSet = modules[keys[0]];
