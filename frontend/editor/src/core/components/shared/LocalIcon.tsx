@@ -1,6 +1,20 @@
 import React from "react";
 import { addCollection, Icon } from "@iconify/react";
-import iconSet from "../../../assets/material-symbols-icons.json"; // eslint-disable-line no-restricted-imports -- Outside app paths
+
+// Try to load the locally generated icons JSON if it exists. Use Vite's import.meta.glob
+// with eager: true so the bundler doesn't fail the build when the file is absent.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - import.meta.glob is provided by Vite
+let iconSet: any | undefined;
+try {
+  const modules = (import.meta as any).glob('../../../assets/material-symbols-icons.json', { eager: true, as: 'json' }) as Record<string, any>;
+  const keys = Object.keys(modules || {});
+  if (keys.length > 0) {
+    iconSet = modules[keys[0]];
+  }
+} catch {
+  // If import.meta.glob isn't available or the file is missing, leave iconSet undefined
+}
 
 // Load icons synchronously at import time - guaranteed to be ready on first render
 let iconsLoaded = false;
