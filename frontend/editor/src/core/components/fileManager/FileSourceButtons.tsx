@@ -14,11 +14,8 @@ interface FileSourceButtonsProps {
 const FileSourceButtons: React.FC<FileSourceButtonsProps> = ({
   horizontal = false,
 }) => {
-  const {
-    activeSource,
-    onSourceChange,
-    onLocalFileClick,
-  } = useFileManagerContext();
+  const { activeSource, onSourceChange, onLocalFileClick } =
+    useFileManagerContext();
   const { t } = useTranslation();
   const terminology = useFileActionTerminology();
   const icons = useFileActionIcons();

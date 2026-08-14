@@ -15,7 +15,10 @@ export type ExecuteDisabledReason =
 // Props passed to the per-tool automation settings component.
 export interface ToolAutomationSettingsProps<TParams = ErasedToolParams> {
   parameters: TParams;
-  onParameterChange?: <K extends keyof TParams>(key: K, value: TParams[K]) => void;
+  onParameterChange?: <K extends keyof TParams>(
+    key: K,
+    value: TParams[K],
+  ) => void;
   onChange?: (params: Partial<TParams>) => void;
   disabled?: boolean;
 }

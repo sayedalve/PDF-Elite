@@ -24,7 +24,6 @@ export enum PageSize {
 
 export type ScaleMode = "fit" | "fill" | "stretch" | "custom";
 
-
 export interface AdjustPageScaleParameters extends BaseParameters {
   targetPageSize: PageSize;
   orientation: Orientation;
@@ -47,6 +46,5 @@ export const defaultParameters: AdjustPageScaleParameters = {
 export type AdjustPageScaleParametersHook =
   BaseParametersHook<AdjustPageScaleParameters>;
 
-export const useAdjustPageScaleParameters =
-  (): AdjustPageScaleParametersHook =>
-    useBaseParameters({ defaultParameters, endpointName: "scale-pages" });
+export const useAdjustPageScaleParameters = (): AdjustPageScaleParametersHook =>
+  useBaseParameters({ defaultParameters, endpointName: "scale-pages" });

@@ -83,7 +83,11 @@ export const useAnnotationStyleState = (
     setHighlightColorState(color);
     localStorage.setItem("pdf-elite-highlight-color", color);
     // Dispatch a custom event so other components (like the compact selector) can sync
-    window.dispatchEvent(new CustomEvent("pdf-elite-color-change", { detail: { type: "highlight", color } }));
+    window.dispatchEvent(
+      new CustomEvent("pdf-elite-color-change", {
+        detail: { type: "highlight", color },
+      }),
+    );
   }, []);
 
   const [highlightOpacity, setHighlightOpacity] = useState(60);

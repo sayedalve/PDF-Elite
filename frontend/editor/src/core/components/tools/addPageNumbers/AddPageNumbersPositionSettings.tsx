@@ -80,7 +80,10 @@ const AddPageNumbersPositionSettings = ({
             label={t("addPageNumbers.selectText.4", "Starting Number")}
             value={parameters.startingNumber}
             onChange={(v) =>
-              onParameterChange?.("startingNumber", typeof v === "number" ? v : 1)
+              onParameterChange?.(
+                "startingNumber",
+                typeof v === "number" ? v : 1,
+              )
             }
             min={1}
             disabled={disabled}

@@ -1,4 +1,4 @@
-﻿import { BaseParameters } from "@app/types/parameters";
+import { BaseParameters } from "@app/types/parameters";
 import {
   BaseParametersHook,
   useBaseParameters,
@@ -9,7 +9,9 @@ export interface RemoveAnnotationsParameters extends BaseParameters {}
 
 export const defaultParameters: RemoveAnnotationsParameters = {};
 
-export type RemoveAnnotationsParametersHook = BaseParametersHook<RemoveAnnotationsParameters>;
+export type RemoveAnnotationsParametersHook =
+  BaseParametersHook<RemoveAnnotationsParameters>;
 
-export const useRemoveAnnotationsParameters = (): RemoveAnnotationsParametersHook =>
-  useBaseParameters({ defaultParameters, endpointName: "flatten" });
+export const useRemoveAnnotationsParameters =
+  (): RemoveAnnotationsParametersHook =>
+    useBaseParameters({ defaultParameters, endpointName: "flatten" });

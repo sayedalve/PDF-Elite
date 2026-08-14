@@ -91,7 +91,7 @@ function describeIntegrationOperation<TParams extends Record<string, string>>(
 
 function describeStandardOperation<TParams>(
   endpoint: string,
-  config: ToolOperationConfig<TParams>
+  config: ToolOperationConfig<TParams>,
 ): PolicyOperation<TParams> {
   const isRedact = endpoint.includes("auto-redact");
 
@@ -114,7 +114,9 @@ function describeStandardOperation<TParams>(
         const { wordsToRedact, mode, ...rest } = params as any;
         return {
           ...rest,
-          listOfText: Array.isArray(wordsToRedact) ? wordsToRedact.join("\n") : wordsToRedact
+          listOfText: Array.isArray(wordsToRedact)
+            ? wordsToRedact.join("\n")
+            : wordsToRedact,
         };
       }
       return params as Record<string, unknown>;
@@ -125,11 +127,12 @@ function describeStandardOperation<TParams>(
         return {
           ...rest,
           mode: "automatic",
-          wordsToRedact: typeof listOfText === "string" ? listOfText.split("\n") : []
+          wordsToRedact:
+            typeof listOfText === "string" ? listOfText.split("\n") : [],
         } as TParams;
       }
       return api as TParams;
-    }
+    },
   };
 }
 

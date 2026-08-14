@@ -24,7 +24,8 @@ export const useInsertBlankPagesParameters = () => {
     setParameters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const resetParameters = () => setParameters(defaultInsertBlankPagesParameters);
+  const resetParameters = () =>
+    setParameters(defaultInsertBlankPagesParameters);
 
   const validateParameters = (): boolean => {
     return parameters.count >= 1 && parameters.position >= 0;

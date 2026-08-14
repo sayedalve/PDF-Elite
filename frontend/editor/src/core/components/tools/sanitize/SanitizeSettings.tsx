@@ -25,8 +25,12 @@ const SanitizeSettings = ({
     Object.keys(defaultParameters) as Array<keyof SanitizeParameters>
   ).map((key) => ({
     key,
-    label: t(`sanitize.options.${key as string}.label` as any, { defaultValue: key as any }) as unknown as string,
-    description: t(`sanitize.options.${key as string}.desc` as any, { defaultValue: `${key as string} from the PDF` as any }) as unknown as string,
+    label: t(`sanitize.options.${key as string}.label` as any, {
+      defaultValue: key as any,
+    }) as unknown as string,
+    description: t(`sanitize.options.${key as string}.desc` as any, {
+      defaultValue: `${key as string} from the PDF` as any,
+    }) as unknown as string,
     default: defaultParameters[key],
   }));
 
@@ -42,7 +46,10 @@ const SanitizeSettings = ({
             key={option.key}
             checked={parameters[option.key]}
             onChange={(event) =>
-              (onParameterChange as any)?.(option.key, event.currentTarget.checked)
+              (onParameterChange as any)?.(
+                option.key,
+                event.currentTarget.checked,
+              )
             }
             disabled={disabled}
             label={

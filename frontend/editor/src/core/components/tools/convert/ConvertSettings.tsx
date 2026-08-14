@@ -500,7 +500,9 @@ const ConvertSettings = ({
         )}
 
       {/* eBook to PDF options */}
-      {["epub", "mobi", "azw3", "fb2"].includes(parameters.fromExtension || "") &&
+      {["epub", "mobi", "azw3", "fb2"].includes(
+        parameters.fromExtension || "",
+      ) &&
         parameters.toExtension === "pdf" && (
           <>
             <Divider />

@@ -41,14 +41,21 @@ export const buildRotateFormData = (
   parameters: RotateParameters,
   file: File,
 ): FormData =>
-  objectToFormData(rotateToApiParams(parameters) as unknown as Record<string, unknown>, { fileInput: file });
+  objectToFormData(
+    rotateToApiParams(parameters) as unknown as Record<string, unknown>,
+    { fileInput: file },
+  );
 
 // Static configuration object
 export const rotateOperationConfig = defineSingleFileTool({
   validateParams: validateRotateParameters,
   buildFormData: buildRotateFormData,
-  toApiParams: rotateToApiParams as unknown as (params: RotateParameters) => import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams,
-  fromApiParams: rotateFromApiParams as unknown as (apiParams: import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams) => Partial<RotateParameters>,
+  toApiParams: rotateToApiParams as unknown as (
+    params: RotateParameters,
+  ) => import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams,
+  fromApiParams: rotateFromApiParams as unknown as (
+    apiParams: import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams,
+  ) => Partial<RotateParameters>,
   operationType: "rotate",
   endpoint: ENDPOINT,
   defaultParameters,

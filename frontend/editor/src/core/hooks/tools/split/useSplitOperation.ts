@@ -165,7 +165,9 @@ export const buildSplitFormData = (
   parameters: SplitParameters,
   file: File,
 ): FormData =>
-  objectToFormData(splitToApiParams(parameters) as Record<string, unknown>, { fileInput: file });
+  objectToFormData(splitToApiParams(parameters) as Record<string, unknown>, {
+    fileInput: file,
+  });
 
 export const getSplitEndpoint = (parameters: SplitParameters): SplitEndpoint =>
   // Default to BY_PAGES when no method is selected yet.
@@ -175,8 +177,12 @@ export const getSplitEndpoint = (parameters: SplitParameters): SplitEndpoint =>
 export const splitOperationConfig = defineSingleFileTool({
   validateParams: validateSplitParameters,
   buildFormData: buildSplitFormData,
-  toApiParams: splitToApiParams as unknown as (params: SplitParameters) => import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams,
-  fromApiParams: splitFromApiParams as unknown as (params: import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams) => SplitParameters,
+  toApiParams: splitToApiParams as unknown as (
+    params: SplitParameters,
+  ) => import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams,
+  fromApiParams: splitFromApiParams as unknown as (
+    params: import("@app/hooks/tools/shared/toolOperationTypes").ErasedToolParams,
+  ) => SplitParameters,
   operationType: "split",
   endpoint: getSplitEndpoint,
   // Full routing set: a stored step maps back to Split though its `method` selector is frontend-only.

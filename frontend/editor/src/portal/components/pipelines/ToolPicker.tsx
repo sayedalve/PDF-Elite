@@ -65,7 +65,8 @@ export function ToolPicker({
       : tools;
     const byCategory = new Map<SubcategoryId, ExecutableTool[]>();
     for (const tool of matched) {
-      const subCat = (tool.subcategoryId as SubcategoryId) ?? SubcategoryId.GENERAL;
+      const subCat =
+        (tool.subcategoryId as SubcategoryId) ?? SubcategoryId.GENERAL;
       const list = byCategory.get(subCat) ?? [];
       list.push(tool);
       byCategory.set(subCat, list);
@@ -126,7 +127,10 @@ export function ToolPicker({
                     {tool.name}
                   </span>
                   {precedingOutput &&
-                  !toolAcceptsFormat(tool.endpoints?.[0] ?? "", precedingOutput) ? (
+                  !toolAcceptsFormat(
+                    tool.endpoints?.[0] ?? "",
+                    precedingOutput,
+                  ) ? (
                     <span className="portal-pipelines__picker-note">
                       {t("portal.pipelines.builder.cannotFollow", {
                         produced: getToolFormatLabel(t, precedingOutput),

@@ -9,13 +9,14 @@ import { buildReplaceImageFormData } from "@app/hooks/tools/replaceImage/useRepl
 
 const ReplaceImage = (props: BaseToolProps) => {
   const { t } = useTranslation();
-  
+
   const base = useBaseTool(
     "replaceImage",
     useReplaceImageParameters,
     // Custom operation hook that handles the replacement image
     () => {
-      const operation = require("@app/hooks/tools/replaceImage/useReplaceImageOperation").useReplaceImageOperation();
+      const operation =
+        require("@app/hooks/tools/replaceImage/useReplaceImageOperation").useReplaceImageOperation();
       return operation;
     },
     props,

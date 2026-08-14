@@ -1,4 +1,7 @@
-﻿import { defineSingleFileTool, useToolOperation } from "@app/hooks/tools/shared/useToolOperation";
+import {
+  defineSingleFileTool,
+  useToolOperation,
+} from "@app/hooks/tools/shared/useToolOperation";
 import { objectToFormData } from "@app/hooks/tools/shared/toolApiMapping";
 import type { ErasedToolParams } from "@app/hooks/tools/shared/toolOperationTypes";
 import { createStandardErrorHandler } from "@app/utils/toolErrorHandler";

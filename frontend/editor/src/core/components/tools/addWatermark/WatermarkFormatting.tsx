@@ -29,7 +29,10 @@ const WatermarkFormatting = ({
         label={t("watermark.settings.size", "Size")}
         value={parameters.fontSize ?? 12}
         onChange={(value) =>
-          onParameterChange?.("fontSize", typeof value === "number" ? value : 12)
+          onParameterChange?.(
+            "fontSize",
+            typeof value === "number" ? value : 12,
+          )
         }
         unit={parameters.watermarkType === "text" ? "pt" : "px"}
         min={1}
@@ -42,7 +45,10 @@ const WatermarkFormatting = ({
           label={t("watermark.settings.rotation", "Rotation")}
           value={parameters.rotation ?? 0}
           onChange={(value) =>
-            onParameterChange?.("rotation", typeof value === "number" ? value : 0)
+            onParameterChange?.(
+              "rotation",
+              typeof value === "number" ? value : 0,
+            )
           }
           unit="°"
           min={-360}
@@ -53,7 +59,10 @@ const WatermarkFormatting = ({
           label={t("watermark.settings.opacity", "Opacity")}
           value={parameters.opacity ?? 50}
           onChange={(value) =>
-            onParameterChange?.("opacity", typeof value === "number" ? value : 50)
+            onParameterChange?.(
+              "opacity",
+              typeof value === "number" ? value : 50,
+            )
           }
           unit="%"
           min={0}
@@ -106,7 +115,10 @@ const WatermarkFormatting = ({
           )}
           checked={parameters.convertPDFToImage}
           onChange={(event) =>
-            onParameterChange?.("convertPDFToImage", event.currentTarget.checked)
+            onParameterChange?.(
+              "convertPDFToImage",
+              event.currentTarget.checked,
+            )
           }
           disabled={disabled}
         />

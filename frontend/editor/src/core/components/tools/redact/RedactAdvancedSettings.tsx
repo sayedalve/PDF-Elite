@@ -54,7 +54,9 @@ const RedactAdvancedSettings = ({
       <Checkbox
         label={t("redact.auto.useRegexLabel", "Use Regex")}
         checked={parameters.useRegex}
-        onChange={(e) => onParameterChange?.("useRegex", e.currentTarget.checked)}
+        onChange={(e) =>
+          onParameterChange?.("useRegex", e.currentTarget.checked)
+        }
         disabled={disabled}
         size="sm"
       />

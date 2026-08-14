@@ -1,5 +1,9 @@
 import { useState, useCallback } from "react";
-import type { AutomationConfig, AutomationOperation, AutomationTool } from "@app/types/automation";
+import type {
+  AutomationConfig,
+  AutomationOperation,
+  AutomationTool,
+} from "@app/types/automation";
 
 export interface AutomationFormState {
   name: string;
@@ -37,7 +41,9 @@ export function useAutomationForm(
   initial?: Partial<AutomationFormState>,
 ): AutomationFormHook {
   const [name, setNameState] = useState(initial?.name ?? defaultState.name);
-  const [description, setDescriptionState] = useState(initial?.description ?? defaultState.description);
+  const [description, setDescriptionState] = useState(
+    initial?.description ?? defaultState.description,
+  );
   const [icon, setIconState] = useState(initial?.icon ?? defaultState.icon);
   const [operations, setOperations] = useState<AutomationTool[]>(
     initial?.operations ?? defaultState.operations,

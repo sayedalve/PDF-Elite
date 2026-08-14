@@ -27,7 +27,9 @@ interface SignatureState {
 
 // Signature actions interface
 interface SignatureActions {
-  setSignatureConfig: React.Dispatch<React.SetStateAction<SignParameters | null>>;
+  setSignatureConfig: React.Dispatch<
+    React.SetStateAction<SignParameters | null>
+  >;
   setPlacementMode: (enabled: boolean) => void;
   activateDrawMode: () => void;
   deactivateDrawMode: () => void;
@@ -75,12 +77,16 @@ export const SignatureProvider: React.FC<{ children: ReactNode }> = ({
   const imageDataStore = useRef<Map<string, string>>(new Map());
 
   // Actions
-  const setSignatureConfig = useCallback((config: React.SetStateAction<SignParameters | null>) => {
-    setState((prev) => ({
-      ...prev,
-      signatureConfig: typeof config === "function" ? config(prev.signatureConfig) : config,
-    }));
-  }, []);
+  const setSignatureConfig = useCallback(
+    (config: React.SetStateAction<SignParameters | null>) => {
+      setState((prev) => ({
+        ...prev,
+        signatureConfig:
+          typeof config === "function" ? config(prev.signatureConfig) : config,
+      }));
+    },
+    [],
+  );
 
   const setPlacementMode = useCallback((enabled: boolean) => {
     setState((prev) => ({

@@ -15,7 +15,8 @@ export interface AdjustContrastParameters extends BaseParameters {
 
 export const defaultParameters: AdjustContrastParameters = {};
 
-export type AdjustContrastParametersHook = BaseParametersHook<AdjustContrastParameters>;
+export type AdjustContrastParametersHook =
+  BaseParametersHook<AdjustContrastParameters>;
 
 export const useAdjustContrastParameters = (): AdjustContrastParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "scanner-effect" });

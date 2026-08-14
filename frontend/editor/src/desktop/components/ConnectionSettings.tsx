@@ -151,8 +151,6 @@ export const ConnectionSettings: React.FC = () => {
                 )}
               </>
             )}
-
-
         </Stack>
       </Card>
     </>

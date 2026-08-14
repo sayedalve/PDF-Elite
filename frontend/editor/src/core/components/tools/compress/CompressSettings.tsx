@@ -59,7 +59,9 @@ const CompressSettings = ({
               "Compression Level",
             )}
             value={parameters.compressionLevel || 5}
-            onChange={(value) => onChange?.({ compressionLevel: Number(value) })}
+            onChange={(value) =>
+              onChange?.({ compressionLevel: Number(value) })
+            }
             disabled={disabled}
             min={1}
             max={9}
@@ -137,7 +139,7 @@ const CompressSettings = ({
         <Checkbox
           checked={parameters.grayscale}
           onChange={(event) =>
-            onChange?.({ "grayscale": event.currentTarget.checked })
+            onChange?.({ grayscale: event.currentTarget.checked })
           }
           disabled={disabled}
           label={t(
@@ -151,7 +153,7 @@ const CompressSettings = ({
           <Checkbox
             checked={parameters.linearize}
             onChange={(event) =>
-              onChange?.({ "linearize": event.currentTarget.checked })
+              onChange?.({ linearize: event.currentTarget.checked })
             }
             disabled={disabled}
             label={t(
@@ -182,7 +184,7 @@ const CompressSettings = ({
             <Checkbox
               checked={parameters.lineArt}
               onChange={(event) =>
-                onChange?.({ "lineArt": event.currentTarget.checked })
+                onChange?.({ lineArt: event.currentTarget.checked })
               }
               disabled={disabled || imageMagickAvailable === false}
               label={t(
@@ -224,7 +226,9 @@ const CompressSettings = ({
                 const closest = thresholdMap.reduce(
                   (prev, curr, idx) =>
                     Math.abs(curr - (parameters.lineArtThreshold ?? 50)) <
-                    Math.abs(thresholdMap[prev] - (parameters.lineArtThreshold ?? 50))
+                    Math.abs(
+                      thresholdMap[prev] - (parameters.lineArtThreshold ?? 50),
+                    )
                       ? idx
                       : prev,
                   0,
@@ -234,7 +238,7 @@ const CompressSettings = ({
               onChange={(value) => {
                 // Map slider position to threshold: 1=20%, 2=35%, 3=50%, 4=65%, 5=80%
                 const thresholdMap = [20, 35, 50, 65, 80];
-                onChange?.({ "lineArtThreshold": thresholdMap[value - 1] });
+                onChange?.({ lineArtThreshold: thresholdMap[value - 1] });
               }}
               disabled={disabled || imageMagickAvailable === false}
               label={null}

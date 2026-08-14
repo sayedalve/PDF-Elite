@@ -9,7 +9,9 @@ const ENDPOINT = "/api/v1/security/remove-password" satisfies ToolEndpoint;
 type RemovePasswordApiParams = ToolApiParams[typeof ENDPOINT];
 
 /** Convert UI parameters into the remove-password request body. */
-const toApiParams = (params: RemovePasswordParameters): RemovePasswordApiParams => ({
+const toApiParams = (
+  params: RemovePasswordParameters,
+): RemovePasswordApiParams => ({
   password: params.password,
 });
 
@@ -20,4 +22,7 @@ const toApiParams = (params: RemovePasswordParameters): RemovePasswordApiParams 
 export const buildRemovePasswordFormData = (
   params: RemovePasswordParameters,
   file: File,
-): FormData => objectToFormData(toApiParams(params) as Record<string, unknown>, { fileInput: file });
+): FormData =>
+  objectToFormData(toApiParams(params) as Record<string, unknown>, {
+    fileInput: file,
+  });

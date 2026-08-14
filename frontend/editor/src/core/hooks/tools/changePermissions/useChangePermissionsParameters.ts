@@ -1,4 +1,4 @@
-﻿import { BaseParameters } from "@app/types/parameters";
+import { BaseParameters } from "@app/types/parameters";
 import {
   BaseParametersHook,
   useBaseParameters,
@@ -9,7 +9,9 @@ export interface ChangePermissionsParameters extends BaseParameters {}
 
 export const defaultParameters: ChangePermissionsParameters = {};
 
-export type ChangePermissionsParametersHook = BaseParametersHook<ChangePermissionsParameters>;
+export type ChangePermissionsParametersHook =
+  BaseParametersHook<ChangePermissionsParameters>;
 
-export const useChangePermissionsParameters = (): ChangePermissionsParametersHook =>
-  useBaseParameters({ defaultParameters, endpointName: "add-password" });
+export const useChangePermissionsParameters =
+  (): ChangePermissionsParametersHook =>
+    useBaseParameters({ defaultParameters, endpointName: "add-password" });

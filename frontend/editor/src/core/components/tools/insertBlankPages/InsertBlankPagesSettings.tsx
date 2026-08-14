@@ -30,25 +30,31 @@ export default function InsertBlankPagesSettings({
     <Stack gap="sm">
       <NumberInput
         label={t("insertBlankPages.position", "Position")}
-        description={t("insertBlankPages.positionDescription", "Page number after which to insert blank pages (0 for beginning)")}
+        description={t(
+          "insertBlankPages.positionDescription",
+          "Page number after which to insert blank pages (0 for beginning)",
+        )}
         value={parameters.position}
         onChange={(v) => onParameterChange?.("position", Number(v) || 0)}
         min={0}
         disabled={disabled}
       />
-      
+
       <NumberInput
         label={t("insertBlankPages.count", "Number of pages")}
-        description={t("insertBlankPages.countDescription", "How many blank pages to insert")}
+        description={t(
+          "insertBlankPages.countDescription",
+          "How many blank pages to insert",
+        )}
         value={parameters.count}
         onChange={(v) => onParameterChange?.("count", Number(v) || 1)}
         min={1}
         max={100}
         disabled={disabled}
       />
-      
+
       <Divider />
-      
+
       <Select
         label={t("insertBlankPages.pageSize", "Page size")}
         data={PAGE_SIZE_OPTIONS}

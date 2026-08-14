@@ -183,14 +183,14 @@
   --p-c-c2c8e0: #c2c8e0;
   --p-c-4f8ef5: #4f8ef5;
 
-  /* Document Editor Palette (from prompt.md) */
-  --p-doc-surface-chrome: #1e202b;
-  --p-doc-surface-workspace: #2c2f3d;
-  --p-doc-surface-elevated: #252734;
-  --p-doc-surface-hover-selected: #353845;
+  /* Document Editor Palette (from prompt.md & PDF-Elite-Professional-Redesign.html) */
+  --p-doc-surface-chrome: #1e2129;
+  --p-doc-surface-workspace: #171a21;
+  --p-doc-surface-elevated: #2a2e38;
+  --p-doc-surface-hover-selected: #363b47;
   --p-doc-page-surface: #ffffff;
   --p-doc-text-primary: #e7e9ee;
-  --p-doc-text-secondary: #8b93a7;
+  --p-doc-text-secondary: #9ab6e0;
   --p-doc-text-disabled: #5b606e;
   --p-doc-accent-primary: #79aeff;
 }

@@ -8,7 +8,9 @@ import { PdfTextEditorViewData } from "@app/tools/pdfTextEditor/pdfTextEditorTyp
 import LocalIcon from "@app/components/shared/LocalIcon";
 import { SegmentedControl } from "@app/ui/SegmentedControl";
 
-export function usePdfTextEditorWorkbenchBarButtons(data: PdfTextEditorViewData) {
+export function usePdfTextEditorWorkbenchBarButtons(
+  data: PdfTextEditorViewData,
+) {
   const { t } = useTranslation();
 
   const {
@@ -36,17 +38,38 @@ export function usePdfTextEditorWorkbenchBarButtons(data: PdfTextEditorViewData)
             onChange={(value: string) => onGroupingModeChange(value as any)}
             disabled={disabled}
             options={[
-              { label: t("pdfTextEditor.options.groupingMode.auto", "Auto"), value: "auto" },
-              { label: t("pdfTextEditor.options.groupingMode.paragraph", "Paragraph"), value: "paragraph" },
-              { label: t("pdfTextEditor.options.groupingMode.singleLine", "Line"), value: "singleLine" },
+              {
+                label: t("pdfTextEditor.options.groupingMode.auto", "Auto"),
+                value: "auto",
+              },
+              {
+                label: t(
+                  "pdfTextEditor.options.groupingMode.paragraph",
+                  "Paragraph",
+                ),
+                value: "paragraph",
+              },
+              {
+                label: t(
+                  "pdfTextEditor.options.groupingMode.singleLine",
+                  "Line",
+                ),
+                value: "singleLine",
+              },
             ]}
           />
         ),
       },
       {
         id: "pdf-text-editor-autoscale",
-        tooltip: t("pdfTextEditor.options.autoScaleText.title", "Auto-scale Text"),
-        ariaLabel: t("pdfTextEditor.options.autoScaleText.title", "Auto-scale Text"),
+        tooltip: t(
+          "pdfTextEditor.options.autoScaleText.title",
+          "Auto-scale Text",
+        ),
+        ariaLabel: t(
+          "pdfTextEditor.options.autoScaleText.title",
+          "Auto-scale Text",
+        ),
         section: "edit",
         order: 20,
         visible: hasDocument,
@@ -67,7 +90,10 @@ export function usePdfTextEditorWorkbenchBarButtons(data: PdfTextEditorViewData)
       {
         id: "pdf-text-editor-generate",
         tooltip: t("pdfTextEditor.options.generatePdf.title", "Apply Changes"),
-        ariaLabel: t("pdfTextEditor.options.generatePdf.title", "Apply Changes"),
+        ariaLabel: t(
+          "pdfTextEditor.options.generatePdf.title",
+          "Apply Changes",
+        ),
         section: "edit",
         order: 40,
         visible: hasDocument,

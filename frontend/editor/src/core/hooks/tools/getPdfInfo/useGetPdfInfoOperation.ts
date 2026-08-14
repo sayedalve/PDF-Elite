@@ -24,7 +24,10 @@ export interface GetPdfInfoOperationHook {
   isLoading: boolean;
   files: File[];
   results: PdfInfo[];
-  executeOperation: (params: Record<string, unknown>, files: File[]) => Promise<void>;
+  executeOperation: (
+    params: Record<string, unknown>,
+    files: File[],
+  ) => Promise<void>;
   resetResults: () => void;
   undoOperation: () => Promise<void>;
 }
@@ -43,7 +46,10 @@ export function useGetPdfInfoOperation(): GetPdfInfoOperationHook {
       try {
         const formData = new FormData();
         formData.append("fileInput", inputFiles[0]);
-        const response = await apiClient.post("/api/v1/misc/get-info-on-pdf", formData);
+        const response = await apiClient.post(
+          "/api/v1/misc/get-info-on-pdf",
+          formData,
+        );
         const info: PdfInfo = (response.data as PdfInfo) ?? {};
         setResults([info]);
         // Produce a JSON file so components can call findFileByExtension(".json")
@@ -71,5 +77,12 @@ export function useGetPdfInfoOperation(): GetPdfInfoOperationHook {
     resetResults();
   }, [resetResults]);
 
-  return { isLoading, files, results, executeOperation, resetResults, undoOperation };
+  return {
+    isLoading,
+    files,
+    results,
+    executeOperation,
+    resetResults,
+    undoOperation,
+  };
 }

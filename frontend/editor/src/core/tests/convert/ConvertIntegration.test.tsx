@@ -213,7 +213,6 @@ describe("Convert Tool Integration Tests", () => {
       expect(result.current.downloadFilename).toBe("test.png");
       expect(result.current.isLoading).toBe(false);
       expect(result.current.errorMessage).toBe(null);
-
     });
 
     test("should handle API error responses correctly", async () => {

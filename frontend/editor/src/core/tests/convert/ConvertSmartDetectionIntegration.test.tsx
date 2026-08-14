@@ -173,7 +173,6 @@ describe("Convert Tool - Smart Detection Integration Tests", () => {
           responseType: "blob",
         },
       );
-
     });
 
     test("should handle unknown file type with file-to-pdf fallback", async () => {

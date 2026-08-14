@@ -47,5 +47,7 @@ export const defaultParameters: SignParameters = DEFAULT_PARAMETERS;
 export type SignParametersHook = BaseParametersHook<SignParameters>;
 
 export const useSignParameters = (): SignParametersHook =>
-  useBaseParameters({ defaultParameters: DEFAULT_PARAMETERS, endpointName: "cert-sign" });
-
+  useBaseParameters({
+    defaultParameters: DEFAULT_PARAMETERS,
+    endpointName: "cert-sign",
+  });

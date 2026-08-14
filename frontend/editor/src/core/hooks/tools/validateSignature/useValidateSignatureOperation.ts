@@ -48,7 +48,9 @@ export function useValidateSignatureOperation(): ValidateSignatureOperationHook 
           "/api/v1/security/validate-signature",
           formData,
         );
-        const data = response.data as SignatureValidationResult | SignatureValidationResult[];
+        const data = response.data as
+          | SignatureValidationResult
+          | SignatureValidationResult[];
         const resultList = Array.isArray(data) ? data : [data];
         setResults(resultList);
 
@@ -77,5 +79,12 @@ export function useValidateSignatureOperation(): ValidateSignatureOperationHook 
     resetResults();
   }, [resetResults]);
 
-  return { isLoading, files, results, executeOperation, resetResults, undoOperation };
+  return {
+    isLoading,
+    files,
+    results,
+    executeOperation,
+    resetResults,
+    undoOperation,
+  };
 }

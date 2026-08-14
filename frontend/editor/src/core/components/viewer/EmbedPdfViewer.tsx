@@ -17,11 +17,6 @@ import { useFileWithUrl } from "@app/hooks/useFileWithUrl";
 import { useViewer } from "@app/contexts/ViewerContext";
 import { LocalEmbedPDF } from "@app/components/viewer/LocalEmbedPDF";
 
-import { ThumbnailSidebar } from "@app/components/viewer/ThumbnailSidebar";
-import { BookmarkSidebar } from "@app/components/viewer/BookmarkSidebar";
-import { AttachmentSidebar } from "@app/components/viewer/AttachmentSidebar";
-import { LayerSidebar } from "@app/components/viewer/LayerSidebar";
-import { PdfViewerToolbar } from "@app/components/viewer/PdfViewerToolbar";
 import {
   useNavigationGuard,
   useNavigationState,
@@ -182,11 +177,9 @@ const EmbedPdfViewerContent = ({
 
   const {
     isThumbnailSidebarVisible,
-    toggleThumbnailSidebar,
     isBookmarkSidebarVisible,
     isAttachmentSidebarVisible,
     isLayerSidebarVisible,
-    setHasLayers,
     isCommentsSidebarVisible,
     isSearchInterfaceVisible,
     searchInterfaceActions,
@@ -445,18 +438,10 @@ const EmbedPdfViewerContent = ({
   // Persist the current page whenever it changes (but only for non-preview files).
   const savedPageRef = useRef<number>(1);
 
-  useEffect(() => {
-    if (!bookmarkCacheKey || previewFile) return;
-    const page = scrollState.currentPage;
-    if (page > 0 && page !== savedPageRef.current) {
-      savedPageRef.current = page;
-      pageMemoryService.savePage(bookmarkCacheKey, page);
-    }
-  }, [scrollState.currentPage, bookmarkCacheKey, previewFile]);
-
   // ─── Page Memory: restore page on file open ───────────────────────────────────
   // When the document is loaded and ready, scroll to the remembered page.
   const hasRestoredPageRef = useRef<string | undefined>(undefined);
+  const hasRestoredZoomRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     if (!bookmarkCacheKey || previewFile) return;
@@ -481,6 +466,51 @@ const EmbedPdfViewerContent = ({
       }
     }
   }, [bookmarkCacheKey, scrollState.totalPages, previewFile, scrollActions]);
+
+  // ─── Zoom Memory: save zoom on change ─────────────────────────────────────────
+  const savedZoomRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!bookmarkCacheKey || previewFile) return;
+    const zoom = getZoomState().zoomPercent;
+    if (zoom && zoom !== savedZoomRef.current) {
+      savedZoomRef.current = zoom;
+      pageMemoryService.saveZoom(bookmarkCacheKey, zoom);
+    }
+  }, [getZoomState().zoomPercent, bookmarkCacheKey, previewFile]);
+
+  // ─── Zoom Memory: restore zoom on file open ───────────────────────────────────
+  useEffect(() => {
+    if (!bookmarkCacheKey || previewFile) return;
+    if (hasRestoredZoomRef.current === bookmarkCacheKey) return;
+
+    const restoredZoom = pageMemoryService.getZoom(bookmarkCacheKey);
+
+    // Wait for the PDF to load (totalPages > 0) before restoring
+    if (scrollState.totalPages > 0) {
+      hasRestoredZoomRef.current = bookmarkCacheKey;
+      // Small delay to let the viewer fully initialize
+      const timer = setTimeout(() => {
+        if (restoredZoom) {
+          zoomActions.setZoomLevel(restoredZoom / 100);
+        } else {
+          // Default initial reading zoom to fit-width if none saved
+          zoomActions.requestZoom("fit-width");
+        }
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [bookmarkCacheKey, scrollState.totalPages, previewFile, zoomActions]);
+
+  // Persist the current page whenever it changes (but only for non-preview files).
+  useEffect(() => {
+    if (!bookmarkCacheKey || previewFile) return;
+    const page = scrollState.currentPage;
+    if (page > 0 && page !== savedPageRef.current) {
+      savedPageRef.current = page;
+      pageMemoryService.savePage(bookmarkCacheKey, page);
+    }
+  }, [scrollState.currentPage, bookmarkCacheKey, previewFile]);
 
   useWheelZoom({
     ref: viewerRef,
@@ -1252,7 +1282,6 @@ const EmbedPdfViewerContent = ({
       !isCurrentFileEncrypted &&
       (fileChanged || providerChanged)
     ) {
-
       console.log("[FormFill] Fetching form fields for:", currentFileId);
       fetchFormFields(currentFile, currentFileId ?? undefined);
     }
@@ -1274,10 +1303,11 @@ const EmbedPdfViewerContent = ({
   const CONTEXTUAL_RAIL_WIDTH_REM = 3;
   // The panels have been moved to the left
   const totalLeftMargin =
-    CONTEXTUAL_RAIL_WIDTH_REM +
-    (isAnyLeftPanelVisible ? sidebarWidthRem : 0);
+    CONTEXTUAL_RAIL_WIDTH_REM + (isAnyLeftPanelVisible ? sidebarWidthRem : 0);
   // Right margin: reserve space for comments sidebar
-  const totalRightMargin = isCommentsSidebarVisible ? commentsSidebarWidthRem : 0;
+  const totalRightMargin = isCommentsSidebarVisible
+    ? commentsSidebarWidthRem
+    : 0;
 
   return (
     <Box
@@ -1431,21 +1461,6 @@ const EmbedPdfViewerContent = ({
             />
           </Box>
         </>
-      )}
-
-      {/* Floating Compact Page Navigation */}
-      {effectiveFile && !isCurrentFileEncrypted && (
-        <Box
-          style={{
-            position: "absolute",
-            bottom: "16px",
-            right: `calc(${totalRightMargin}rem + 16px)`,
-            zIndex: 10,
-            transition: "right 0.3s ease",
-          }}
-        >
-          <PdfViewerToolbar />
-        </Box>
       )}
 
       {/* Contextual Left Panel */}

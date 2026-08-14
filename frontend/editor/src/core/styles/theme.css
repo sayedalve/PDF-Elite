@@ -114,7 +114,9 @@
     --p-blue-500
   ); /* Cyan for extraction tools */
   --category-color-signing: var(--p-green-500); /* Green for signing tools */
-  --category-color-general: var(--p-doc-accent-primary); /* Blue for general tools */
+  --category-color-general: var(
+    --p-doc-accent-primary
+  ); /* Blue for general tools */
   --category-color-verification: var(
     --p-amber-600
   ); /* Orange for verification tools */
@@ -124,7 +126,9 @@
 
   /* Special section colors - consistent across light and dark modes */
   --special-color-favorites: var(--p-amber-400); /* Yellow/gold for favorites */
-  --special-color-recommended: var(--p-doc-accent-primary); /* Cyan for recommended */
+  --special-color-recommended: var(
+    --p-doc-accent-primary
+  ); /* Cyan for recommended */
   --color-yellow-500: var(--p-amber-500);
   --color-yellow-600: var(--p-amber-600);
   --color-yellow-700: var(--p-amber-600);
@@ -195,8 +199,16 @@
   --text-brand-accent: var(--p-red-600);
 
   /* PDF text selection colors */
-  --pdf-selection-bg: color-mix(in srgb, var(--p-doc-accent-primary) 20%, transparent);
-  --pdf-selection-ring: color-mix(in srgb, var(--p-doc-accent-primary) 18%, transparent);
+  --pdf-selection-bg: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 20%,
+    transparent
+  );
+  --pdf-selection-ring: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 18%,
+    transparent
+  );
 
   /* container */
   --landing-button-bg: var(--c-surface);
@@ -319,19 +331,39 @@
   --onboarding-step-inactive: var(--p-gray-300);
 
   /* PDF Link Overlay (viewer) */
-  --link-hover-bg: color-mix(in srgb, var(--p-doc-accent-primary) 10%, transparent);
-  --link-hover-border: color-mix(in srgb, var(--p-doc-accent-primary) 32%, transparent);
+  --link-hover-bg: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 10%,
+    transparent
+  );
+  --link-hover-border: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 32%,
+    transparent
+  );
   --link-hover-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.35),
     0 1px 4px color-mix(in srgb, var(--p-azure-500) 12%, transparent);
-  --link-focus-ring: color-mix(in srgb, var(--p-doc-accent-primary) 25%, transparent);
-  --link-toolbar-bg: color-mix(in srgb, var(--p-doc-accent-primary) 88%, transparent);
+  --link-focus-ring: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 25%,
+    transparent
+  );
+  --link-toolbar-bg: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 88%,
+    transparent
+  );
   --link-toolbar-border: rgba(255, 255, 255, 0.1);
   --link-toolbar-shadow:
     0 12px 40px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.16),
     0 0 0 0.5px rgba(255, 255, 255, 0.05);
 
-  --shadow-color: color-mix(in srgb, var(--p-doc-accent-primary) 55%, transparent);
+  --shadow-color: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 55%,
+    transparent
+  );
 }
 
 [data-mantine-color-scheme="dark"] {
@@ -396,7 +428,9 @@
     --p-blue-500
   ); /* Cyan for extraction tools */
   --category-color-signing: var(--p-green-500); /* Green for signing tools */
-  --category-color-general: var(--p-doc-accent-primary); /* Blue for general tools */
+  --category-color-general: var(
+    --p-doc-accent-primary
+  ); /* Blue for general tools */
   --category-color-verification: var(
     --p-amber-600
   ); /* Orange for verification tools */
@@ -406,7 +440,9 @@
 
   /* Special section colors - same as light mode for consistency */
   --special-color-favorites: var(--p-amber-400); /* Yellow/gold for favorites */
-  --special-color-recommended: var(--p-doc-accent-primary); /* Cyan for recommended */
+  --special-color-recommended: var(
+    --p-doc-accent-primary
+  ); /* Cyan for recommended */
 
   /* Success (green) - dark */
   --color-green-50: var(--p-green-700);
@@ -479,8 +515,16 @@
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
 
   /* PDF text selection colors (dark mode) */
-  --pdf-selection-bg: color-mix(in srgb, var(--p-doc-accent-primary) 25%, transparent);
-  --pdf-selection-ring: color-mix(in srgb, var(--p-doc-accent-primary) 28%, transparent);
+  --pdf-selection-bg: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 25%,
+    transparent
+  );
+  --pdf-selection-ring: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 28%,
+    transparent
+  );
 
   /* Tool panel search bar background colors (dark mode) */
 
@@ -550,13 +594,29 @@
   --dropdown-group-label: var(--mantine-color-dark-2);
 
   /* PDF Link Overlay (viewer) */
-  --link-hover-bg: color-mix(in srgb, var(--p-doc-accent-primary) 14%, transparent);
-  --link-hover-border: color-mix(in srgb, var(--p-doc-accent-primary) 38%, transparent);
+  --link-hover-bg: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 14%,
+    transparent
+  );
+  --link-hover-border: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 38%,
+    transparent
+  );
   --link-hover-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.1),
     0 1px 4px color-mix(in srgb, var(--p-c-4f8ef5) 18%, transparent);
-  --link-focus-ring: color-mix(in srgb, var(--p-doc-accent-primary) 30%, transparent);
-  --link-toolbar-bg: color-mix(in srgb, var(--p-doc-accent-primary) 94%, transparent);
+  --link-focus-ring: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 30%,
+    transparent
+  );
+  --link-toolbar-bg: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 94%,
+    transparent
+  );
   --link-toolbar-border: rgba(255, 255, 255, 0.07);
   --link-toolbar-shadow:
     0 12px 40px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35),

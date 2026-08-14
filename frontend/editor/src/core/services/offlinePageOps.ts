@@ -23,7 +23,10 @@ import { PDFDocument } from "@cantoo/pdf-lib";
  */
 export function parsePageNumbers(spec: string, total: number): number[] {
   const indices = new Set<number>();
-  const parts = spec.split(",").map((p) => p.trim()).filter(Boolean);
+  const parts = spec
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
 
   for (const part of parts) {
     if (part.includes("-")) {
@@ -81,7 +84,9 @@ export async function removePagesLocal(
   }
 
   const outBytes = await outDoc.save();
-  return new Blob([outBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+  return new Blob([outBytes.buffer as ArrayBuffer], {
+    type: "application/pdf",
+  });
 }
 
 /**
@@ -111,7 +116,9 @@ export async function extractPagesLocal(
   }
 
   const outBytes = await outDoc.save();
-  return new Blob([outBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+  return new Blob([outBytes.buffer as ArrayBuffer], {
+    type: "application/pdf",
+  });
 }
 
 /**
@@ -146,7 +153,9 @@ export async function rearrangePagesLocal(
   }
 
   const outBytes = await outDoc.save();
-  return new Blob([outBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+  return new Blob([outBytes.buffer as ArrayBuffer], {
+    type: "application/pdf",
+  });
 }
 
 /**
@@ -166,19 +175,22 @@ export async function rotatePagesLocal(
   const doc = await PDFDocument.load(bytes);
   const total = doc.getPageCount();
 
-  const targetIndices =
-    pageNumbers.trim()
-      ? parsePageNumbers(pageNumbers, total)
-      : Array.from({ length: total }, (_, i) => i);
+  const targetIndices = pageNumbers.trim()
+    ? parsePageNumbers(pageNumbers, total)
+    : Array.from({ length: total }, (_, i) => i);
 
   for (const idx of targetIndices) {
     const page = doc.getPage(idx);
     const currentRotation = page.getRotation().angle;
     // Normalise to 0–359
-    const newAngle = ((currentRotation + rotation) % 360 + 360) % 360;
-    page.setRotation({ type: "degrees", angle: newAngle } as Parameters<typeof page.setRotation>[0]);
+    const newAngle = (((currentRotation + rotation) % 360) + 360) % 360;
+    page.setRotation({ type: "degrees", angle: newAngle } as Parameters<
+      typeof page.setRotation
+    >[0]);
   }
 
   const outBytes = await doc.save();
-  return new Blob([outBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+  return new Blob([outBytes.buffer as ArrayBuffer], {
+    type: "application/pdf",
+  });
 }

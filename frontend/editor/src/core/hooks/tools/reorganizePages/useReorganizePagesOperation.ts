@@ -12,7 +12,8 @@ import {
 import { PDFDocument } from "@cantoo/pdf-lib";
 
 // Keep API helpers for automation / pipeline compatibility
-type ReorganizePagesApiParams = ToolApiParams["/api/v1/general/rearrange-pages"];
+type ReorganizePagesApiParams =
+  ToolApiParams["/api/v1/general/rearrange-pages"];
 
 export const reorganizePagesToApiParams = (
   parameters: ReorganizePagesParameters,
@@ -37,7 +38,6 @@ export const reorganizePagesFromApiParams = (
   pageNumbers:
     apiParams.pageNumbers ?? defaultReorganizePagesParameters.pageNumbers,
 });
-
 
 /**
  * Compute the 0-indexed page order for a given mode and total page count.
@@ -100,8 +100,8 @@ function computePageOrder(
       const order: number[] = [];
       for (let i = 0; i < padded / 2; i += 2) {
         order.push(padded - 1 - i); // last
-        order.push(i);              // first
-        order.push(i + 1);         // second
+        order.push(i); // first
+        order.push(i + 1); // second
         order.push(padded - 2 - i); // second-last
       }
       return order.filter((i) => i < total);
@@ -111,10 +111,7 @@ function computePageOrder(
       // but we concatenate here as a single output)
       return [
         ...Array.from({ length: Math.ceil(total / 2) }, (_, i) => i * 2),
-        ...Array.from(
-          { length: Math.floor(total / 2) },
-          (_, i) => i * 2 + 1,
-        ),
+        ...Array.from({ length: Math.floor(total / 2) }, (_, i) => i * 2 + 1),
       ];
     case "ODD_EVEN_MERGE":
       // Interleave: page 0, total/2, 1, total/2+1, …
@@ -122,11 +119,15 @@ function computePageOrder(
         i % 2 === 0 ? i / 2 : Math.ceil(total / 2) + Math.floor(i / 2),
       ).filter((i) => i < total);
     case "REMOVE_FIRST":
-      return total > 1 ? Array.from({ length: total - 1 }, (_, i) => i + 1) : null;
+      return total > 1
+        ? Array.from({ length: total - 1 }, (_, i) => i + 1)
+        : null;
     case "REMOVE_LAST":
       return total > 1 ? Array.from({ length: total - 1 }, (_, i) => i) : null;
     case "REMOVE_FIRST_AND_LAST":
-      return total > 2 ? Array.from({ length: total - 2 }, (_, i) => i + 1) : null;
+      return total > 2
+        ? Array.from({ length: total - 2 }, (_, i) => i + 1)
+        : null;
     default:
       return null;
   }
@@ -147,7 +148,11 @@ async function reorganizePagesProcessor(
     const srcDoc = await PDFDocument.load(bytes);
     const total = srcDoc.getPageCount();
 
-    const order = computePageOrder(params.customMode, total, params.pageNumbers);
+    const order = computePageOrder(
+      params.customMode,
+      total,
+      params.pageNumbers,
+    );
     if (!order || order.length === 0) {
       throw new Error(
         `No valid page order computed for mode "${params.customMode}".`,

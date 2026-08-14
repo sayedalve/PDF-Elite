@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Slider } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { NumberInput, Slider } from "@mantine/core";
 import { ActionIcon } from "@app/ui/ActionIcon";
 import { useTranslation } from "react-i18next";
 import { useViewer } from "@app/contexts/ViewerContext";
@@ -8,7 +8,8 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { NumberInput } from "@mantine/core";
+import FitScreenIcon from "@mui/icons-material/FitScreen";
+import CenterFocusWeakIcon from "@mui/icons-material/CenterFocusWeak";
 
 /**
  * Compact zoom controls rendered inline in the WorkbenchBar when the current workbench is "viewer".
@@ -29,15 +30,17 @@ export function ViewerInlineControls() {
     const unregisterZoom = viewer.registerImmediateZoomUpdate((pct) => {
       setZoomPercent(pct);
     });
-    
+
     const scrollState = viewer.getScrollState();
     setCurrentPage(scrollState.currentPage || 1);
     setTotalPages(scrollState.totalPages || 1);
-    
-    const unregisterScroll = viewer.registerImmediateScrollUpdate((page, total) => {
-      setCurrentPage(page);
-      if (total) setTotalPages(total);
-    });
+
+    const unregisterScroll = viewer.registerImmediateScrollUpdate(
+      (page, total) => {
+        setCurrentPage(page);
+        if (total) setTotalPages(total);
+      },
+    );
 
     return () => {
       unregisterZoom?.();
@@ -63,8 +66,15 @@ export function ViewerInlineControls() {
       >
         <KeyboardArrowUpIcon sx={{ fontSize: "1rem" }} />
       </ActionIcon>
-      
-      <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", margin: "0 0.25rem" }}>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.25rem",
+          margin: "0 0.25rem",
+        }}
+      >
         <NumberInput
           value={currentPage}
           min={1}
@@ -72,7 +82,13 @@ export function ViewerInlineControls() {
           hideControls
           size="xs"
           styles={{
-            input: { width: "3rem", textAlign: "center", padding: "0 0.25rem", height: "1.75rem", minHeight: "1.75rem" }
+            input: {
+              width: "3rem",
+              textAlign: "center",
+              padding: "0 0.25rem",
+              height: "1.75rem",
+              minHeight: "1.75rem",
+            },
           }}
           onChange={(val) => {
             if (typeof val === "number") {
@@ -81,7 +97,13 @@ export function ViewerInlineControls() {
           }}
           aria-label={t("viewer.pageNumber", "Page number")}
         />
-        <span style={{ fontSize: "0.75rem", color: "var(--c-text-subtle)", userSelect: "none" }}>
+        <span
+          style={{
+            fontSize: "0.75rem",
+            color: "var(--c-text-subtle)",
+            userSelect: "none",
+          }}
+        >
           / {totalPages}
         </span>
       </div>
@@ -115,7 +137,7 @@ export function ViewerInlineControls() {
           max={500}
           step={5}
           onChange={(val) => {
-            viewer.zoomActions.setZoomLevel?.(val / 100);
+            viewer.zoomActions.setZoomLevel?.(val / 75);
           }}
           size="xs"
           styles={{
@@ -139,6 +161,36 @@ export function ViewerInlineControls() {
       <span className="viewer-inline-controls__zoom-pct">
         {Math.round(zoomPercent)}%
       </span>
+
+      <ActionIcon
+        variant="tertiary"
+        className="workbench-bar-action-icon"
+        onClick={() => viewer.zoomActions.requestZoom("fitWidth")}
+        aria-label={t("viewer.fitWidth", "Fit width")}
+        title={t("viewer.fitWidth", "Fit width")}
+      >
+        <FitScreenIcon sx={{ fontSize: "1rem" }} />
+      </ActionIcon>
+
+      <ActionIcon
+        variant="tertiary"
+        className="workbench-bar-action-icon"
+        onClick={() => viewer.zoomActions.requestZoom("fitPage")}
+        aria-label={t("viewer.fitPage", "Fit page")}
+        title={t("viewer.fitPage", "Fit page")}
+      >
+        <CenterFocusWeakIcon sx={{ fontSize: "1rem" }} />
+      </ActionIcon>
+
+      <ActionIcon
+        variant="tertiary"
+        className="workbench-bar-action-icon"
+        onClick={() => viewer.zoomActions.setZoomLevel?.(100 / 75)}
+        aria-label={t("viewer.actualSize", "Actual size")}
+        title={t("viewer.actualSize", "Actual size")}
+      >
+        <span className="viewer-inline-controls__actual-size">100</span>
+      </ActionIcon>
     </div>
   );
 }

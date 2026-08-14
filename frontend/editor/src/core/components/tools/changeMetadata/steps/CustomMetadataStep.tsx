@@ -12,7 +12,11 @@ interface CustomMetadataStepProps {
   disabled?: boolean;
   addCustomMetadata: (key?: string, value?: string) => void;
   removeCustomMetadata: (index: number) => void;
-  updateCustomMetadata: (index: number, key: keyof ChangeMetadataParameters["customMetadata"][0], value: string) => void;
+  updateCustomMetadata: (
+    index: number,
+    key: keyof ChangeMetadataParameters["customMetadata"][0],
+    value: string,
+  ) => void;
 }
 
 const CustomMetadataStep = ({
@@ -57,9 +61,7 @@ const CustomMetadataStep = ({
               "Custom key",
             )}
             value={entry.key}
-            onChange={(e) =>
-              updateCustomMetadata(index, "key", e.target.value)
-            }
+            onChange={(e) => updateCustomMetadata(index, "key", e.target.value)}
             disabled={disabled}
           />
           <TextInput

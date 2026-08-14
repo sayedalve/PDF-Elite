@@ -30,13 +30,16 @@ export interface BaseToolOptions {
  * Wires together the parameters hook and operation hook with file selection,
  * settings collapse, and result tracking.
  */
-export function useBaseTool<TParams extends { validateParameters: () => boolean, parameters: any }, TOperation extends {
-  isLoading: boolean;
-  files: File[];
-  executeOperation: (params: any, files: File[]) => Promise<void>;
-  resetResults: () => void;
-  undoOperation: () => Promise<void>;
-}>(
+export function useBaseTool<
+  TParams extends { validateParameters: () => boolean; parameters: any },
+  TOperation extends {
+    isLoading: boolean;
+    files: File[];
+    executeOperation: (params: any, files: File[]) => Promise<void>;
+    resetResults: () => void;
+    undoOperation: () => Promise<void>;
+  },
+>(
   toolId: string,
   useParametersHook: () => TParams,
   useOperationHook: () => TOperation,
@@ -51,7 +54,10 @@ export function useBaseTool<TParams extends { validateParameters: () => boolean,
 
   const [settingsCollapsed, setSettingsCollapsed] = useState(false);
 
-  const selectedFiles = useMemo(() => viewFiles.slice(0, Math.max(viewFiles.length, minFiles)), [viewFiles]);
+  const selectedFiles = useMemo(
+    () => viewFiles.slice(0, Math.max(viewFiles.length, minFiles)),
+    [viewFiles],
+  );
 
   const hasFiles = selectedFiles.length >= minFiles;
   const hasResults = operation.files.length > 0;

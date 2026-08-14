@@ -114,10 +114,15 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
     // object directly here is race-free and disk-I/O-free.
     generateBundle: {
       order: "post" as const,
-      async handler(_options: object, bundle: Record<string, { type: string; source?: string | Uint8Array; fileName?: string }>) {
-        const { buildOgTags, injectOg } = await import(
-          "./scripts/og-prerender.mjs"
-        );
+      async handler(
+        _options: object,
+        bundle: Record<
+          string,
+          { type: string; source?: string | Uint8Array; fileName?: string }
+        >,
+      ) {
+        const { buildOgTags, injectOg } =
+          await import("./scripts/og-prerender.mjs");
 
         const ogBase = (
           process.env.VITE_OG_BASE_URL ||
@@ -131,16 +136,26 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
         const baseHref = subpath ? `/${subpath}/` : "/";
 
         let manifest: {
-          default: { title: string; description: string; image: string; ogTitle?: string };
+          default: {
+            title: string;
+            description: string;
+            image: string;
+            ogTitle?: string;
+          };
           byPath?: Record<string, string>;
-          byTool?: Record<string, { title: string; description: string; image: string; ogTitle?: string }>;
+          byTool?: Record<
+            string,
+            {
+              title: string;
+              description: string;
+              image: string;
+              ogTitle?: string;
+            }
+          >;
         };
         try {
           manifest = JSON.parse(
-            await fs.readFile(
-              path.resolve(resolvedRoot, manifestFile),
-              "utf8",
-            ),
+            await fs.readFile(path.resolve(resolvedRoot, manifestFile), "utf8"),
           );
         } catch {
           console.warn(
@@ -155,7 +170,9 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
           (chunk) =>
             chunk.type === "asset" &&
             (chunk as { fileName?: string }).fileName === "index.html",
-        ) as { type: string; source: string | Uint8Array; fileName: string } | undefined;
+        ) as
+          | { type: string; source: string | Uint8Array; fileName: string }
+          | undefined;
 
         if (!htmlEntry || htmlEntry.type !== "asset") {
           console.warn(
@@ -177,9 +194,7 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
         const BASE_HREF_RE = /<base\s+href="[^"]*"\s*\/?>/i;
         let count = 0;
         const distDir = path.resolve(resolvedRoot, resolvedOutDir);
-        for (const [routePath, id] of Object.entries(
-          manifest.byPath ?? {},
-        )) {
+        for (const [routePath, id] of Object.entries(manifest.byPath ?? {})) {
           const segments = routePath.replace(/^\//, "").split("/");
           if (
             !segments.length ||
@@ -192,7 +207,8 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
             pageUrlPath: ogBase ? routePath : null,
           });
           const nested = segments.length > 1;
-          if (nested) html = html.replace(BASE_HREF_RE, `<base href="${baseHref}" />`);
+          if (nested)
+            html = html.replace(BASE_HREF_RE, `<base href="${baseHref}" />`);
           // Emit as a Rollup asset so Vite writes it with everything else.
           this.emitFile({
             type: "asset",
@@ -212,9 +228,7 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
         // Fallback: also write per-route files to disk (needed for Spring Boot
         // bundling where Rollup-emitted assets may be post-processed).
         try {
-          for (const [routePath, id] of Object.entries(
-            manifest.byPath ?? {},
-          )) {
+          for (const [routePath, id] of Object.entries(manifest.byPath ?? {})) {
             const segments = routePath.replace(/^\//, "").split("/");
             if (
               !segments.length ||
@@ -228,10 +242,7 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
             });
             const nested = segments.length > 1;
             if (nested)
-              html = html.replace(
-                BASE_HREF_RE,
-                `<base href="${baseHref}" />`,
-              );
+              html = html.replace(BASE_HREF_RE, `<base href="${baseHref}" />`);
             const outFile = path.join(distDir, ...segments) + ".html";
             if (nested)
               await fs.mkdir(path.dirname(outFile), { recursive: true });

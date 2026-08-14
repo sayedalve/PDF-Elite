@@ -12,7 +12,8 @@ export interface RemoveBlanksParameters extends BaseParameters {
 
 export const defaultParameters: RemoveBlanksParameters = {};
 
-export type RemoveBlanksParametersHook = BaseParametersHook<RemoveBlanksParameters>;
+export type RemoveBlanksParametersHook =
+  BaseParametersHook<RemoveBlanksParameters>;
 
 export const useRemoveBlanksParameters = (): RemoveBlanksParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "remove-blanks" });

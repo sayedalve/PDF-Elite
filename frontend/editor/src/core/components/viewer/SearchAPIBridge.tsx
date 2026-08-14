@@ -64,28 +64,40 @@ function SearchAPIBridgeInner({ documentId }: { documentId: string }) {
 
         let validResults = null;
         let newActiveIndex = state.activeResultIndex || 0;
-        
+
         if (state.results) {
           validResults = [];
           const seen = new Set<string>();
-          
+
           for (let i = 0; i < state.results.length; i++) {
             const res = state.results[i];
-            
+
             // Filter hidden matches (zero width/height)
-            const hasVisibleRect = res.rects && res.rects.some((r: any) => r.size.width > 0 && r.size.height > 0);
+            const hasVisibleRect =
+              res.rects &&
+              res.rects.some((r: any) => r.size.width > 0 && r.size.height > 0);
             if (!hasVisibleRect) {
-              if (i <= (state.activeResultIndex || 0) && newActiveIndex > 0) newActiveIndex--;
+              if (i <= (state.activeResultIndex || 0) && newActiveIndex > 0)
+                newActiveIndex--;
               continue;
             }
-            
+
             // Filter duplicate matches (identical rounded coordinates)
-            const key = res.pageIndex + ":" + res.rects.map((r: any) => `${Math.round(r.origin.x)},${Math.round(r.origin.y)},${Math.round(r.size.width)},${Math.round(r.size.height)}`).join("|");
+            const key =
+              res.pageIndex +
+              ":" +
+              res.rects
+                .map(
+                  (r: any) =>
+                    `${Math.round(r.origin.x)},${Math.round(r.origin.y)},${Math.round(r.size.width)},${Math.round(r.size.height)}`,
+                )
+                .join("|");
             if (seen.has(key)) {
-              if (i <= (state.activeResultIndex || 0) && newActiveIndex > 0) newActiveIndex--;
+              if (i <= (state.activeResultIndex || 0) && newActiveIndex > 0)
+                newActiveIndex--;
               continue;
             }
-            
+
             seen.add(key);
             validResults.push({ ...res, originalIndex: i });
           }
@@ -194,8 +206,11 @@ function SearchAPIBridgeInner({ documentId }: { documentId: string }) {
           next: () => {
             try {
               if (localResults && localResults.length > 0) {
-                const nextIndex = (localActiveIndex - 1 + 1) % localResults.length;
-                currentSearch?.goToResult?.((localResults[nextIndex] as any).originalIndex);
+                const nextIndex =
+                  (localActiveIndex - 1 + 1) % localResults.length;
+                currentSearch?.goToResult?.(
+                  (localResults[nextIndex] as any).originalIndex,
+                );
               } else {
                 currentSearch?.nextResult?.();
               }
@@ -206,8 +221,12 @@ function SearchAPIBridgeInner({ documentId }: { documentId: string }) {
           previous: () => {
             try {
               if (localResults && localResults.length > 0) {
-                const prevIndex = (localActiveIndex - 1 - 1 + localResults.length) % localResults.length;
-                currentSearch?.goToResult?.((localResults[prevIndex] as any).originalIndex);
+                const prevIndex =
+                  (localActiveIndex - 1 - 1 + localResults.length) %
+                  localResults.length;
+                currentSearch?.goToResult?.(
+                  (localResults[prevIndex] as any).originalIndex,
+                );
               } else {
                 currentSearch?.previousResult?.();
               }
@@ -218,7 +237,9 @@ function SearchAPIBridgeInner({ documentId }: { documentId: string }) {
           goToResult: (index: number) => {
             try {
               if (localResults && localResults[index]) {
-                currentSearch?.goToResult?.((localResults[index] as any).originalIndex);
+                currentSearch?.goToResult?.(
+                  (localResults[index] as any).originalIndex,
+                );
               } else {
                 currentSearch?.goToResult?.(index);
               }

@@ -70,15 +70,12 @@ export function useMetadataExtraction(
     [options],
   );
 
-  const setMetadata = useCallback(
-    (data: PdfMetadata) => {
-      setIsLoading(false);
-      setIsExtractingMetadata(false);
-      setMetadataState(data);
-      setOriginal(data);
-    },
-    [],
-  );
+  const setMetadata = useCallback((data: PdfMetadata) => {
+    setIsLoading(false);
+    setIsExtractingMetadata(false);
+    setMetadataState(data);
+    setOriginal(data);
+  }, []);
 
   const reset = useCallback(() => {
     setMetadataState(original);

@@ -19,11 +19,13 @@ export const defaultParameters: InsertBlankPagesParameters = {
   pageSize: "SamePage",
 };
 
-export type InsertBlankPagesParametersHook = BaseParametersHook<InsertBlankPagesParameters>;
+export type InsertBlankPagesParametersHook =
+  BaseParametersHook<InsertBlankPagesParameters>;
 
-export const useInsertBlankPagesParameters = (): InsertBlankPagesParametersHook => {
-  return useBaseParameters({
-    defaultParameters,
-    endpointName: "insert-blank-pages",
-  });
-};
+export const useInsertBlankPagesParameters =
+  (): InsertBlankPagesParametersHook => {
+    return useBaseParameters({
+      defaultParameters,
+      endpointName: "insert-blank-pages",
+    });
+  };

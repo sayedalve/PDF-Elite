@@ -16,10 +16,14 @@ export interface ImportableAutomation {
 export interface SavedAutomationsHook {
   automations: AutomationConfig[];
   isLoading: boolean;
-  save: (config: Omit<AutomationConfig, "id" | "createdAt" | "updatedAt">) => Promise<AutomationConfig>;
+  save: (
+    config: Omit<AutomationConfig, "id" | "createdAt" | "updatedAt">,
+  ) => Promise<AutomationConfig>;
   update: (id: string, config: Partial<AutomationConfig>) => Promise<void>;
   remove: (id: string) => Promise<void>;
-  importAutomation: (importable: ImportableAutomation) => Promise<AutomationConfig>;
+  importAutomation: (
+    importable: ImportableAutomation,
+  ) => Promise<AutomationConfig>;
   reload: () => Promise<void>;
 }
 
@@ -35,7 +39,8 @@ export function useSavedAutomations(): SavedAutomationsHook {
   const reload = useCallback(async () => {
     setIsLoading(true);
     try {
-      const { automationStorage } = await import("@app/services/automationStorage");
+      const { automationStorage } =
+        await import("@app/services/automationStorage");
       const loaded = await automationStorage.getAll();
       setAutomations(loaded);
     } catch {
@@ -46,7 +51,9 @@ export function useSavedAutomations(): SavedAutomationsHook {
   }, []);
 
   const save = useCallback(
-    async (config: Omit<AutomationConfig, "id" | "createdAt" | "updatedAt">) => {
+    async (
+      config: Omit<AutomationConfig, "id" | "createdAt" | "updatedAt">,
+    ) => {
       const full: AutomationConfig = {
         ...config,
         id: crypto.randomUUID(),
@@ -54,30 +61,44 @@ export function useSavedAutomations(): SavedAutomationsHook {
         updatedAt: now(),
       };
       try {
-        const { automationStorage } = await import("@app/services/automationStorage");
+        const { automationStorage } =
+          await import("@app/services/automationStorage");
         await automationStorage.save(full);
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       setAutomations((prev) => [...prev, full]);
       return full;
     },
     [],
   );
 
-  const update = useCallback(async (id: string, patch: Partial<AutomationConfig>) => {
-    try {
-      const { automationStorage } = await import("@app/services/automationStorage");
-      await automationStorage.update(id, { ...patch, updatedAt: now() });
-    } catch { /* ignore */ }
-    setAutomations((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, ...patch, updatedAt: now() } : a)),
-    );
-  }, []);
+  const update = useCallback(
+    async (id: string, patch: Partial<AutomationConfig>) => {
+      try {
+        const { automationStorage } =
+          await import("@app/services/automationStorage");
+        await automationStorage.update(id, { ...patch, updatedAt: now() });
+      } catch {
+        /* ignore */
+      }
+      setAutomations((prev) =>
+        prev.map((a) =>
+          a.id === id ? { ...a, ...patch, updatedAt: now() } : a,
+        ),
+      );
+    },
+    [],
+  );
 
   const remove = useCallback(async (id: string) => {
     try {
-      const { automationStorage } = await import("@app/services/automationStorage");
+      const { automationStorage } =
+        await import("@app/services/automationStorage");
       await automationStorage.remove(id);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setAutomations((prev) => prev.filter((a) => a.id !== id));
   }, []);
 
@@ -93,5 +114,13 @@ export function useSavedAutomations(): SavedAutomationsHook {
     [save],
   );
 
-  return { automations, isLoading, save, update, remove, importAutomation, reload };
+  return {
+    automations,
+    isLoading,
+    save,
+    update,
+    remove,
+    importAutomation,
+    reload,
+  };
 }

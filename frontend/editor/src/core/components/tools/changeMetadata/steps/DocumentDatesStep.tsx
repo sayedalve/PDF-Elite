@@ -27,9 +27,14 @@ const DocumentDatesStep = ({
           "changeMetadata.creationDate.placeholder",
           "Creation date",
         )}
-        value={parameters.creationDate ? new Date(parameters.creationDate) : null}
+        value={
+          parameters.creationDate ? new Date(parameters.creationDate) : null
+        }
         onChange={(value: string | null) =>
-          onParameterChange?.("creationDate", value ? new Date(value).toISOString() : undefined)
+          onParameterChange?.(
+            "creationDate",
+            value ? new Date(value).toISOString() : undefined,
+          )
         }
         disabled={disabled}
         clearable
@@ -41,9 +46,16 @@ const DocumentDatesStep = ({
           "changeMetadata.modificationDate.placeholder",
           "Modification date",
         )}
-        value={parameters.modificationDate ? new Date(parameters.modificationDate) : null}
+        value={
+          parameters.modificationDate
+            ? new Date(parameters.modificationDate)
+            : null
+        }
         onChange={(value: string | null) =>
-          onParameterChange?.("modificationDate", value ? new Date(value).toISOString() : undefined)
+          onParameterChange?.(
+            "modificationDate",
+            value ? new Date(value).toISOString() : undefined,
+          )
         }
         disabled={disabled}
         clearable

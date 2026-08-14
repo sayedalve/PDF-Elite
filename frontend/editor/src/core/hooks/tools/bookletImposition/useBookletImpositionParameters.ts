@@ -16,7 +16,12 @@ export interface BookletImpositionParameters extends BaseParameters {
 
 export const defaultParameters: BookletImpositionParameters = {};
 
-export type BookletImpositionParametersHook = BaseParametersHook<BookletImpositionParameters>;
+export type BookletImpositionParametersHook =
+  BaseParametersHook<BookletImpositionParameters>;
 
-export const useBookletImpositionParameters = (): BookletImpositionParametersHook =>
-  useBaseParameters({ defaultParameters, endpointName: "booklet-imposition" });
+export const useBookletImpositionParameters =
+  (): BookletImpositionParametersHook =>
+    useBaseParameters({
+      defaultParameters,
+      endpointName: "booklet-imposition",
+    });

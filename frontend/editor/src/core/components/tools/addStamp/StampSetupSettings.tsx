@@ -230,7 +230,9 @@ const StampSetupSettings = ({
         </Text>
         <ButtonSelector
           value={parameters.stampType}
-          onChange={(v: "text" | "image") => onParameterChange?.("stampType", v)}
+          onChange={(v: "text" | "image") =>
+            onParameterChange?.("stampType", v)
+          }
           options={[
             { value: "text", label: t("watermark.type.1", "Text") },
             { value: "image", label: t("watermark.type.2", "Image") },

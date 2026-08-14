@@ -1,4 +1,7 @@
-import { defineCustomTool, useToolOperation } from "@app/hooks/tools/shared/useToolOperation";
+import {
+  defineCustomTool,
+  useToolOperation,
+} from "@app/hooks/tools/shared/useToolOperation";
 import { objectToFormData } from "@app/hooks/tools/shared/toolApiMapping";
 import type { ConvertParameters } from "./useConvertParameters";
 import { createStandardErrorHandler } from "@app/utils/toolErrorHandler";
@@ -19,11 +22,16 @@ export const convertOperationConfig = defineCustomTool<ConvertParameters>({
       params.toExtension === "pdf";
 
     const isPdfToCsv = firstExt === "pdf" && params.toExtension === "csv";
-    const isPdfToImg = firstExt === "pdf" && ["jpg", "png", "gif", "webp", "bmp", "tiff", "svg"].includes(params.toExtension || "");
+    const isPdfToImg =
+      firstExt === "pdf" &&
+      ["jpg", "png", "gif", "webp", "bmp", "tiff", "svg"].includes(
+        params.toExtension || "",
+      );
     const isEmlToPdf = firstExt === "eml" && params.toExtension === "pdf";
     const isPdfToPdfa = firstExt === "pdf" && params.toExtension === "pdfa";
     const isPdfToPdfx = firstExt === "pdf" && params.toExtension === "pdfx";
-    const isHtmlToPdf = ["html", "htm", "zip"].includes(firstExt) && params.toExtension === "pdf";
+    const isHtmlToPdf =
+      ["html", "htm", "zip"].includes(firstExt) && params.toExtension === "pdf";
 
     let endpoint = "";
     let optionsToSpread: any = {};
@@ -38,7 +46,7 @@ export const convertOperationConfig = defineCustomTool<ConvertParameters>({
       endpoint = "/api/v1/convert/pdf/img";
       optionsToSpread = {
         imageFormat: params.toExtension,
-        ...(params.imageOptions || {})
+        ...(params.imageOptions || {}),
       };
     } else if (isEmlToPdf) {
       endpoint = "/api/v1/convert/eml/pdf";
@@ -59,7 +67,8 @@ export const convertOperationConfig = defineCustomTool<ConvertParameters>({
     }
 
     const combineImages = params.imageOptions?.combineImages !== false;
-    const batches: File[][] = (isImageToPdf && combineImages) ? [files] : files.map(f => [f]);
+    const batches: File[][] =
+      isImageToPdf && combineImages ? [files] : files.map((f) => [f]);
 
     const generatedFiles: File[] = [];
     const errors: Error[] = [];
@@ -69,7 +78,9 @@ export const convertOperationConfig = defineCustomTool<ConvertParameters>({
       const filename = firstFile.name || "";
 
       try {
-        const formData = objectToFormData(optionsToSpread, { fileInput: batch });
+        const formData = objectToFormData(optionsToSpread, {
+          fileInput: batch,
+        });
 
         const response: any = await apiClient.post(endpoint, formData, {
           responseType: "blob",
@@ -79,22 +90,31 @@ export const convertOperationConfig = defineCustomTool<ConvertParameters>({
           throw new Error("Empty response");
         }
 
-        const contentType = (response.headers && response.headers["content-type"]) || "application/octet-stream";
-        
+        const contentType =
+          (response.headers && response.headers["content-type"]) ||
+          "application/octet-stream";
+
         let outName = "";
-        const disposition = response.headers && response.headers["content-disposition"];
+        const disposition =
+          response.headers && response.headers["content-disposition"];
         if (disposition && disposition.includes('filename="')) {
           const match = disposition.match(/filename="([^"]+)"/);
           if (match) {
             outName = match[1];
           }
         }
-        
+
         if (!outName) {
-          outName = filename.replace(/\.[^/.]+$/, "") + "." + (params.toExtension || "pdf");
+          outName =
+            filename.replace(/\.[^/.]+$/, "") +
+            "." +
+            (params.toExtension || "pdf");
         }
 
-        const blob = response.data instanceof Blob ? response.data : new Blob([response.data || ""], { type: contentType });
+        const blob =
+          response.data instanceof Blob
+            ? response.data
+            : new Blob([response.data || ""], { type: contentType });
         generatedFiles.push(new File([blob], outName, { type: contentType }));
       } catch (err) {
         if (batches.length > 1) {

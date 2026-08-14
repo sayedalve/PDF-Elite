@@ -9,6 +9,7 @@ import { useFileState } from "@app/contexts/FileContext";
 import { useViewer } from "@app/contexts/ViewerContext";
 import { isStirlingFile } from "@app/types/fileContext";
 import { isPdfFile } from "@app/utils/fileUtils";
+import { ViewerShell } from "@app/components/viewer/ViewerShell";
 
 export type { ViewerProps };
 
@@ -44,7 +45,17 @@ const Viewer = (props: ViewerProps & SignatureOverlayPassThrough) => {
     return <NonPdfViewerWrapper {...props} />;
   }
 
-  return <EmbedPdfViewer {...props} />;
+  const handleClose = () => {
+    if (props.onClose) {
+      props.onClose();
+    }
+  };
+
+  return (
+    <ViewerShell onClose={handleClose}>
+      <EmbedPdfViewer {...props} />
+    </ViewerShell>
+  );
 };
 
 export default Viewer;

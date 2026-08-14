@@ -70,25 +70,33 @@ export default function AutomationCreation({
     updateOperation: updateTool,
     addOperation: addTool,
     isValid: canSaveAutomation,
-  } = useAutomationForm({ 
+  } = useAutomationForm({
     name: existingAutomation?.name || "",
     description: existingAutomation?.description || "",
     icon: existingAutomation?.icon || "SettingsIcon",
-    operations: existingAutomation?.operations?.map((op, i) => ({
-      id: `tool-${Date.now()}-${i}`,
-      operation: op.operation,
-      name: toolRegistry[op.operation as keyof typeof toolRegistry]?.name || op.operation,
-      configured: true,
-      parameters: op.parameters || {},
-    })) || []
+    operations:
+      existingAutomation?.operations?.map((op, i) => ({
+        id: `tool-${Date.now()}-${i}`,
+        operation: op.operation,
+        name:
+          toolRegistry[op.operation as keyof typeof toolRegistry]?.name ||
+          op.operation,
+        configured: true,
+        parameters: op.parameters || {},
+      })) || [],
   });
 
   const getToolName = (operation: string) => {
-    return toolRegistry[operation as keyof typeof toolRegistry]?.name || operation;
+    return (
+      toolRegistry[operation as keyof typeof toolRegistry]?.name || operation
+    );
   };
 
   const getToolDefaultParameters = (operation: string) => {
-    return toolRegistry[operation as keyof typeof toolRegistry]?.operationConfig?.defaultParameters || {};
+    return (
+      toolRegistry[operation as keyof typeof toolRegistry]?.operationConfig
+        ?.defaultParameters || {}
+    );
   };
 
   const [configModalOpen, setConfigModalOpen] = useState(false);

@@ -31,11 +31,8 @@ export function PdfViewerToolbar({
   const isPhone = useIsPhone();
   const buttonMinWidth = isPhone ? "3rem" : "2.5rem";
   const buttonSize = isPhone ? "lg" : "md";
-  const {
-    getScrollState,
-    scrollActions,
-    registerImmediateScrollUpdate,
-  } = useViewer();
+  const { getScrollState, scrollActions, registerImmediateScrollUpdate } =
+    useViewer();
 
   const scrollState = getScrollState();
   const [pageInput, setPageInput] = useState(
@@ -161,7 +158,9 @@ export function PdfViewerToolbar({
         }}
       />
 
-      <span style={{ fontWeight: 500, fontSize: 14, color: "var(--c-text-subtle)" }}>
+      <span
+        style={{ fontWeight: 500, fontSize: 14, color: "var(--c-text-subtle)" }}
+      >
         / {scrollState.totalPages}
       </span>
 

@@ -29,7 +29,6 @@ export const defaultParameters: RedactParameters = {
   convertPDFToImage: false,
 };
 
-
 export type RedactParametersHook = BaseParametersHook<RedactParameters>;
 
 export const useRedactParameters = (): RedactParametersHook =>

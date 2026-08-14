@@ -26,7 +26,8 @@ export const defaultParameters: OverlayPdfsParameters = {
   overlayOnTop: true,
 };
 
-export type OverlayPdfsParametersHook = BaseParametersHook<OverlayPdfsParameters>;
+export type OverlayPdfsParametersHook =
+  BaseParametersHook<OverlayPdfsParameters>;
 
 export const useOverlayPdfsParameters = (): OverlayPdfsParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "overlay-pdfs" });

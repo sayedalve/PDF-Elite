@@ -32,6 +32,6 @@ const AdjustContrastSingleStepSettings = ({
       />
     </Stack>
   );
-}
+};
 
 export default AdjustContrastSingleStepSettings;

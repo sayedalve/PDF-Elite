@@ -26,9 +26,13 @@ const ChangePermissionsSettings = ({
         ).map((key) => (
           <Checkbox
             key={key}
-            label={t(`changePermissions.permissions.${key}.label` as any, key) as any}
+            label={
+              t(`changePermissions.permissions.${key}.label` as any, key) as any
+            }
             checked={parameters[key]}
-            onChange={(e) => (onParameterChange as any)?.(key, e.target.checked)}
+            onChange={(e) =>
+              (onParameterChange as any)?.(key, e.target.checked)
+            }
             disabled={disabled}
           />
         ))}

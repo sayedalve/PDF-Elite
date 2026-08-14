@@ -94,13 +94,9 @@ const Annotate = (_props: BaseToolProps) => {
     setActiveAnnotationToolId,
     styleStateReturn,
   } = useAnnotationContext();
-  
-  const {
-    styleState,
-    styleActions,
-    buildToolOptions,
-    getActiveColor,
-  } = styleStateReturn;
+
+  const { styleState, styleActions, buildToolOptions, getActiveColor } =
+    styleStateReturn;
 
   const viewerContext = useContext(ViewerContext);
   const viewerContextRef = useRef(viewerContext);
@@ -199,8 +195,6 @@ const Annotate = (_props: BaseToolProps) => {
     },
     [],
   );
-
-
 
   const {
     setInkWidth,

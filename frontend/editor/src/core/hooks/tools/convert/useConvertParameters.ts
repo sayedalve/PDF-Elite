@@ -128,25 +128,32 @@ export const defaultParameters: ConvertParameters = {
 };
 
 export interface ConvertParametersHook extends BaseParametersHook<ConvertParameters> {
-  analyzeFileTypes: (files: { name?: string; file?: { name: string } }[]) => void;
+  analyzeFileTypes: (
+    files: { name?: string; file?: { name: string } }[],
+  ) => void;
 }
 
 export const useConvertParameters = (): ConvertParametersHook => {
-  const base = useBaseParameters({ defaultParameters, endpointName: "convert" });
+  const base = useBaseParameters({
+    defaultParameters,
+    endpointName: "convert",
+  });
 
-  const analyzeFileTypes = (files: { name?: string; file?: { name: string } }[]) => {
+  const analyzeFileTypes = (
+    files: { name?: string; file?: { name: string } }[],
+  ) => {
     if (!files.length) return;
 
     let allSame = true;
     let firstExt = "";
 
-    const exts = files.map(f => {
+    const exts = files.map((f) => {
       const filename = f.name || (f.file && f.file.name) || "";
       return detectFileExtension(filename);
     });
 
     firstExt = exts[0];
-    const isWeb = exts.every(ext => ["html", "htm", "zip"].includes(ext));
+    const isWeb = exts.every((ext) => ["html", "htm", "zip"].includes(ext));
 
     for (let i = 1; i < exts.length; i++) {
       if (exts[i] !== firstExt) {
@@ -155,7 +162,9 @@ export const useConvertParameters = (): ConvertParametersHook => {
       }
     }
 
-    const isImage = exts.every(ext => ["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(ext));
+    const isImage = exts.every((ext) =>
+      ["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(ext),
+    );
 
     if (isWeb) {
       base.updateParameter("fromExtension", "html");
@@ -172,7 +181,9 @@ export const useConvertParameters = (): ConvertParametersHook => {
         base.updateParameter("fromExtension", firstExt);
         base.updateParameter("toExtension", "pdf");
         base.updateParameter("isSmartDetection", false);
-      } else if (["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(firstExt)) {
+      } else if (
+        ["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(firstExt)
+      ) {
         base.updateParameter("fromExtension", "img");
         base.updateParameter("toExtension", "pdf");
         base.updateParameter("isSmartDetection", false);

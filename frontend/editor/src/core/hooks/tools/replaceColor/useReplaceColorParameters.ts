@@ -13,7 +13,8 @@ export interface ReplaceColorParameters extends BaseParameters {
 
 export const defaultParameters: ReplaceColorParameters = {};
 
-export type ReplaceColorParametersHook = BaseParametersHook<ReplaceColorParameters>;
+export type ReplaceColorParametersHook =
+  BaseParametersHook<ReplaceColorParameters>;
 
 export const useReplaceColorParameters = (): ReplaceColorParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "replace-invert-pdf" });

@@ -37,7 +37,11 @@ export function newIntegrationStep(op: StepOperation): WorkingToolStep {
     operation: INTEGRATION_ENDPOINT,
     // Connection is chosen in the inspector; the step is created unconfigured on purpose so the
     // operator sees it in the chain and fills it in, rather than the picker blocking on a modal.
-    parameters: buildStepParameters(op, "", values) as unknown as ErasedToolParams,
+    parameters: buildStepParameters(
+      op,
+      "",
+      values,
+    ) as unknown as ErasedToolParams,
     configured: false,
   };
 }

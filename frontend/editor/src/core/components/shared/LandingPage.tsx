@@ -17,7 +17,6 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import "@app/components/shared/HomePage.css";
 
-
 const LandingPage = () => {
   const { t } = useTranslation();
   const { addFiles } = useFileHandler();
@@ -85,7 +84,10 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="home-layout" style={{ display: "flex", width: "100%", height: "100%" }}>
+    <div
+      className="home-layout"
+      style={{ display: "flex", width: "100%", height: "100%" }}
+    >
       {/* ── Main Workspace ───────────────────────────── */}
       <main className="home-workspace">
         <Dropzone
@@ -109,7 +111,6 @@ const LandingPage = () => {
           }}
         >
           <div className="home-content">
-
             {/* ── Hero section ─────────────────────── */}
             <div className="home-hero">
               <h1 className="home-hero__title">
@@ -138,12 +139,8 @@ const LandingPage = () => {
                     cursor: "pointer",
                     transition: "opacity 0.15s ease",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.opacity = "0.88")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.opacity = "1")
-                  }
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                   onClick={(e) => {
                     e.stopPropagation();
                     void handleNativeUploadClick();
@@ -189,7 +186,10 @@ const LandingPage = () => {
 
             {/* ── Recent Documents ─────────────────── */}
             {recentFiles.length > 0 && (
-              <section className="home-section" aria-labelledby="recent-heading">
+              <section
+                className="home-section"
+                aria-labelledby="recent-heading"
+              >
                 <div className="home-section__header">
                   <h2 id="recent-heading" className="home-section__title">
                     {t("home.recentDocuments", "Recent Documents")}

@@ -45,7 +45,12 @@ export function PipelineStepSettings({
   const entry = step.toolId
     ? registry[step.toolId as keyof typeof registry]
     : undefined;
-  const support = entry?.supportsAutomate === false ? "noSettings" : entry?.automationSettings ? "editable" : "unsupported";
+  const support =
+    entry?.supportsAutomate === false
+      ? "noSettings"
+      : entry?.automationSettings
+        ? "editable"
+        : "unsupported";
 
   if (support === "noSettings") {
     return (
@@ -56,8 +61,7 @@ export function PipelineStepSettings({
     );
   }
 
-  const Settings =
-    support === "editable" ? entry?.automationSettings : null;
+  const Settings = support === "editable" ? entry?.automationSettings : null;
 
   if (!Settings) {
     return (

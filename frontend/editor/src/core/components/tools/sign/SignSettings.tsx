@@ -663,7 +663,10 @@ const SignSettings = ({
     if (!isCurrentTypeReady) {
       return null;
     }
-    return signatureKeysByType[parameters.signatureType as SavedSignatureType] ?? null;
+    return (
+      signatureKeysByType[parameters.signatureType as SavedSignatureType] ??
+      null
+    );
   }, [isCurrentTypeReady, parameters.signatureType, signatureKeysByType]);
 
   const shouldEnablePlacement = useMemo(() => {

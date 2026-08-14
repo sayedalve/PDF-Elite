@@ -14,7 +14,11 @@ interface AdvancedOptionsStepProps {
   disabled?: boolean;
   addCustomMetadata: (key?: string, value?: string) => void;
   removeCustomMetadata: (index: number) => void;
-  updateCustomMetadata: (index: number, key: keyof ChangeMetadataParameters["customMetadata"][0], value: string) => void;
+  updateCustomMetadata: (
+    index: number,
+    key: keyof ChangeMetadataParameters["customMetadata"][0],
+    value: string,
+  ) => void;
 }
 
 const AdvancedOptionsStep = ({

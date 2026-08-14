@@ -10,7 +10,11 @@ import {
 } from "@app/hooks/tools/shared/toolOperationTypes";
 import { useFileContext } from "@app/contexts/FileContext";
 import { createChildStub } from "@app/contexts/file/fileActions";
-import { StirlingFile, createFileId, createStirlingFile } from "@app/types/fileContext";
+import {
+  StirlingFile,
+  createFileId,
+  createStirlingFile,
+} from "@app/types/fileContext";
 
 // Re-export config types so consumers can import them from one place.
 export type {
@@ -69,7 +73,11 @@ export interface ToolOperationHook<TParams = unknown> {
   /** True when the cloud backend will process this request. */
   willUseCloud?: boolean | null;
   /** Run the tool operation. */
-  executeOperation: (params: TParams, files: File[], inputStirlingFiles?: StirlingFile[]) => Promise<void>;
+  executeOperation: (
+    params: TParams,
+    files: File[],
+    inputStirlingFiles?: StirlingFile[],
+  ) => Promise<void>;
   /** Clear result files and reset to idle. */
   resetResults: () => void;
   /** Dismiss the current error message. */
@@ -86,21 +94,30 @@ export interface ToolOperationHook<TParams = unknown> {
 export function defineSingleFileTool<TParams = ErasedToolParams>(
   config: Omit<SingleFileToolOperationConfig<TParams>, "toolType">,
 ): SingleFileToolOperationConfig<TParams> {
-  return { ...config, toolType: ToolType.singleFile } as SingleFileToolOperationConfig<TParams>;
+  return {
+    ...config,
+    toolType: ToolType.singleFile,
+  } as SingleFileToolOperationConfig<TParams>;
 }
 
 /** Build a multi-file operation config with the toolType discriminant pre-set. */
 export function defineMultiFileTool<TParams = ErasedToolParams>(
   config: Omit<MultiFileToolOperationConfig<TParams>, "toolType">,
 ): MultiFileToolOperationConfig<TParams> {
-  return { ...config, toolType: ToolType.multiFile } as MultiFileToolOperationConfig<TParams>;
+  return {
+    ...config,
+    toolType: ToolType.multiFile,
+  } as MultiFileToolOperationConfig<TParams>;
 }
 
 /** Build a custom-processor operation config with the toolType discriminant pre-set. */
 export function defineCustomTool<TParams = ErasedToolParams>(
   config: Omit<CustomToolOperationConfig<TParams>, "toolType">,
 ): CustomToolOperationConfig<TParams> {
-  return { ...config, toolType: ToolType.custom } as CustomToolOperationConfig<TParams>;
+  return {
+    ...config,
+    toolType: ToolType.custom,
+  } as CustomToolOperationConfig<TParams>;
 }
 
 // ─── useToolOperation ─────────────────────────────────────────────────────────
@@ -143,7 +160,9 @@ export function useToolOperation<TParams>(
   }, []);
 
   const [outputFileIds, setOutputFileIds] = useState<string[]>([]);
-  const [inputStirlingFileStubs, setInputStirlingFileStubs] = useState<any[]>([]);
+  const [inputStirlingFileStubs, setInputStirlingFileStubs] = useState<any[]>(
+    [],
+  );
 
   const cancelOperation = useCallback(() => {
     abortRef.current?.abort();
@@ -152,7 +171,11 @@ export function useToolOperation<TParams>(
   }, []);
 
   const undoOperation = useCallback(async () => {
-    if (undoConsumeFiles && outputFileIds.length > 0 && inputStirlingFileStubs.length > 0) {
+    if (
+      undoConsumeFiles &&
+      outputFileIds.length > 0 &&
+      inputStirlingFileStubs.length > 0
+    ) {
       await undoConsumeFiles([], inputStirlingFileStubs, outputFileIds as any);
       setOutputFileIds([]);
       setInputStirlingFileStubs([]);
@@ -160,61 +183,81 @@ export function useToolOperation<TParams>(
     resetResults();
   }, [undoConsumeFiles, outputFileIds, inputStirlingFileStubs, resetResults]);
 
-  const storeResults = useCallback(async (resultFiles: File[], inputStirlingFiles?: StirlingFile[]) => {
-    setFiles(resultFiles);
+  const storeResults = useCallback(
+    async (resultFiles: File[], inputStirlingFiles?: StirlingFile[]) => {
+      setFiles(resultFiles);
 
-    // Generate a simple download URL for single-file results
-    if (resultFiles.length === 1) {
-      const url = URL.createObjectURL(resultFiles[0]);
-      setDownloadUrl(url);
-      setDownloadFilename(resultFiles[0].name);
-    } else if (resultFiles.length > 1) {
-      // Multiple files — no single download URL (use individual file URLs)
-      setDownloadUrl(null);
-      setDownloadFilename("");
-    }
+      // Generate a simple download URL for single-file results
+      if (resultFiles.length === 1) {
+        const url = URL.createObjectURL(resultFiles[0]);
+        setDownloadUrl(url);
+        setDownloadFilename(resultFiles[0].name);
+      } else if (resultFiles.length > 1) {
+        // Multiple files — no single download URL (use individual file URLs)
+        setDownloadUrl(null);
+        setDownloadFilename("");
+      }
 
-    // Update FileContext for robust save/undo chaining
-    if (consumeFiles && selectors && inputStirlingFiles && inputStirlingFiles.length > 0) {
-      const newStirlingFiles = resultFiles.map((f) => createStirlingFile(f, createFileId()));
-      
-      // Determine parents (using first input as primary parent for simplicty in multi-file operations)
-      const primaryInputId = inputStirlingFiles[0].fileId;
-      const parentStub = selectors.getStirlingFileStub(primaryInputId);
-      
-      if (parentStub) {
-        const stubs = newStirlingFiles.map((sf) => {
-          return createChildStub(
-            parentStub,
-            {
-              toolId: config.operationType as any,
-              timestamp: Date.now(),
-            },
-            sf,
-          );
-        });
+      // Update FileContext for robust save/undo chaining
+      if (
+        consumeFiles &&
+        selectors &&
+        inputStirlingFiles &&
+        inputStirlingFiles.length > 0
+      ) {
+        const newStirlingFiles = resultFiles.map((f) =>
+          createStirlingFile(f, createFileId()),
+        );
 
-        const inputFileIds = inputStirlingFiles.map(f => f.fileId);
-        const originalInputStubs = inputFileIds.map(id => selectors.getStirlingFileStub(id)).filter(Boolean);
-        
-        try {
-          const newIds = await consumeFiles(inputFileIds, newStirlingFiles, stubs);
-          setOutputFileIds(newIds);
-          setInputStirlingFileStubs(originalInputStubs);
-        } catch (e) {
-          console.error("[useToolOperation] Failed to consume files:", e);
+        // Determine parents (using first input as primary parent for simplicty in multi-file operations)
+        const primaryInputId = inputStirlingFiles[0].fileId;
+        const parentStub = selectors.getStirlingFileStub(primaryInputId);
+
+        if (parentStub) {
+          const stubs = newStirlingFiles.map((sf) => {
+            return createChildStub(
+              parentStub,
+              {
+                toolId: config.operationType as any,
+                timestamp: Date.now(),
+              },
+              sf,
+            );
+          });
+
+          const inputFileIds = inputStirlingFiles.map((f) => f.fileId);
+          const originalInputStubs = inputFileIds
+            .map((id) => selectors.getStirlingFileStub(id))
+            .filter(Boolean);
+
+          try {
+            const newIds = await consumeFiles(
+              inputFileIds,
+              newStirlingFiles,
+              stubs,
+            );
+            setOutputFileIds(newIds);
+            setInputStirlingFileStubs(originalInputStubs);
+          } catch (e) {
+            console.error("[useToolOperation] Failed to consume files:", e);
+          }
         }
       }
-    }
 
-    // Generate blank thumbnails placeholders (real thumbnails generated elsewhere)
-    setIsGeneratingThumbnails(true);
-    setThumbnails(resultFiles.map(() => null));
-    setIsGeneratingThumbnails(false);
-  }, [consumeFiles, selectors, config.operationType]);
+      // Generate blank thumbnails placeholders (real thumbnails generated elsewhere)
+      setIsGeneratingThumbnails(true);
+      setThumbnails(resultFiles.map(() => null));
+      setIsGeneratingThumbnails(false);
+    },
+    [consumeFiles, selectors, config.operationType],
+  );
 
   const executeOperation = useCallback(
-    async (params: TParams, inputFiles: File[], inputStirlingFiles?: StirlingFile[]): Promise<void> => {
+    async (
+      params: TParams,
+      inputFiles: File[],
+      inputStirlingFiles?: StirlingFile[],
+    ): Promise<void> => {
       if (isLoading) return;
 
       setIsLoading(true);
@@ -240,17 +283,20 @@ export function useToolOperation<TParams>(
               ? config.endpoint(params)
               : config.endpoint;
 
-          const formData = (config as MultiFileToolOperationConfig<TParams>).buildFormData(
-            params,
-            inputFiles,
-          );
+          const formData = (
+            config as MultiFileToolOperationConfig<TParams>
+          ).buildFormData(params, inputFiles);
 
           const response = await apiClient.post(endpoint, formData, {
             responseType: "blob",
           });
 
           // Use custom response handler if provided, otherwise processResponse
-          const responseHandler = (config as MultiFileToolOperationConfig<TParams> & { responseHandler?: any }).responseHandler;
+          const responseHandler = (
+            config as MultiFileToolOperationConfig<TParams> & {
+              responseHandler?: any;
+            }
+          ).responseHandler;
           if (responseHandler) {
             resultFiles = await responseHandler(response.data, inputFiles);
           } else {

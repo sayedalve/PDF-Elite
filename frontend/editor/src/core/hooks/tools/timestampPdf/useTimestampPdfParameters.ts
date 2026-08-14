@@ -14,8 +14,14 @@ export const FALLBACK_TSA_PRESETS: TsaPreset[] = [
   { label: "Freetsa (free)", url: "https://freetsa.org/tsr" },
   { label: "DigiCert (free)", url: "http://timestamp.digicert.com" },
   { label: "Sectigo", url: "http://timestamp.sectigo.com" },
-  { label: "GlobalSign", url: "http://timestamp.globalsign.com/scripts/timstamp.dll" },
-  { label: "VeriSign", url: "http://timestamp.verisign.com/scripts/timstamp.dll" },
+  {
+    label: "GlobalSign",
+    url: "http://timestamp.globalsign.com/scripts/timstamp.dll",
+  },
+  {
+    label: "VeriSign",
+    url: "http://timestamp.verisign.com/scripts/timstamp.dll",
+  },
 ];
 
 export interface TimestampPdfParameters extends BaseParameters {
@@ -29,7 +35,8 @@ export const defaultParameters: TimestampPdfParameters = {
   tsaUrl: FALLBACK_TSA_PRESETS[0].url,
 };
 
-export type TimestampPdfParametersHook = BaseParametersHook<TimestampPdfParameters>;
+export type TimestampPdfParametersHook =
+  BaseParametersHook<TimestampPdfParameters>;
 
 export const useTimestampPdfParameters = (): TimestampPdfParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "timestamp-pdf" });

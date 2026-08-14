@@ -16,7 +16,8 @@ export const defaultParameters: AddPasswordParameters = {
   keyLength: 128,
 };
 
-export type AddPasswordParametersHook = BaseParametersHook<AddPasswordParameters>;
+export type AddPasswordParametersHook =
+  BaseParametersHook<AddPasswordParameters>;
 
 export const useAddPasswordParameters = (): AddPasswordParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "add-password" });

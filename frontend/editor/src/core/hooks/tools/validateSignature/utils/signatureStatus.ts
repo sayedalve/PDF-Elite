@@ -11,7 +11,9 @@ export type SignatureStatus =
   | "SELF_SIGNED";
 
 /** Map a raw backend status string to a canonical SignatureStatus. */
-export function normalizeSignatureStatus(raw: string | undefined): SignatureStatus {
+export function normalizeSignatureStatus(
+  raw: string | undefined,
+): SignatureStatus {
   const upper = (raw ?? "").toUpperCase();
   const valid: SignatureStatus[] = [
     "VALID",

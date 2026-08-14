@@ -706,13 +706,10 @@ const PdfTextEditor = ({ onComplete, onError }: BaseToolProps) => {
             message: "Loading PDF for local extraction...",
           });
 
-          const docResult = await convertPdfToJsonLocal(
-            file,
-            (progress) => {
-              if (loadRequestIdRef.current !== requestId) return;
-              setConversionProgress(progress);
-            },
-          );
+          const docResult = await convertPdfToJsonLocal(file, (progress) => {
+            if (loadRequestIdRef.current !== requestId) return;
+            setConversionProgress(progress);
+          });
 
           parsed = {
             ...docResult,

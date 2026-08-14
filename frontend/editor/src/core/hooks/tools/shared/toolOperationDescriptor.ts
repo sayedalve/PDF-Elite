@@ -7,7 +7,10 @@
  * duplicating logic.
  */
 
-import type { ErasedToolParams, ToolOperationConfig } from "@app/hooks/tools/shared/toolOperationTypes";
+import type {
+  ErasedToolParams,
+  ToolOperationConfig,
+} from "@app/hooks/tools/shared/toolOperationTypes";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -58,7 +61,9 @@ export function toWireParams<TParams>(
   descriptor: ToolOperationDescriptor<TParams>,
   params: TParams,
 ): ErasedToolParams {
-  return descriptor.toWireParams ? descriptor.toWireParams(params) : (params as ErasedToolParams);
+  return descriptor.toWireParams
+    ? descriptor.toWireParams(params)
+    : (params as ErasedToolParams);
 }
 
 /**

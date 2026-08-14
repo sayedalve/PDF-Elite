@@ -505,41 +505,44 @@ export default function HomePage() {
             className="flex-nowrap flex"
             bg="var(--c-bg)"
           >
-            {(!isMobile && !fileSidebarCollapsed && navigationState.workbench === "myFiles") && (
-              <MyFilesAwareFileSidebar
-                ref={quickAccessRef}
-                active={navigationState.workbench === "myFiles"}
-                // /files always shows the rail collapsed - force it here so a
-                // deep-link/reload onto /files (no workbench transition) still
-                // collapses, and a manual expand can't stick.
-                collapsed={
-                  navigationState.workbench === "myFiles" || fileSidebarCollapsed
-                }
-                toggleAriaLabel={
-                  navigationState.workbench === "myFiles"
-                    ? t("fileSidebar.leaveMyFiles", "Leave My Files")
-                    : undefined
-                }
-                // Back-arrow on /files; burger elsewhere.
-                toggleIcon={
-                  navigationState.workbench === "myFiles" ? (
-                    <ArrowBackIcon />
-                  ) : undefined
-                }
-                onToggleCollapse={() => {
-                  if (navigationState.workbench === "myFiles") {
-                    navigate("/");
-                    return;
+            {!isMobile &&
+              !fileSidebarCollapsed &&
+              navigationState.workbench === "myFiles" && (
+                <MyFilesAwareFileSidebar
+                  ref={quickAccessRef}
+                  active={navigationState.workbench === "myFiles"}
+                  // /files always shows the rail collapsed - force it here so a
+                  // deep-link/reload onto /files (no workbench transition) still
+                  // collapses, and a manual expand can't stick.
+                  collapsed={
+                    navigationState.workbench === "myFiles" ||
+                    fileSidebarCollapsed
                   }
-                  setFileSidebarCollapsed((c) => {
-                    const next = !c;
-                    writePersistedSidebarCollapsed(next);
-                    return next;
-                  });
-                }}
-                onOpenSettings={() => setConfigModalOpen(true)}
-              />
-            )}
+                  toggleAriaLabel={
+                    navigationState.workbench === "myFiles"
+                      ? t("fileSidebar.leaveMyFiles", "Leave My Files")
+                      : undefined
+                  }
+                  // Back-arrow on /files; burger elsewhere.
+                  toggleIcon={
+                    navigationState.workbench === "myFiles" ? (
+                      <ArrowBackIcon />
+                    ) : undefined
+                  }
+                  onToggleCollapse={() => {
+                    if (navigationState.workbench === "myFiles") {
+                      navigate("/");
+                      return;
+                    }
+                    setFileSidebarCollapsed((c) => {
+                      const next = !c;
+                      writePersistedSidebarCollapsed(next);
+                      return next;
+                    });
+                  }}
+                  onOpenSettings={() => setConfigModalOpen(true)}
+                />
+              )}
             <FolderTreePanel active={navigationState.workbench === "myFiles"} />
             {navigationState.workbench !== "myFiles" && <PrimaryModeRail />}
             <Workbench />

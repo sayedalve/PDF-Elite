@@ -3,7 +3,6 @@ import React from "react";
 
 import { ToolId } from "@app/types/toolId";
 
-
 interface HomeQuickToolsProps {
   filteredTools: Record<string, any>;
   onSelect: (toolId: string) => void;
@@ -62,12 +61,15 @@ export const HomeQuickTools: React.FC<HomeQuickToolsProps> = ({
             transition: "all 0.15s ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "var(--c-surface-elevated, var(--p-doc-surface-elevated))";
-            e.currentTarget.style.borderColor = "var(--c-border, var(--p-doc-surface-hover-selected))";
+            e.currentTarget.style.background =
+              "var(--c-surface-elevated, var(--p-doc-surface-elevated))";
+            e.currentTarget.style.borderColor =
+              "var(--c-border, var(--p-doc-surface-hover-selected))";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.borderColor = "var(--c-border-subtle, rgba(255,255,255,0.05))";
+            e.currentTarget.style.borderColor =
+              "var(--c-border-subtle, rgba(255,255,255,0.05))";
           }}
         >
           <div

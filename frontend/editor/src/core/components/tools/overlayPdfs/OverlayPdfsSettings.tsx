@@ -71,7 +71,7 @@ const OverlayPdfsSettings = ({
     openFilesModal({
       customHandler: (files: File[]) => {
         handleOverlayFilesChange([
-          ...((parameters.overlayFiles || []) || []),
+          ...(parameters.overlayFiles || [] || []),
           ...files,
         ]);
       },
@@ -157,7 +157,7 @@ const OverlayPdfsSettings = ({
                       step={1}
                       value={(parameters.counts || [])[index] ?? 1}
                       onChange={(value) => {
-                        const next = [...((parameters.counts || []) || [])];
+                        const next = [...(parameters.counts || [] || [])];
                         next[index] = Number(value) || 1;
                         onParameterChange("counts", next);
                       }}
@@ -224,9 +224,11 @@ const OverlayPdfsSettings = ({
                         accent="danger"
                         className={styles.removeButton}
                         onClick={() => {
-                          const next = ((parameters.overlayFiles || []) || []).filter(
-                            (_, i) => i !== index,
-                          );
+                          const next = (
+                            parameters.overlayFiles ||
+                            [] ||
+                            []
+                          ).filter((_, i) => i !== index);
                           handleOverlayFilesChange(next);
                         }}
                         disabled={disabled}
@@ -247,6 +249,6 @@ const OverlayPdfsSettings = ({
       </Stack>
     </Stack>
   );
-}
+};
 
 export default OverlayPdfsSettings;

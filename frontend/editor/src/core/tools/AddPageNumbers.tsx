@@ -60,7 +60,9 @@ const AddPageNumbers = ({
       title: t("addPageNumbers.positionAndPages", "Position & Pages"),
       isCollapsed: !accordion.isStepOpen(0),
       onCollapsedClick: () =>
-        accordion.isStepOpen(0) ? accordion.resetSteps() : accordion.openStep(0),
+        accordion.isStepOpen(0)
+          ? accordion.resetSteps()
+          : accordion.openStep(0),
       isVisible: hasFiles || hasResults,
       content: (
         <AddPageNumbersPositionSettings
@@ -78,7 +80,9 @@ const AddPageNumbers = ({
       title: t("addPageNumbers.customize", "Customize Appearance"),
       isCollapsed: !accordion.isStepOpen(1),
       onCollapsedClick: () =>
-        accordion.isStepOpen(1) ? accordion.resetSteps() : accordion.openStep(1),
+        accordion.isStepOpen(1)
+          ? accordion.resetSteps()
+          : accordion.openStep(1),
       isVisible: hasFiles || hasResults,
       content: (
         <AddPageNumbersAppearanceSettings

@@ -146,7 +146,14 @@ export function TextSelectionMenu({
             </ActionIcon>
           </Tooltip>
 
-          <div style={{ width: 1, height: 20, backgroundColor: "var(--c-border)", margin: "0 4px" }} />
+          <div
+            style={{
+              width: 1,
+              height: 20,
+              backgroundColor: "var(--c-border)",
+              margin: "0 4px",
+            }}
+          />
 
           <Tooltip label={t("viewer.copyText", "Copy")} withArrow>
             <ActionIcon

@@ -70,7 +70,10 @@ export default function ToolConfigurationModal({
       <SettingsComponent
         parameters={parameters}
         onParameterChange={(key, value) => {
-          setParameters((prev: ErasedToolParams) => ({ ...prev, [key]: value }));
+          setParameters((prev: ErasedToolParams) => ({
+            ...prev,
+            [key]: value,
+          }));
         }}
         disabled={false}
       />

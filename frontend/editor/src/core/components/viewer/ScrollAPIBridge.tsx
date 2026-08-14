@@ -63,13 +63,19 @@ function ScrollAPIBridgeInner({ documentId }: { documentId: string }) {
     return () => {
       registerBridge("scroll", null);
     };
-  }, [currentPage, totalPages, registerBridge, triggerImmediateScrollUpdate, documentId]);
+  }, [
+    currentPage,
+    totalPages,
+    registerBridge,
+    triggerImmediateScrollUpdate,
+    documentId,
+  ]);
 
   // Restore saved page on initial load
   const hasRestoredPage = useRef(false);
   useEffect(() => {
     if (!scroll || hasRestoredPage.current) return;
-    
+
     // Only attempt to restore if we have a valid scroll API and documentId
     if (documentId) {
       const savedPage = pageMemoryService.getPage(documentId);

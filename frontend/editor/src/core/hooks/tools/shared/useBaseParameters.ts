@@ -3,10 +3,7 @@ import { useState, useCallback } from "react";
 // Minimum shape every tool parameters hook must satisfy.
 export interface BaseParametersHook<TParams> {
   parameters: TParams;
-  updateParameter: <K extends keyof TParams>(
-    key: K,
-    value: TParams[K],
-  ) => void;
+  updateParameter: <K extends keyof TParams>(key: K, value: TParams[K]) => void;
   setParameters: (params: TParams) => void;
   resetParameters: () => void;
   validateParameters: () => boolean;

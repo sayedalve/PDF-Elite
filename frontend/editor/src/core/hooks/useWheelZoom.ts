@@ -110,7 +110,7 @@ export function useWheelZoom({
 
         // Clamp to reasonable bounds (20% – 500%)
         const clamped = Math.min(Math.max(newFactor, 0.2), 5.0);
-        
+
         // Calculate the zoom center (viewport relative)
         const rect = element.getBoundingClientRect();
         const vx = (wheelEvent.clientX - rect.left) / rect.width;

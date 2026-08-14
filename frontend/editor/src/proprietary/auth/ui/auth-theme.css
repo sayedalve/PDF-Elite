@@ -8,7 +8,11 @@
   --auth-input-bg: #ffffff;
   --auth-input-text: var(--p-gray-900);
   --auth-border-focus: var(--p-doc-accent-primary);
-  --auth-focus-ring: color-mix(in srgb, var(--p-doc-accent-primary) 10%, transparent);
+  --auth-focus-ring: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 10%,
+    transparent
+  );
   --auth-button-bg: var(--p-red-600);
   --auth-button-text: #ffffff;
   --auth-magic-button-bg: var(--p-gray-200);
@@ -38,7 +42,11 @@
   --auth-input-bg: var(--c-surface-raised);
   --auth-input-text: var(--c-text);
   --auth-border-focus: var(--p-doc-accent-primary);
-  --auth-focus-ring: color-mix(in srgb, var(--p-doc-accent-primary) 20%, transparent);
+  --auth-focus-ring: color-mix(
+    in srgb,
+    var(--p-doc-accent-primary) 20%,
+    transparent
+  );
   --auth-button-bg: var(--p-red-600);
   --auth-button-text: #ffffff;
   --auth-magic-button-bg: var(--c-surface-raised);

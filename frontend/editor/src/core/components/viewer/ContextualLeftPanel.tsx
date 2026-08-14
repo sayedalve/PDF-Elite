@@ -48,7 +48,9 @@ export function ContextualLeftPanel({
           ? "layers"
           : null;
 
-  const togglePanel = (panel: "thumbnails" | "bookmarks" | "attachments" | "layers") => {
+  const togglePanel = (
+    panel: "thumbnails" | "bookmarks" | "attachments" | "layers",
+  ) => {
     if (activePanel === panel) {
       if (panel === "thumbnails") viewer.toggleThumbnailSidebar();
       if (panel === "bookmarks") viewer.toggleBookmarkSidebar();
@@ -76,13 +78,21 @@ export function ContextualLeftPanel({
     },
     {
       id: "bookmarks" as const,
-      icon: <LocalIcon icon="bookmark-add-rounded" width="1.25rem" height="1.25rem" />,
+      icon: (
+        <LocalIcon
+          icon="bookmark-add-rounded"
+          width="1.25rem"
+          height="1.25rem"
+        />
+      ),
       label: t("workbenchBar.toggleBookmarks", "Bookmarks"),
       visible: true,
     },
     {
       id: "attachments" as const,
-      icon: <LocalIcon icon="attachment-rounded" width="1.25rem" height="1.25rem" />,
+      icon: (
+        <LocalIcon icon="attachment-rounded" width="1.25rem" height="1.25rem" />
+      ),
       label: t("workbenchBar.toggleAttachments", "Attachments"),
       visible: true,
     },

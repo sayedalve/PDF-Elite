@@ -182,10 +182,7 @@ export function PipelineBuilder() {
   const isEdit = Boolean(id);
   const catalog = useToolRegistry();
   const { allTools } = catalog;
-  const executableTools = useMemo(
-    () => getExecutableTools(catalog),
-    [catalog],
-  );
+  const executableTools = useMemo(() => getExecutableTools(catalog), [catalog]);
 
   const policyState = useAsync<Policy | null>(
     async () => (id ? await fetchPipeline(id) : null),
@@ -405,13 +402,17 @@ export function PipelineBuilder() {
     if (op) return t(op.labelKey);
     if (isIntegrationStep(step))
       return t("portal.pipelines.builder.sendToSystem");
-    const entry = step.toolId ? catalog.getToolById(step.toolId as any) : undefined;
+    const entry = step.toolId
+      ? catalog.getToolById(step.toolId as any)
+      : undefined;
     return entry?.name ?? humanizeOperation(step.operation);
   }
 
   // Steps whose params carry an uploaded file can't be saved: the bytes aren't persisted with the
   // policy, so a later run would send null for that field (see stepRequiresUpload).
-  const uploadStepLabels = steps.filter((s) => stepRequiresUpload(s)).map(stepLabel);
+  const uploadStepLabels = steps
+    .filter((s) => stepRequiresUpload(s))
+    .map(stepLabel);
   const hasUploadSteps = uploadStepLabels.length > 0;
 
   // A step still missing a choice - an integration with no operation or account, a tool whose
@@ -421,7 +422,12 @@ export function PipelineBuilder() {
     .filter(
       (step) =>
         !integrationStepConfigured(step) ||
-        stepNeedsConfiguring(step, step.toolId ? executableTools.find(t => t.id === step.toolId) : undefined),
+        stepNeedsConfiguring(
+          step,
+          step.toolId
+            ? executableTools.find((t) => t.id === step.toolId)
+            : undefined,
+        ),
     )
     .map(stepLabel);
   const hasUnconfiguredSteps = unconfiguredStepLabels.length > 0;
@@ -966,15 +972,29 @@ export function PipelineBuilder() {
                         <span className="portal-builder__step-note">
                           {t("portal.pipelines.builder.needsUpload")}
                         </span>
-                      ) : stepNeedsConfiguring(step, step.toolId ? executableTools.find(t => t.id === step.toolId) : undefined) ? (
+                      ) : stepNeedsConfiguring(
+                          step,
+                          step.toolId
+                            ? executableTools.find((t) => t.id === step.toolId)
+                            : undefined,
+                        ) ? (
                         <span className="portal-builder__step-note">
                           {t("portal.pipelines.builder.needsConfiguring")}
                         </span>
-                      ) : (step.toolId ? catalog.getToolById(step.toolId as any) : undefined) && !(step.toolId ? catalog.getToolById(step.toolId as any) : undefined)?.automationSettings ? (
+                      ) : (step.toolId
+                          ? catalog.getToolById(step.toolId as any)
+                          : undefined) &&
+                        !(
+                          step.toolId
+                            ? catalog.getToolById(step.toolId as any)
+                            : undefined
+                        )?.automationSettings ? (
                         <span className="portal-builder__step-note">
                           {t("portal.pipelines.builder.usesDefaults")}
                         </span>
-                      ) : !isIntegrationStep(step) && step.toolId && !catalog.getToolById(step.toolId as any) ? (
+                      ) : !isIntegrationStep(step) &&
+                        step.toolId &&
+                        !catalog.getToolById(step.toolId as any) ? (
                         <span className="portal-builder__step-note">
                           {t("portal.pipelines.builder.unknownStep")}
                         </span>

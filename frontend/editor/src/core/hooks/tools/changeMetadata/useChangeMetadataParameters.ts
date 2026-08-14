@@ -32,7 +32,8 @@ export const defaultParameters: ChangeMetadataParameters = {
   customMetadata: [],
 };
 
-export type ChangeMetadataParametersHook = BaseParametersHook<ChangeMetadataParameters>;
+export type ChangeMetadataParametersHook =
+  BaseParametersHook<ChangeMetadataParameters>;
 
 export const useChangeMetadataParameters = (): ChangeMetadataParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "update-metadata" });
@@ -55,10 +56,7 @@ export function createCustomMetadataFunctions(
   const entries = parameters.customMetadata ?? [];
 
   function addCustomMetadata() {
-    const next: CustomMetadataEntry[] = [
-      ...entries,
-      { key: "", value: "" },
-    ];
+    const next: CustomMetadataEntry[] = [...entries, { key: "", value: "" }];
     onParameterChange?.("customMetadata", next);
   }
 

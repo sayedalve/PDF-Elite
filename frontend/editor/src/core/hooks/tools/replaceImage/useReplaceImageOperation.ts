@@ -42,14 +42,14 @@ export const buildReplaceImageFormData = (
   const formData = new FormData();
   formData.append("fileInput", file);
   formData.append("replacementImage", replacementImage);
-  
+
   if (parameters.imageIndex !== undefined) {
     formData.append("imageIndex", parameters.imageIndex.toString());
   }
   if (parameters.pageNumber !== undefined) {
     formData.append("pageNumber", parameters.pageNumber.toString());
   }
-  
+
   return formData;
 };
 
@@ -65,11 +65,14 @@ export const replaceImageOperationConfig = {
     if (files.length < 2) throw new Error("Missing replacement image");
     const formData = buildReplaceImageFormData(params, files[0], files[1]);
     const { default: apiClient } = await import("@app/services/apiClient");
-    const { processResponse } = await import("@app/utils/toolResponseProcessor");
-    const response = await apiClient.post(ENDPOINT, formData, { responseType: "blob" });
+    const { processResponse } =
+      await import("@app/utils/toolResponseProcessor");
+    const response = await apiClient.post(ENDPOINT, formData, {
+      responseType: "blob",
+    });
     const resultFiles = await processResponse(response.data, [files[0]], "");
     return { files: resultFiles };
-  }
+  },
 };
 
 export const useReplaceImageOperation = () => {

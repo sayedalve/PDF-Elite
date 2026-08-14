@@ -38,7 +38,10 @@ export const buildExtractImagesFormData = (
   parameters: ExtractImagesParameters,
   file: File,
 ): FormData =>
-  objectToFormData(extractImagesToApiParams(parameters) as unknown as Record<string, unknown>, { fileInput: file });
+  objectToFormData(
+    extractImagesToApiParams(parameters) as unknown as Record<string, unknown>,
+    { fileInput: file },
+  );
 
 // Static configuration object (without response handler - will be added in hook)
 export const extractImagesOperationConfig = defineSingleFileTool({

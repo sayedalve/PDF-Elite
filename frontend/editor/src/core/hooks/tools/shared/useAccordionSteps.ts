@@ -56,5 +56,12 @@ export function useAccordionSteps(totalSteps: number): AccordionStepsHook {
     [completedSteps],
   );
 
-  return { activeStep, openStep, completeStep, resetSteps, isStepOpen, isStepComplete };
+  return {
+    activeStep,
+    openStep,
+    completeStep,
+    resetSteps,
+    isStepOpen,
+    isStepComplete,
+  };
 }

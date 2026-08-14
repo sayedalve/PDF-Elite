@@ -42,9 +42,12 @@ const buildFormData = (
   parameters: MergeParameters,
   files: File[],
 ): FormData => {
-  const formData = objectToFormData(mergeToApiParams(parameters) as unknown as Record<string, unknown>, {
-    fileInput: files,
-  });
+  const formData = objectToFormData(
+    mergeToApiParams(parameters) as unknown as Record<string, unknown>,
+    {
+      fileInput: files,
+    },
+  );
   // Stable client file IDs, aligned with the fileInput order. Derived from the
   // files themselves, so it belongs to the file-appending step.
   const clientIds: string[] = files.map((f) =>

@@ -44,7 +44,10 @@ const ReplaceImageSettings = ({
             ? t("replaceImage.settings.selected", "Selected: {{name}}", {
                 name: selectedReplacementFile.name,
               })
-            : t("replaceImage.settings.selectImage", "Select Replacement Image")}
+            : t(
+                "replaceImage.settings.selectImage",
+                "Select Replacement Image",
+              )}
           <input
             type="file"
             accept="image/*"
@@ -66,7 +69,10 @@ const ReplaceImageSettings = ({
         )}
         value={parameters.imageIndex ?? ""}
         onChange={(value) =>
-          onParameterChange?.("imageIndex", value === "" ? undefined : Number(value))
+          onParameterChange?.(
+            "imageIndex",
+            value === "" ? undefined : Number(value),
+          )
         }
         min={0}
         disabled={disabled}
@@ -81,7 +87,10 @@ const ReplaceImageSettings = ({
         )}
         value={parameters.pageNumber ?? ""}
         onChange={(value) =>
-          onParameterChange?.("pageNumber", value === "" ? undefined : Number(value))
+          onParameterChange?.(
+            "pageNumber",
+            value === "" ? undefined : Number(value),
+          )
         }
         min={1}
         disabled={disabled}

@@ -6,7 +6,10 @@
  * "working step" (an in-progress pipeline step with its current parameter state).
  */
 
-import type { ErasedToolParams, ToolOperationConfig } from "@app/hooks/tools/shared/toolOperationTypes";
+import type {
+  ErasedToolParams,
+  ToolOperationConfig,
+} from "@app/hooks/tools/shared/toolOperationTypes";
 import type { ToolRegistryCatalog } from "@app/contexts/ToolRegistryContext";
 
 // ─── ExecutableTool ───────────────────────────────────────────────────────────
@@ -71,7 +74,10 @@ export function newWorkingToolStep(tool: ExecutableTool): WorkingToolStep {
  * - it has been explicitly marked configured, or
  * - its operation config reports valid parameters.
  */
-export function stepNeedsConfiguring(step: WorkingToolStep, tool?: ExecutableTool): boolean {
+export function stepNeedsConfiguring(
+  step: WorkingToolStep,
+  tool?: ExecutableTool,
+): boolean {
   if (step.configured) return false;
   const validateFn = tool?.operationConfig?.validateParams;
   if (validateFn) return !validateFn(step.parameters);
@@ -83,7 +89,10 @@ export function stepNeedsConfiguring(step: WorkingToolStep, tool?: ExecutableToo
  * user (i.e. it is not a pure document-processing step that uses the pipeline's
  * flowing document as input).
  */
-export function stepRequiresUpload(_step: WorkingToolStep, _tool?: ExecutableTool): boolean {
+export function stepRequiresUpload(
+  _step: WorkingToolStep,
+  _tool?: ExecutableTool,
+): boolean {
   // For now, no standard tool requires a separate upload in the pipeline context.
   // Proprietary or integration steps can override this logic.
   return false;
@@ -107,7 +116,9 @@ export function serializeToolStep(step: WorkingToolStep): SerializedToolStep {
 }
 
 /** Reconstruct a WorkingToolStep from a serialised backend step. */
-export function deserializeToolStep(serialized: SerializedToolStep): WorkingToolStep {
+export function deserializeToolStep(
+  serialized: SerializedToolStep,
+): WorkingToolStep {
   return {
     toolId: serialized.toolId,
     operation: serialized.operation,
@@ -123,7 +134,9 @@ export function deserializeToolStep(serialized: SerializedToolStep): WorkingTool
  * Extract all ExecutableTool entries from the full tool registry catalog.
  * Only tools that have an operationConfig (i.e. are automatable) are returned.
  */
-export function getExecutableTools(catalog: ToolRegistryCatalog): ExecutableTool[] {
+export function getExecutableTools(
+  catalog: ToolRegistryCatalog,
+): ExecutableTool[] {
   const { regularTools } = catalog;
   return Object.entries(regularTools)
     .filter(([, entry]) => entry.operationConfig !== undefined)

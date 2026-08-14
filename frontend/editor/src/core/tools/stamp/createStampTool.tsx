@@ -90,7 +90,8 @@ export const createStampTool = (config: StampToolConfig) => {
     );
 
     const allowedSignatureTypes = allowedSignatureSources.filter(
-      (source): source is Exclude<SignatureSource, "saved"> => source !== "saved",
+      (source): source is Exclude<SignatureSource, "saved"> =>
+        source !== "saved",
     );
     const enforcedSignatureType =
       defaultSignatureType ??
@@ -99,7 +100,9 @@ export const createStampTool = (config: StampToolConfig) => {
 
     useEffect(() => {
       if (
-        !(allowedSignatureTypes as string[]).includes(base.params.parameters.signatureType as string)
+        !(allowedSignatureTypes as string[]).includes(
+          base.params.parameters.signatureType as string,
+        )
       ) {
         base.params.updateParameter("signatureType", enforcedSignatureType);
       }

@@ -534,17 +534,27 @@ function PolicySetupWizardBody({
                       <div className="portal-policies__capability-config">
                         {tl.toolId === "redact" && (
                           <PolicyRedactConfig
-                            parameters={tl.params as unknown as RedactParameters}
+                            parameters={
+                              tl.params as unknown as RedactParameters
+                            }
                             onChange={(params) =>
-                              setToolParams("redact", params as unknown as ErasedToolParams)
+                              setToolParams(
+                                "redact",
+                                params as unknown as ErasedToolParams,
+                              )
                             }
                           />
                         )}
                         {tl.toolId === "watermark" && (
                           <PolicyWatermarkConfig
-                            parameters={tl.params as unknown as AddWatermarkParameters}
+                            parameters={
+                              tl.params as unknown as AddWatermarkParameters
+                            }
                             onChange={(params) =>
-                              setToolParams("watermark", params as unknown as ErasedToolParams)
+                              setToolParams(
+                                "watermark",
+                                params as unknown as ErasedToolParams,
+                              )
                             }
                           />
                         )}

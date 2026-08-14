@@ -23,7 +23,8 @@ export const defaultParameters: AddWatermarkParameters = {
   watermarkType: "text",
 };
 
-export type AddWatermarkParametersHook = BaseParametersHook<AddWatermarkParameters>;
+export type AddWatermarkParametersHook =
+  BaseParametersHook<AddWatermarkParameters>;
 
 export const useAddWatermarkParameters = (): AddWatermarkParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "add-watermark" });

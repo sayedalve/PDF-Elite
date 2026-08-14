@@ -121,7 +121,9 @@ interface AnnotationPanelProps {
   signatureApiRef: React.RefObject<SignatureAPI | null>;
   viewerContext: ViewerContextType | null;
   setPlacementMode: (value: boolean) => void;
-  setSignatureConfig: React.Dispatch<React.SetStateAction<SignParameters | null>>;
+  setSignatureConfig: React.Dispatch<
+    React.SetStateAction<SignParameters | null>
+  >;
   computeStampDisplaySize: (
     natural: { width: number; height: number } | null,
   ) => { width: number; height: number };
@@ -432,11 +434,15 @@ export function AnnotationPanel(props: AnnotationPanelProps) {
                     setStampImageSize(displaySize);
                     setPlacementPreviewSize(displaySize);
 
-                    setSignatureConfig((prev: SignParameters | null) => prev ? ({
-                      ...prev,
-                      signatureType: "image",
-                      signatureDataUrl: dataUrl,
-                    }) : null);
+                    setSignatureConfig((prev: SignParameters | null) =>
+                      prev
+                        ? {
+                            ...prev,
+                            signatureType: "image",
+                            signatureDataUrl: dataUrl,
+                          }
+                        : null,
+                    );
 
                     setTimeout(() => {
                       viewerContext?.setAnnotationMode(true);

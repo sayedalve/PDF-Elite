@@ -1,5 +1,6 @@
 import { MutableRefObject } from "react";
 import { SpreadMode } from "@embedpdf/plugin-spread/react";
+import { ZoomMode } from "@embedpdf/plugin-zoom/react";
 import {
   ViewerBridgeRegistry,
   ScrollState,
@@ -104,6 +105,26 @@ interface ViewerActionDependencies {
   getScrollState: () => ScrollState;
   getZoomState: () => ZoomState;
   triggerImmediateZoomUpdate: (percent: number) => void;
+}
+
+function normalizeZoomRequest(level: any): any {
+  if (typeof level !== "string") {
+    return level;
+  }
+
+  switch (level) {
+    case "fitWidth":
+    case "fit-width":
+      return ZoomMode.FitWidth;
+    case "fitPage":
+    case "fit-page":
+      return ZoomMode.FitPage;
+    case "automatic":
+    case "auto":
+      return ZoomMode.Automatic;
+    default:
+      return level;
+  }
 }
 
 export function createViewerActions({
@@ -217,7 +238,7 @@ export function createViewerActions({
     requestZoom: (level: any, center?: any) => {
       const api = registry.current.zoom?.api;
       if (api?.requestZoom) {
-        api.requestZoom(level, center);
+        api.requestZoom(normalizeZoomRequest(level), center);
       }
     },
     setZoomLevel: (factor: number, center?: any) => {

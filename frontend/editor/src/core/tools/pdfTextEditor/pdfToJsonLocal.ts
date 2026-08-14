@@ -76,8 +76,9 @@ export async function convertPdfToJsonLocal(
 
       const page = await pdfDoc.getPage(pageNum);
       const viewport = page.getViewport({ scale: 1.0 });
-      const textContent = await page.getTextContent({ includeMarkedContent: false });
-
+      const textContent = await page.getTextContent({
+        includeMarkedContent: false,
+      });
 
       const textElements: PdfJsonTextElement[] = [];
       const pageHeight = viewport.height;
@@ -162,7 +163,7 @@ export async function convertPdfToJsonLocal(
       pages.push(pdfPage);
       page.cleanup();
 
-      const percent = Math.round(5 + ((pageNum / totalPages) * 90));
+      const percent = Math.round(5 + (pageNum / totalPages) * 90);
       onProgress?.({
         percent,
         stage: "processing",
@@ -172,7 +173,11 @@ export async function convertPdfToJsonLocal(
       });
     }
 
-    onProgress?.({ percent: 98, stage: "finalizing", message: "Finalizing..." });
+    onProgress?.({
+      percent: 98,
+      stage: "finalizing",
+      message: "Finalizing...",
+    });
 
     const doc: PdfJsonDocument = {
       metadata: null,

@@ -53,7 +53,9 @@
   justify-content: flex-start !important;
   color: var(--c-text-secondary) !important;
   background: transparent !important;
-  transition: color 0.12s ease, background 0.12s ease !important;
+  transition:
+    color 0.12s ease,
+    background 0.12s ease !important;
 }
 
 .document-tab__btn:hover {

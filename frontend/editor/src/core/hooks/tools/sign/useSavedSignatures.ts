@@ -27,7 +27,11 @@ export interface SavedSignaturesHook {
   isAtCapacity: boolean;
   maxLimit: number;
   storageType: StorageType | null;
-  addSignature: (payload: SavedSignaturePayload, label?: string, scope?: SignatureScope) => Promise<AddSignatureResult>;
+  addSignature: (
+    payload: SavedSignaturePayload,
+    label?: string,
+    scope?: SignatureScope,
+  ) => Promise<AddSignatureResult>;
   deleteSignature: (signature: SavedSignature) => Promise<void>;
   updateSignatureLabel: (id: string, label: string) => Promise<void>;
   reload: () => Promise<void>;
@@ -48,9 +52,8 @@ export function useSavedSignatures(): SavedSignaturesHook {
   const reload = useCallback(async () => {
     setIsLoading(true);
     try {
-      const { signatureStorageService } = await import(
-        "@app/services/signatureStorageService"
-      );
+      const { signatureStorageService } =
+        await import("@app/services/signatureStorageService");
       const loaded = await signatureStorageService.loadSignatures();
       setSignatures(loaded);
       setStorageType(await signatureStorageService.getStorageType());
@@ -62,7 +65,11 @@ export function useSavedSignatures(): SavedSignaturesHook {
   }, []);
 
   const addSignature = useCallback(
-    async (payload: SavedSignaturePayload, label?: string, scope?: SignatureScope): Promise<AddSignatureResult> => {
+    async (
+      payload: SavedSignaturePayload,
+      label?: string,
+      scope?: SignatureScope,
+    ): Promise<AddSignatureResult> => {
       const signature: SavedSignature = {
         ...payload,
         id: crypto.randomUUID(),
@@ -72,39 +79,55 @@ export function useSavedSignatures(): SavedSignaturesHook {
         updatedAt: Date.now(),
       } as SavedSignature;
       try {
-        const { signatureStorageService } = await import(
-          "@app/services/signatureStorageService"
-        );
+        const { signatureStorageService } =
+          await import("@app/services/signatureStorageService");
         await signatureStorageService.saveSignature(signature);
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       const next = [...signatures, signature];
       setSignatures(next);
-      return { signature, isAtCapacity: next.length >= MAX_SIGNATURES, success: true };
+      return {
+        signature,
+        isAtCapacity: next.length >= MAX_SIGNATURES,
+        success: true,
+      };
     },
     [signatures],
   );
 
-  const updateSignatureLabel = useCallback(async (id: string, label: string) => {
-    try {
-      // Temporary implementation until storage service supports update
-    } catch { /* ignore */ }
-    setSignatures((prev) => prev.map((s) => s.id === id ? { ...s, label } : s));
-  }, []);
+  const updateSignatureLabel = useCallback(
+    async (id: string, label: string) => {
+      try {
+        // Temporary implementation until storage service supports update
+      } catch {
+        /* ignore */
+      }
+      setSignatures((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, label } : s)),
+      );
+    },
+    [],
+  );
 
   const deleteSignature = useCallback(async (signature: SavedSignature) => {
     try {
-      const { signatureStorageService } = await import(
-        "@app/services/signatureStorageService"
-      );
+      const { signatureStorageService } =
+        await import("@app/services/signatureStorageService");
       await signatureStorageService.deleteSignature(signature.id);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setSignatures((prev) => prev.filter((s) => s.id !== signature.id));
   }, []);
 
-  const byTypeCounts = signatures.reduce((acc, sig) => {
-    acc[sig.type] = (acc[sig.type] || 0) + 1;
-    return acc;
-  }, { canvas: 0, image: 0, text: 0 } as Record<SavedSignatureType, number>);
+  const byTypeCounts = signatures.reduce(
+    (acc, sig) => {
+      acc[sig.type] = (acc[sig.type] || 0) + 1;
+      return acc;
+    },
+    { canvas: 0, image: 0, text: 0 } as Record<SavedSignatureType, number>,
+  );
 
   return {
     signatures,

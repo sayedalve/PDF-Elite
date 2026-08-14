@@ -50,7 +50,7 @@ class PageMemoryService {
     if (!cacheKey || page < 1) return;
     const store = loadStore();
     const existing = store[cacheKey] || { page: 1 };
-    
+
     if (page === 1 && !existing.zoom) {
       delete store[cacheKey];
     } else {

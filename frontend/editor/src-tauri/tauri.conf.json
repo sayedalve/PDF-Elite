@@ -3,7 +3,7 @@
   "productName": "PDF Elite",
   "mainBinaryName": "PDF Elite",
   "version": "2.14.2",
-  "identifier": "com.pdfelite.app",
+  "identifier": "com.pdfelite.desktop",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -61,6 +61,7 @@
       }
     },
     "windows": {
+      "iconPath": "icons/icon.ico",
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
       "timestampUrl": "http://timestamp.digicert.com",

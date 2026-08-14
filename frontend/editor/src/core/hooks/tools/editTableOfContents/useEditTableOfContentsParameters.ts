@@ -1,4 +1,4 @@
-﻿import { BaseParameters } from "@app/types/parameters";
+import { BaseParameters } from "@app/types/parameters";
 import {
   BaseParametersHook,
   useBaseParameters,
@@ -9,7 +9,12 @@ export interface EditTableOfContentsParameters extends BaseParameters {}
 
 export const defaultParameters: EditTableOfContentsParameters = {};
 
-export type EditTableOfContentsParametersHook = BaseParametersHook<EditTableOfContentsParameters>;
+export type EditTableOfContentsParametersHook =
+  BaseParametersHook<EditTableOfContentsParameters>;
 
-export const useEditTableOfContentsParameters = (): EditTableOfContentsParametersHook =>
-  useBaseParameters({ defaultParameters, endpointName: "edit-table-of-contents" });
+export const useEditTableOfContentsParameters =
+  (): EditTableOfContentsParametersHook =>
+    useBaseParameters({
+      defaultParameters,
+      endpointName: "edit-table-of-contents",
+    });

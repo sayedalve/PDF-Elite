@@ -152,7 +152,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["merge-pdfs"],
         operationConfig: asRegistryConfig(mergeOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/merge/MergeSettings"))),
+        automationSettings: lazySettings(
+          lazy(() => import("@app/components/tools/merge/MergeSettings")),
+        ),
         synonyms: getSynonyms(t, "merge"),
       },
       // Signing
@@ -176,7 +178,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["cert-sign"],
         operationConfig: asRegistryConfig(certSignOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/certSign/CertSignAutomationSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/certSign/CertSignAutomationSettings"),
+          ),
+        ),
       },
       timestampPdf: {
         icon: (
@@ -214,7 +221,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         subcategoryId: SubcategoryId.SIGNING,
         endpoints: ["sign"],
         operationConfig: asRegistryConfig(signOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/sign/SignSettings"))), // TODO:: not all settings shown, suggested next tools shown
+        automationSettings: lazySettings(
+          lazy(() => import("@app/components/tools/sign/SignSettings")),
+        ), // TODO:: not all settings shown, suggested next tools shown
         synonyms: getSynonyms(t, "sign"),
         supportsAutomate: false, //TODO make support Sign
       },
@@ -314,7 +323,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["add-password"],
         operationConfig: asRegistryConfig(addPasswordOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/addPassword/AddPasswordSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/addPassword/AddPasswordSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "addPassword"),
       },
       watermark: {
@@ -336,7 +350,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         subcategoryId: SubcategoryId.DOCUMENT_SECURITY,
         endpoints: ["add-watermark"],
         operationConfig: asRegistryConfig(addWatermarkOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/addWatermark/AddWatermarkSingleStepSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/addWatermark/AddWatermarkSingleStepSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "watermark"),
       },
       addStamp: {
@@ -359,7 +378,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["add-stamp"],
         operationConfig: asRegistryConfig(addStampOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/addStamp/AddStampAutomationSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/addStamp/AddStampAutomationSettings"),
+          ),
+        ),
       },
       sanitize: {
         icon: (
@@ -380,7 +404,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         ),
         endpoints: ["sanitize-pdf"],
         operationConfig: asRegistryConfig(sanitizeOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/sanitize/SanitizeSettings"))),
+        automationSettings: lazySettings(
+          lazy(() => import("@app/components/tools/sanitize/SanitizeSettings")),
+        ),
         synonyms: getSynonyms(t, "sanitize"),
       },
       flatten: {
@@ -402,7 +428,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["flatten"],
         operationConfig: asRegistryConfig(flattenOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/flatten/FlattenSettings"))),
+        automationSettings: lazySettings(
+          lazy(() => import("@app/components/tools/flatten/FlattenSettings")),
+        ),
         synonyms: getSynonyms(t, "flatten"),
       },
       unlockPDFForms: {
@@ -462,7 +490,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["add-password"],
         operationConfig: asRegistryConfig(changePermissionsOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/changePermissions/ChangePermissionsSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/changePermissions/ChangePermissionsSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "changePermissions"),
       },
       getPdfInfo: {
@@ -552,7 +585,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["update-metadata"],
         operationConfig: asRegistryConfig(changeMetadataOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/changeMetadata/ChangeMetadataSingleStep"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/changeMetadata/ChangeMetadataSingleStep"),
+          ),
+        ),
         synonyms: getSynonyms(t, "changeMetadata"),
       },
       editTableOfContents: {
@@ -587,7 +625,11 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["crop"],
         operationConfig: asRegistryConfig(cropOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/crop/CropAutomationSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () => import("@app/components/tools/crop/CropAutomationSettings"),
+          ),
+        ),
       },
       rotate: {
         icon: (
@@ -605,7 +647,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["rotate-pdf"],
         operationConfig: asRegistryConfig(rotateOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/rotate/RotateAutomationSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/rotate/RotateAutomationSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "rotate"),
       },
       autoRotate: {
@@ -627,7 +674,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["auto-rotate-pdf"],
         operationConfig: asRegistryConfig(autoRotateOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/autoRotate/AutoRotateAutomationSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/autoRotate/AutoRotateAutomationSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "autoRotate"),
       },
       split: {
@@ -645,7 +697,11 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         subcategoryId: SubcategoryId.PAGE_FORMATTING,
         endpoints: Array.from(new Set(Object.values(SPLIT_ENDPOINT_NAMES))),
         operationConfig: asRegistryConfig(splitOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/split/SplitAutomationSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () => import("@app/components/tools/split/SplitAutomationSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "split"),
       },
       reorganizePages: {
@@ -680,7 +736,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["scale-pages"],
         operationConfig: asRegistryConfig(adjustPageScaleOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/adjustPageScale/AdjustPageScaleSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/adjustPageScale/AdjustPageScaleSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "scalePages"),
       },
       addPageNumbers: {
@@ -693,7 +754,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         ),
         categoryId: ToolCategoryId.STANDARD_TOOLS,
         subcategoryId: SubcategoryId.PAGE_FORMATTING,
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/addPageNumbers/AddPageNumbersAutomationSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/addPageNumbers/AddPageNumbersAutomationSettings"),
+          ),
+        ),
         maxFiles: -1,
         endpoints: ["add-page-numbers"],
         operationConfig: asRegistryConfig(addPageNumbersOperationConfig),
@@ -717,7 +783,11 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         subcategoryId: SubcategoryId.PAGE_FORMATTING,
         maxFiles: -1,
         endpoints: ["multi-page-layout"],
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/pageLayout/PageLayoutSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () => import("@app/components/tools/pageLayout/PageLayoutSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "pageLayout"),
       },
       bookletImposition: {
@@ -731,7 +801,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         name: t("home.bookletImposition.title", "Booklet Imposition"),
         component: lazy(() => import("@app/tools/BookletImposition")),
         operationConfig: asRegistryConfig(bookletImpositionOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/bookletImposition/BookletImpositionSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/bookletImposition/BookletImpositionSettings"),
+          ),
+        ),
         description: t(
           "home.bookletImposition.desc",
           "Create booklets with proper page ordering and multi-page layout for printing and binding",
@@ -779,7 +854,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: 1,
         endpoints: ["add-attachments"],
         operationConfig: asRegistryConfig(addAttachmentsOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/addAttachments/AddAttachmentsSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/addAttachments/AddAttachmentsSettings"),
+          ),
+        ),
       },
 
       // Extraction
@@ -798,8 +878,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         subcategoryId: SubcategoryId.EXTRACTION,
         synonyms: getSynonyms(t, "extractPages"),
         automationSettings: lazySettings(
-          lazy(() =>
-            import("@app/components/tools/extractPages/ExtractPagesSettings"),
+          lazy(
+            () =>
+              import("@app/components/tools/extractPages/ExtractPagesSettings"),
           ),
         ),
         operationConfig: asRegistryConfig(extractPagesOperationConfig),
@@ -807,7 +888,11 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
       },
       insertBlankPages: {
         icon: (
-          <LocalIcon icon="add-box-outline-rounded" width="1.5rem" height="1.5rem" />
+          <LocalIcon
+            icon="add-box-outline-rounded"
+            width="1.5rem"
+            height="1.5rem"
+          />
         ),
         name: t("home.insertBlankPages.title", "Insert Blank Pages"),
         component: lazy(() => import("@app/tools/InsertBlankPages")),
@@ -820,7 +905,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: 1,
         endpoints: ["insert-blank-pages"],
         operationConfig: asRegistryConfig(insertBlankPagesOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/insertBlankPages/InsertBlankPagesSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/insertBlankPages/InsertBlankPagesSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "insertBlankPages"),
       },
       extractImages: {
@@ -842,7 +932,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["extract-images"],
         operationConfig: asRegistryConfig(extractImagesOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/extractImages/ExtractImagesSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/extractImages/ExtractImagesSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "extractImages"),
       },
 
@@ -869,7 +964,10 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         synonyms: getSynonyms(t, "removePages"),
         operationConfig: asRegistryConfig(removePagesOperationConfig),
         automationSettings: lazySettings(
-          lazy(() => import("@app/components/tools/removePages/RemovePagesSettings")),
+          lazy(
+            () =>
+              import("@app/components/tools/removePages/RemovePagesSettings"),
+          ),
         ),
       },
       removeBlanks: {
@@ -892,7 +990,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         endpoints: ["remove-blanks"],
         synonyms: getSynonyms(t, "removeBlanks"),
         operationConfig: asRegistryConfig(removeBlanksOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/removeBlanks/RemoveBlanksSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/removeBlanks/RemoveBlanksSettings"),
+          ),
+        ),
       },
       removeAnnotations: {
         icon: (
@@ -948,10 +1051,7 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         ),
         name: t("home.replaceImage.title", "Replace Image"),
         component: lazy(() => import("@app/tools/ReplaceImage")),
-        description: t(
-          "home.replaceImage.desc",
-          "Replace images in your PDF",
-        ),
+        description: t("home.replaceImage.desc", "Replace images in your PDF"),
         categoryId: ToolCategoryId.STANDARD_TOOLS,
         subcategoryId: SubcategoryId.GENERAL,
         maxFiles: 1,
@@ -979,7 +1079,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         endpoints: ["remove-password"],
         maxFiles: -1,
         operationConfig: asRegistryConfig(removePasswordOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/removePassword/RemovePasswordSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/removePassword/RemovePasswordSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "removePassword"),
       },
       removeCertSign: {
@@ -1060,7 +1165,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["adjust-contrast"],
         operationConfig: asRegistryConfig(adjustContrastOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/adjustContrast/AdjustContrastSingleStepSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/adjustContrast/AdjustContrastSingleStepSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "adjustContrast"),
       },
       repair: {
@@ -1107,7 +1217,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["extract-image-scans"],
         operationConfig: asRegistryConfig(scannerImageSplitOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/scannerImageSplit/ScannerImageSplitSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/scannerImageSplit/ScannerImageSplitSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "scannerImageSplit"),
       },
       overlayPdfs: {
@@ -1129,7 +1244,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         endpoints: ["overlay-pdf"],
         operationConfig: asRegistryConfig(overlayPdfsOperationConfig),
         synonyms: getSynonyms(t, "overlay-pdfs"),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/overlayPdfs/OverlayPdfsSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/overlayPdfs/OverlayPdfsSettings"),
+          ),
+        ),
       },
       replaceColor: {
         icon: (
@@ -1150,7 +1270,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["replace-invert-pdf"],
         operationConfig: asRegistryConfig(replaceColorOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/replaceColor/ReplaceColorSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/replaceColor/ReplaceColorSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "replaceColor"),
       },
       scannerEffect: {
@@ -1320,7 +1445,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["compress-pdf"],
         operationConfig: asRegistryConfig(compressOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/compress/CompressSettings"))),
+        automationSettings: lazySettings(
+          lazy(() => import("@app/components/tools/compress/CompressSettings")),
+        ),
         synonyms: getSynonyms(t, "compress"),
       },
       convert: {
@@ -1357,7 +1484,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         ],
 
         operationConfig: asRegistryConfig(convertOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/convert/ConvertSettings"))),
+        automationSettings: lazySettings(
+          lazy(() => import("@app/components/tools/convert/ConvertSettings")),
+        ),
         synonyms: getSynonyms(t, "convert"),
       },
 
@@ -1380,7 +1509,9 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["ocr-pdf"],
         operationConfig: asRegistryConfig(ocrOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/ocr/OCRSettings"))),
+        automationSettings: lazySettings(
+          lazy(() => import("@app/components/tools/ocr/OCRSettings")),
+        ),
         synonyms: getSynonyms(t, "ocr"),
       },
       redact: {
@@ -1402,7 +1533,12 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         maxFiles: -1,
         endpoints: ["auto-redact"],
         operationConfig: asRegistryConfig(redactOperationConfig),
-        automationSettings: lazySettings(lazy(() => import("@app/components/tools/redact/RedactSingleStepSettings"))),
+        automationSettings: lazySettings(
+          lazy(
+            () =>
+              import("@app/components/tools/redact/RedactSingleStepSettings"),
+          ),
+        ),
         synonyms: getSynonyms(t, "redact"),
       },
     };

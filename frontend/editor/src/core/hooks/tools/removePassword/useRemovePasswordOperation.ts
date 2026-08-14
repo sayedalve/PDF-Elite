@@ -30,12 +30,19 @@ export const buildRemovePasswordOperationFormData = (
   parameters: RemovePasswordParameters,
   file: File,
 ): FormData =>
-  objectToFormData(removePasswordToApiParams(parameters) as Record<string, unknown>, { fileInput: file });
+  objectToFormData(
+    removePasswordToApiParams(parameters) as Record<string, unknown>,
+    { fileInput: file },
+  );
 
 export const removePasswordOperationConfig = defineSingleFileTool({
   buildFormData: buildRemovePasswordOperationFormData,
-  toApiParams: removePasswordToApiParams as unknown as (params: RemovePasswordParameters) => any,
-  fromApiParams: removePasswordFromApiParams as unknown as (apiParams: any) => Partial<RemovePasswordParameters>,
+  toApiParams: removePasswordToApiParams as unknown as (
+    params: RemovePasswordParameters,
+  ) => any,
+  fromApiParams: removePasswordFromApiParams as unknown as (
+    apiParams: any,
+  ) => Partial<RemovePasswordParameters>,
   operationType: "removePassword",
   endpoint: ENDPOINT,
   defaultParameters: { password: "" } as RemovePasswordParameters,

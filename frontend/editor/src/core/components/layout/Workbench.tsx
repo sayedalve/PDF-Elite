@@ -221,7 +221,8 @@ export default function Workbench() {
       style={{ backgroundColor: "var(--c-bg)", minWidth: 0 }}
     >
       {/* Workbench Bar - animates in/out based on file presence */}
-      {currentView !== "myFiles" &&
+      {(currentView as string) !== "myFiles" &&
+        (currentView as string) !== "viewer" &&
         !customWorkbenchViews.find((v) => v.workbenchId === currentView)
           ?.hideTopControls && (
           <div
@@ -229,7 +230,9 @@ export default function Workbench() {
             data-hidden={String(!hasFiles && !isCustomViewActive)}
             data-no-transition={String(!barTransitionEnabled)}
             // Reserve space for the 3rem contextual right rail when in viewer mode
-            style={currentView === "viewer" ? { paddingRight: "3rem" } : undefined}
+            style={
+              currentView === "viewer" ? { paddingRight: "3rem" } : undefined
+            }
           >
             <div className={styles.workbenchBarInner}>
               <WorkbenchBar

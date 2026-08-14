@@ -15,27 +15,19 @@ import ViewerAnnotationControls from "@app/components/viewer/ViewerAnnotationCon
 import { useSidebarContext } from "@app/contexts/SidebarContext";
 import { useWorkbenchBarTooltipSide } from "@app/hooks/useWorkbenchBarTooltipSide";
 import { useToolWorkflow } from "@app/contexts/ToolWorkflowContext";
-import {
-  useNavigationState,
-  useNavigationGuard,
-} from "@app/contexts/NavigationContext";
-import { stripBasePath, withBasePath } from "@app/constants/app";
+import { useNavigationState } from "@app/contexts/NavigationContext";
+import { stripBasePath } from "@app/constants/app";
 import { useRedaction, useRedactionMode } from "@app/contexts/RedactionContext";
 import { useAnnotation } from "@app/contexts/AnnotationContext";
-import type { AnnotationToolId } from "@app/components/viewer/viewerTypes";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import StraightenIcon from "@mui/icons-material/Straighten";
-import LayersIcon from "@mui/icons-material/Layers";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import StopIcon from "@mui/icons-material/Stop";
-import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
 import DescriptionIcon from "@mui/icons-material/Description";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import WbTwilightIcon from "@mui/icons-material/WbTwilight";
-import FitScreenIcon from "@mui/icons-material/FitScreen";
 import { Group } from "@mantine/core";
 import { useViewerReadAloud } from "@app/components/viewer/useViewerReadAloud";
 
@@ -55,19 +47,13 @@ export function useViewerWorkbenchBarButtons(
     toggleCommentsSidebar,
     isSearchInterfaceVisible,
     registerImmediatePanUpdate,
-    registerImmediateZoomUpdate,
     registerImmediateSpreadUpdate,
-    getZoomState,
     getSpreadState,
-    zoomActions,
     spreadActions,
     pdfRenderMode,
     cyclePdfRenderMode,
   } = viewer;
   const [isPanning, setIsPanning] = useState<boolean>(false);
-  const [displayZoomPercent, setDisplayZoomPercent] = useState<number>(
-    getZoomState().zoomPercent || 140,
-  );
   const [isDualPageActive, setIsDualPageActive] = useState<boolean>(
     getSpreadState().isDualPage,
   );
@@ -76,11 +62,9 @@ export function useViewerWorkbenchBarButtons(
     sidebarRefs,
     12,
   );
-  const { handleToolSelect, handleToolSelectForced, handleBackToTools } =
-    useToolWorkflow();
+  const { handleToolSelect, handleBackToTools } = useToolWorkflow();
   const { selectedTool } = useNavigationState();
-  const { requestNavigation } = useNavigationGuard();
-  const { pendingCount, redactionsApplied } = useRedaction();
+  const { pendingCount } = useRedaction();
   const { activateAnnotationToolRef, activeAnnotationToolId } = useAnnotation();
   const { activeType: redactionActiveType } = useRedactionMode();
 
@@ -102,13 +86,7 @@ export function useViewerWorkbenchBarButtons(
   }, [registerImmediatePanUpdate]);
 
   useEffect(() => {
-    return registerImmediateZoomUpdate((percent) => {
-      setDisplayZoomPercent(percent || 100);
-    });
-  }, [registerImmediateZoomUpdate]);
-
-  useEffect(() => {
-    return registerImmediateSpreadUpdate((mode, isDualPage) => {
+    return registerImmediateSpreadUpdate((_mode, isDualPage) => {
       setIsDualPageActive(isDualPage);
     });
   }, [registerImmediateSpreadUpdate]);
@@ -274,71 +252,6 @@ export function useViewerWorkbenchBarButtons(
         },
       },
       {
-        id: "viewer-zoom-controls",
-        section: "view" as const,
-        order: 26,
-        render: ({ disabled }) => (
-          <Group gap={4} align="center" wrap="nowrap" className="workbench-bar-zoom-group">
-            <Tooltip content={t("viewer.zoomOut", "Zoom Out")} position={tooltipPosition} arrow>
-              <ActionIcon
-                variant="tertiary"
-                className="workbench-bar-action-icon"
-                onClick={() => zoomActions.zoomOut()}
-                disabled={disabled}
-                aria-label={t("viewer.zoomOut", "Zoom Out")}
-              >
-                <ZoomOutIcon fontSize="small" />
-              </ActionIcon>
-            </Tooltip>
-            <Slider
-              value={Math.min(Math.max(displayZoomPercent, 20), 500)}
-              min={20}
-              max={500}
-              step={5}
-              onChange={(val) => zoomActions.setZoomLevel?.(val / 75)}
-              size="xs"
-              styles={{
-                root: { minWidth: "5rem", width: "5rem", flexShrink: 0 },
-                thumb: { width: 14, height: 14 },
-                track: { height: 3 },
-              }}
-              label={null}
-              disabled={disabled}
-            />
-            <Tooltip content={t("viewer.zoomIn", "Zoom In")} position={tooltipPosition} arrow>
-              <ActionIcon
-                variant="tertiary"
-                className="workbench-bar-action-icon"
-                onClick={() => zoomActions.zoomIn()}
-                disabled={disabled}
-                aria-label={t("viewer.zoomIn", "Zoom In")}
-              >
-                <ZoomInIcon fontSize="small" />
-              </ActionIcon>
-            </Tooltip>
-            <span
-              style={{
-                minWidth: "2.5rem",
-                textAlign: "center",
-                fontSize: 12,
-                color: "var(--c-text-subtle)",
-              }}
-            >
-              {displayZoomPercent}%
-            </span>
-          </Group>
-        ),
-      },
-      {
-        id: "viewer-fit-width",
-        icon: <FitScreenIcon fontSize="small" />,
-        section: "view" as const,
-        tooltip: t("viewer.fitWidth", "Fit Width"),
-        ariaLabel: t("viewer.fitWidth", "Fit Width"),
-        order: 27,
-        onClick: () => zoomActions.requestZoom?.("fitWidth"),
-      },
-      {
         id: "viewer-spread-mode",
         section: "view" as const,
         tooltip: isDualPageActive
@@ -382,16 +295,18 @@ export function useViewerWorkbenchBarButtons(
       {
         id: "viewer-pdf-render-mode",
         section: "view" as const,
-        tooltip: pdfRenderMode === "normal"
-          ? t("viewer.enableDarkFilter", "Enable Dark Filter")
-          : pdfRenderMode === "dark"
-            ? t("viewer.enableSepiaFilter", "Enable Sepia Filter")
-            : t("viewer.disableColorFilter", "Disable Color Filter"),
-        ariaLabel: pdfRenderMode === "normal"
-          ? t("viewer.enableDarkFilter", "Enable Dark Filter")
-          : pdfRenderMode === "dark"
-            ? t("viewer.enableSepiaFilter", "Enable Sepia Filter")
-            : t("viewer.disableColorFilter", "Disable Color Filter"),
+        tooltip:
+          pdfRenderMode === "normal"
+            ? t("viewer.enableDarkFilter", "Enable Dark Filter")
+            : pdfRenderMode === "dark"
+              ? t("viewer.enableSepiaFilter", "Enable Sepia Filter")
+              : t("viewer.disableColorFilter", "Disable Color Filter"),
+        ariaLabel:
+          pdfRenderMode === "normal"
+            ? t("viewer.enableDarkFilter", "Enable Dark Filter")
+            : pdfRenderMode === "dark"
+              ? t("viewer.enableSepiaFilter", "Enable Sepia Filter")
+              : t("viewer.disableColorFilter", "Disable Color Filter"),
         order: 29,
         onClick: () => cyclePdfRenderMode(),
         render: ({ disabled }) => (
@@ -566,8 +481,12 @@ export function useViewerWorkbenchBarButtons(
         order: 57,
         active: isAnnotationsActive && activeAnnotationToolId === "highlight",
         render: ({ disabled }) => {
-          const isActive = isAnnotationsActive && activeAnnotationToolId === "highlight";
-          const [highlightColor, setHighlightColor] = useState(() => localStorage.getItem("pdf-elite-highlight-color") || "#ffd54f");
+          const isActive =
+            isAnnotationsActive && activeAnnotationToolId === "highlight";
+          const [highlightColor, setHighlightColor] = useState(
+            () =>
+              localStorage.getItem("pdf-elite-highlight-color") || "#ffd54f",
+          );
           const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
           useEffect(() => {
@@ -576,14 +495,25 @@ export function useViewerWorkbenchBarButtons(
                 setHighlightColor(e.detail.color);
               }
             };
-            window.addEventListener("pdf-elite-color-change", handleStorageChange);
-            return () => window.removeEventListener("pdf-elite-color-change", handleStorageChange);
+            window.addEventListener(
+              "pdf-elite-color-change",
+              handleStorageChange,
+            );
+            return () =>
+              window.removeEventListener(
+                "pdf-elite-color-change",
+                handleStorageChange,
+              );
           }, []);
 
           const handleColorSelect = (color: string) => {
             setHighlightColor(color);
             localStorage.setItem("pdf-elite-highlight-color", color);
-            window.dispatchEvent(new CustomEvent("pdf-elite-color-change", { detail: { type: "highlight", color } }));
+            window.dispatchEvent(
+              new CustomEvent("pdf-elite-color-change", {
+                detail: { type: "highlight", color },
+              }),
+            );
             setIsColorPickerOpen(false);
             if (isActive) {
               activateAnnotationToolRef.current?.("highlight"); // Reactivate to apply color
@@ -627,7 +557,11 @@ export function useViewerWorkbenchBarButtons(
                         aria-pressed={isActive}
                         aria-label={t("workbenchBar.highlight", "Highlight")}
                       >
-                        <LocalIcon icon="ink-highlighter" width="1.25rem" height="1.25rem" />
+                        <LocalIcon
+                          icon="ink-highlighter"
+                          width="1.25rem"
+                          height="1.25rem"
+                        />
                       </ActionIcon>
                       <div
                         style={{
@@ -639,7 +573,7 @@ export function useViewerWorkbenchBarButtons(
                           borderRadius: "50%",
                           backgroundColor: highlightColor,
                           border: "1px solid rgba(0,0,0,0.2)",
-                          pointerEvents: "none"
+                          pointerEvents: "none",
                         }}
                       />
                     </div>
@@ -648,7 +582,14 @@ export function useViewerWorkbenchBarButtons(
               </Popover.Target>
               <Popover.Dropdown>
                 <Group gap="xs" p={4} w={140} justify="center">
-                  {["#ffd54f", "#81c784", "#64b5f6", "#e57373", "#ba68c8", "#ffb74d"].map((color) => (
+                  {[
+                    "#ffd54f",
+                    "#81c784",
+                    "#64b5f6",
+                    "#e57373",
+                    "#ba68c8",
+                    "#ffb74d",
+                  ].map((color) => (
                     <ActionIcon
                       key={color}
                       variant="quiet"
@@ -659,7 +600,10 @@ export function useViewerWorkbenchBarButtons(
                         height: 24,
                         borderRadius: "50%",
                         backgroundColor: color,
-                        border: highlightColor === color ? "2px solid var(--c-border-active)" : "1px solid var(--c-border-subtle)",
+                        border:
+                          highlightColor === color
+                            ? "2px solid var(--c-border-active)"
+                            : "1px solid var(--c-border-subtle)",
                       }}
                     />
                   ))}
@@ -677,8 +621,11 @@ export function useViewerWorkbenchBarButtons(
         order: 57.1,
         active: isAnnotationsActive && activeAnnotationToolId === "note",
         render: ({ disabled }) => {
-          const isActive = isAnnotationsActive && activeAnnotationToolId === "note";
-          const [noteColor, setNoteColor] = useState(() => localStorage.getItem("pdf-elite-note-color") || "#ffd54f");
+          const isActive =
+            isAnnotationsActive && activeAnnotationToolId === "note";
+          const [noteColor, setNoteColor] = useState(
+            () => localStorage.getItem("pdf-elite-note-color") || "#ffd54f",
+          );
           const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
           useEffect(() => {
@@ -687,14 +634,25 @@ export function useViewerWorkbenchBarButtons(
                 setNoteColor(e.detail.color);
               }
             };
-            window.addEventListener("pdf-elite-color-change", handleStorageChange);
-            return () => window.removeEventListener("pdf-elite-color-change", handleStorageChange);
+            window.addEventListener(
+              "pdf-elite-color-change",
+              handleStorageChange,
+            );
+            return () =>
+              window.removeEventListener(
+                "pdf-elite-color-change",
+                handleStorageChange,
+              );
           }, []);
 
           const handleColorSelect = (color: string) => {
             setNoteColor(color);
             localStorage.setItem("pdf-elite-note-color", color);
-            window.dispatchEvent(new CustomEvent("pdf-elite-color-change", { detail: { type: "note", color } }));
+            window.dispatchEvent(
+              new CustomEvent("pdf-elite-color-change", {
+                detail: { type: "note", color },
+              }),
+            );
             setIsColorPickerOpen(false);
             if (isActive) {
               activateAnnotationToolRef.current?.("note");
@@ -738,7 +696,11 @@ export function useViewerWorkbenchBarButtons(
                         aria-pressed={isActive}
                         aria-label={t("workbenchBar.note", "Sticky Note")}
                       >
-                        <LocalIcon icon="sticky-note-2" width="1.25rem" height="1.25rem" />
+                        <LocalIcon
+                          icon="sticky-note-2"
+                          width="1.25rem"
+                          height="1.25rem"
+                        />
                       </ActionIcon>
                       <div
                         style={{
@@ -750,7 +712,7 @@ export function useViewerWorkbenchBarButtons(
                           borderRadius: "50%",
                           backgroundColor: noteColor,
                           border: "1px solid rgba(0,0,0,0.2)",
-                          pointerEvents: "none"
+                          pointerEvents: "none",
                         }}
                       />
                     </div>
@@ -759,7 +721,14 @@ export function useViewerWorkbenchBarButtons(
               </Popover.Target>
               <Popover.Dropdown>
                 <Group gap="xs" p={4} w={140} justify="center">
-                  {["#ffd54f", "#81c784", "#64b5f6", "#e57373", "#ba68c8", "#ffb74d"].map((color) => (
+                  {[
+                    "#ffd54f",
+                    "#81c784",
+                    "#64b5f6",
+                    "#e57373",
+                    "#ba68c8",
+                    "#ffb74d",
+                  ].map((color) => (
                     <ActionIcon
                       key={color}
                       variant="quiet"
@@ -770,7 +739,10 @@ export function useViewerWorkbenchBarButtons(
                         height: 24,
                         borderRadius: "50%",
                         backgroundColor: color,
-                        border: noteColor === color ? "2px solid var(--c-border-active)" : "1px solid var(--c-border-subtle)",
+                        border:
+                          noteColor === color
+                            ? "2px solid var(--c-border-active)"
+                            : "1px solid var(--c-border-subtle)",
                       }}
                     />
                   ))}
@@ -796,11 +768,17 @@ export function useViewerWorkbenchBarButtons(
             portalTarget={document.body}
           >
             <ActionIcon
-              variant={isAnnotationsActive && activeAnnotationToolId === "text" ? "primary" : "tertiary"}
+              variant={
+                isAnnotationsActive && activeAnnotationToolId === "text"
+                  ? "primary"
+                  : "tertiary"
+              }
               className="workbench-bar-action-icon"
               onClick={() => activateAnnotationToolRef.current?.("text")}
               disabled={disabled}
-              aria-pressed={isAnnotationsActive && activeAnnotationToolId === "text"}
+              aria-pressed={
+                isAnnotationsActive && activeAnnotationToolId === "text"
+              }
               aria-label={t("workbenchBar.text", "Text Comment")}
             >
               <LocalIcon icon="match-case" width="1.25rem" height="1.25rem" />
@@ -824,11 +802,17 @@ export function useViewerWorkbenchBarButtons(
             portalTarget={document.body}
           >
             <ActionIcon
-              variant={isAnnotationsActive && activeAnnotationToolId === "ink" ? "primary" : "tertiary"}
+              variant={
+                isAnnotationsActive && activeAnnotationToolId === "ink"
+                  ? "primary"
+                  : "tertiary"
+              }
               className="workbench-bar-action-icon"
               onClick={() => activateAnnotationToolRef.current?.("ink")}
               disabled={disabled}
-              aria-pressed={isAnnotationsActive && activeAnnotationToolId === "ink"}
+              aria-pressed={
+                isAnnotationsActive && activeAnnotationToolId === "ink"
+              }
               aria-label={t("workbenchBar.ink", "Drawing/Pen")}
             >
               <LocalIcon icon="edit" width="1.25rem" height="1.25rem" />

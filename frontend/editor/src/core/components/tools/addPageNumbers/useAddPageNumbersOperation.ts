@@ -72,7 +72,10 @@ export const buildAddPageNumbersFormData = (
   parameters: AddPageNumbersParameters,
   file: File,
 ): FormData =>
-  objectToFormData(addPageNumbersToApiParams(parameters) as unknown as Record<string, unknown>, { fileInput: file });
+  objectToFormData(
+    addPageNumbersToApiParams(parameters) as unknown as Record<string, unknown>,
+    { fileInput: file },
+  );
 
 export const addPageNumbersOperationConfig = defineSingleFileTool({
   validateParams: validateAddPageNumbersParameters,

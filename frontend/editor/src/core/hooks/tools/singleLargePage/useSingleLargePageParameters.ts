@@ -1,4 +1,4 @@
-﻿import { BaseParameters } from "@app/types/parameters";
+import { BaseParameters } from "@app/types/parameters";
 import {
   BaseParametersHook,
   useBaseParameters,
@@ -9,7 +9,8 @@ export interface SingleLargePageParameters extends BaseParameters {}
 
 export const defaultParameters: SingleLargePageParameters = {};
 
-export type SingleLargePageParametersHook = BaseParametersHook<SingleLargePageParameters>;
+export type SingleLargePageParametersHook =
+  BaseParametersHook<SingleLargePageParameters>;
 
 export const useSingleLargePageParameters = (): SingleLargePageParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "pdf-to-single-page" });

@@ -14,7 +14,12 @@ export interface ScannerImageSplitParameters extends BaseParameters {
 
 export const defaultParameters: ScannerImageSplitParameters = {};
 
-export type ScannerImageSplitParametersHook = BaseParametersHook<ScannerImageSplitParameters>;
+export type ScannerImageSplitParametersHook =
+  BaseParametersHook<ScannerImageSplitParameters>;
 
-export const useScannerImageSplitParameters = (): ScannerImageSplitParametersHook =>
-  useBaseParameters({ defaultParameters, endpointName: "extract-image-scans" });
+export const useScannerImageSplitParameters =
+  (): ScannerImageSplitParametersHook =>
+    useBaseParameters({
+      defaultParameters,
+      endpointName: "extract-image-scans",
+    });

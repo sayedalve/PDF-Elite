@@ -56,7 +56,15 @@ import PrintIcon from "@mui/icons-material/Print";
 import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
 import "@app/components/shared/WorkbenchBar.css";
 
-const SECTION_ORDER: WorkbenchBarSection[] = ["navigation", "view", "edit", "annotate", "organize", "search", "other"];
+const SECTION_ORDER: WorkbenchBarSection[] = [
+  "navigation",
+  "view",
+  "edit",
+  "annotate",
+  "organize",
+  "search",
+  "other",
+];
 
 interface ViewOption {
   value: WorkbenchType;
@@ -106,7 +114,8 @@ export default function WorkbenchBar({
     clearFilesPageReturnRoute();
     navigate(target);
   }, [returnRoute, navigate]);
-  const { buttons, actions, allButtonsDisabled, activeMode } = useWorkbenchBar();
+  const { buttons, actions, allButtonsDisabled, activeMode } =
+    useWorkbenchBar();
   const {
     pageEditorFunctions,
     toolPanelMode,
@@ -394,7 +403,9 @@ export default function WorkbenchBar({
       const buttonNode = (
         <ActionIcon
           variant="quiet"
-          className={isActive ? "workbench-bar-active-tool" : "workbench-bar-action-icon"}
+          className={
+            isActive ? "workbench-bar-active-tool" : "workbench-bar-action-icon"
+          }
           onClick={triggerAction}
           disabled={disabled}
           aria-label={ariaLabel}

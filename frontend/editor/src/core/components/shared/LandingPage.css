@@ -167,8 +167,14 @@
 
 /* ── Recent document row ─────────────────────────────────── */
 .landing-recent-item:hover {
-  background-color: var(--c-hover, var(--c-surface-hover-selected, rgba(255,255,255,0.06))) !important;
+  background-color: var(
+    --c-hover,
+    var(--c-surface-hover-selected, rgba(255, 255, 255, 0.06))
+  ) !important;
 }
 .landing-recent-item:active {
-  background-color: var(--c-surface-hover-selected, rgba(255,255,255,0.1)) !important;
+  background-color: var(
+    --c-surface-hover-selected,
+    rgba(255, 255, 255, 0.1)
+  ) !important;
 }

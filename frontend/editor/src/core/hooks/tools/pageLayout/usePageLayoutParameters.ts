@@ -4,13 +4,7 @@ import {
   useBaseParameters,
 } from "@app/hooks/tools/shared/useBaseParameters";
 
-export type PageLayoutMode =
-  | "2x1"
-  | "2x2"
-  | "3x2"
-  | "3x3"
-  | "1x2"
-  | "booklet";
+export type PageLayoutMode = "2x1" | "2x2" | "3x2" | "3x3" | "1x2" | "booklet";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PageLayoutParameters extends BaseParameters {

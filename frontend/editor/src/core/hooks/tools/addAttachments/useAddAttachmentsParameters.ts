@@ -11,7 +11,8 @@ export interface AddAttachmentsParameters extends BaseParameters {
 
 export const defaultParameters: AddAttachmentsParameters = {};
 
-export type AddAttachmentsParametersHook = BaseParametersHook<AddAttachmentsParameters>;
+export type AddAttachmentsParametersHook =
+  BaseParametersHook<AddAttachmentsParameters>;
 
 export const useAddAttachmentsParameters = (): AddAttachmentsParametersHook =>
   useBaseParameters({ defaultParameters, endpointName: "add-attachments" });

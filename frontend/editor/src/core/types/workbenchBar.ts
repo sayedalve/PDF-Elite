@@ -1,6 +1,14 @@
 import React from "react";
 
-export type WorkbenchBarSection = "navigation" | "view" | "edit" | "annotate" | "organize" | "search" | "other" | "tool-panel";
+export type WorkbenchBarSection =
+  | "navigation"
+  | "view"
+  | "edit"
+  | "annotate"
+  | "organize"
+  | "search"
+  | "other"
+  | "tool-panel";
 
 export type WorkbenchBarAction = () => void;
 

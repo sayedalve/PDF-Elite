@@ -3,7 +3,10 @@ import { Box, Stack, Tooltip, UnstyledButton, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useWorkbenchBar } from "@app/contexts/WorkbenchBarContext";
-import { useNavigationActions, useNavigationState } from "@app/contexts/NavigationContext";
+import {
+  useNavigationActions,
+  useNavigationState,
+} from "@app/contexts/NavigationContext";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
@@ -17,27 +20,39 @@ export function PrimaryModeRail() {
   const { actions: navActions } = useNavigationActions();
   const { workbench } = useNavigationState();
 
-  const handleModeClick = React.useCallback((mode: string) => {
-    setActiveMode(mode);
-    if (mode === "organize") {
-      navActions.setWorkbench("pageEditor");
-    } else if (workbench === "pageEditor") {
-      navActions.setWorkbench("viewer");
-    }
-  }, [navActions, setActiveMode, workbench]);
+  const handleModeClick = React.useCallback(
+    (mode: string) => {
+      setActiveMode(mode);
+      if (mode === "organize") {
+        navActions.setWorkbench("pageEditor");
+      } else if (workbench === "pageEditor") {
+        navActions.setWorkbench("viewer");
+      }
+    },
+    [navActions, setActiveMode, workbench],
+  );
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || e.defaultPrevented) return;
 
       const el = document.activeElement;
-      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || (el as HTMLElement).isContentEditable)) {
+      if (
+        el &&
+        (el.tagName === "INPUT" ||
+          el.tagName === "TEXTAREA" ||
+          (el as HTMLElement).isContentEditable)
+      ) {
         return;
       }
 
       // Check if a modal/dropdown/popover is open.
-      if (document.querySelector('[role="dialog"], [role="menu"], [data-radix-popper-content-wrapper], .mantine-Popover-dropdown, .mantine-Modal-content')) {
-         return;
+      if (
+        document.querySelector(
+          '[role="dialog"], [role="menu"], [data-radix-popper-content-wrapper], .mantine-Popover-dropdown, .mantine-Modal-content',
+        )
+      ) {
+        return;
       }
 
       if (activeMode !== "view" && activeMode !== "home") {
@@ -89,7 +104,8 @@ export function PrimaryModeRail() {
       h="100%"
       style={{
         backgroundColor: "var(--c-bg-raised, var(--p-doc-surface-chrome))",
-        borderRight: "1px solid var(--c-border, var(--p-doc-surface-hover-selected))",
+        borderRight:
+          "1px solid var(--c-border, var(--p-doc-surface-hover-selected))",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -178,4 +194,3 @@ export function PrimaryModeRail() {
     </Box>
   );
 }
-

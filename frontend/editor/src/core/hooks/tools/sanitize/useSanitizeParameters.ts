@@ -1,4 +1,4 @@
-﻿import { BaseParameters } from "@app/types/parameters";
+import { BaseParameters } from "@app/types/parameters";
 import {
   BaseParametersHook,
   useBaseParameters,

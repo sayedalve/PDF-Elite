@@ -53,7 +53,10 @@ const RemoveBlanksSettings = ({
           <NumberInput
             value={parameters.whitePercent}
             onChange={(v) =>
-              onParameterChange?.("whitePercent", typeof v === "number" ? v : 0.1)
+              onParameterChange?.(
+                "whitePercent",
+                typeof v === "number" ? v : 0.1,
+              )
             }
             min={0.1}
             max={100}
@@ -79,7 +82,10 @@ const RemoveBlanksSettings = ({
         <Checkbox
           checked={parameters.includeBlankPages}
           onChange={(event) =>
-            onParameterChange?.("includeBlankPages", event.currentTarget.checked)
+            onParameterChange?.(
+              "includeBlankPages",
+              event.currentTarget.checked,
+            )
           }
           disabled={disabled}
           label={
