@@ -1,0 +1,1 @@
+const fs = require('fs'); let c = fs.readFileSync('c:/Users/sayed/Downloads/PDF-Elite/frontend/editor/public/locales/en-US/translation.toml', 'utf8'); c = c.replace(/starting = Starting up/g, 'starting = \"Starting up...\"'); fs.writeFileSync('c:/Users/sayed/Downloads/PDF-Elite/frontend/editor/public/locales/en-US/translation.toml', c);
