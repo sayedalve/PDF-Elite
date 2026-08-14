@@ -181,7 +181,7 @@ const FileSidebar = forwardRef<HTMLDivElement, FileSidebarProps>(
     const {
       isEnabled: isGoogleDriveEnabled,
       openPicker: openGoogleDrivePicker,
-    } = useGoogleDrivePicker();
+    } = { isEnabled: false, openPicker: () => {} };
     const { state } = useFileState();
     const { actions: fileActions } = useFileActions();
     const { actions: navActions } = useNavigationActions();

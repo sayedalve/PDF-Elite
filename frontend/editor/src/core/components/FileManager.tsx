@@ -11,10 +11,8 @@ import DesktopLayout from "@app/components/fileManager/DesktopLayout";
 import DragOverlay from "@app/components/fileManager/DragOverlay";
 import { FileManagerProvider } from "@app/contexts/FileManagerContext";
 import { Z_INDEX_FILE_MANAGER_MODAL } from "@app/styles/zIndex";
-import {
-  isGoogleDriveConfigured,
-  extractGoogleDriveBackendConfig,
-} from "@app/services/googleDrivePickerService";
+const isGoogleDriveConfigured = (c: any) => false;
+const extractGoogleDriveBackendConfig = (c: any) => null;
 import { loadScript } from "@app/utils/scriptLoader";
 import { useAllFiles } from "@app/contexts/FileContext";
 import { useFileActions } from "@app/contexts/file/fileHooks";

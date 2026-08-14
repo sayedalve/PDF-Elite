@@ -75,64 +75,12 @@ export const HomePage: React.FC<HomePageProps> = ({
     }
   }, [docs, activeId]);
 
-  const tryTauriOpen = useCallback(async (): Promise<boolean> => {
-    // Tauri v1/v2 dialog support with graceful fallback
-    try {
-      const tauri = (window as any).__TAURI__;
-      if (!tauri) return false;
-
-      // Try modern plugin first, then legacy API
-      let openFn: any = null;
-      try {
-        const mod = await import("@tauri-apps/plugin-dialog" as any);
-        openFn = mod.open;
-      } catch {
-        try {
-          const mod = await import("@tauri-apps/api/dialog" as any);
-          openFn = mod.open;
-        } catch {
-          if (tauri.dialog?.open) openFn = tauri.dialog.open;
-        }
-      }
-
-      if (!openFn) return false;
-
-      const selected = await openFn({
-        multiple: false,
-        filters: [{ name: "PDF", extensions: ["pdf"] }],
-      });
-
-      if (!selected) return true; // user cancelled, but handled
-
-      const pathVal =
-        typeof selected === "string"
-          ? selected
-          : Array.isArray(selected)
-            ? selected[0]
-            : null;
-      if (!pathVal) return true;
-
-      const fileName =
-        pathVal.split("/").pop()?.split("\\").pop() || "document.pdf";
-      // Create a File-like object carrying the native path for the backend to read
-      const fakeFile = new File([], fileName, { type: "application/pdf" });
-      (fakeFile as any).path = pathVal;
-      onOpenPdf(fakeFile);
-      return true;
-    } catch {
-      return false;
-    }
-  }, [onOpenPdf]);
-
   const handleOpenPdfClick = useCallback(async () => {
     if (isOpening) return;
     setIsOpening(true);
-    const handledByTauri = await tryTauriOpen();
-    if (!handledByTauri) {
-      fileInputRef.current?.click();
-    }
+    fileInputRef.current?.click();
     setIsOpening(false);
-  }, [isOpening, tryTauriOpen]);
+  }, [isOpening]);
 
   const handleFileInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
