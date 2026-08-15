@@ -42,6 +42,7 @@ export const ViewerShell: React.FC<Props> = ({ children, onClose }) => {
     getSearchState,
     registerImmediateZoomUpdate,
     registerImmediateScrollUpdate,
+    rotationActions,
   } = useViewer();
   const { workbench: currentView } = useNavigationState();
   const { actions: navActions } = useNavigationActions();
@@ -231,6 +232,7 @@ export const ViewerShell: React.FC<Props> = ({ children, onClose }) => {
         onFitPage={() => zoomActions.requestZoom("fit-page")}
         onActualSize={() => zoomActions.requestZoom("actual-size")}
         onZoomSlider={(val) => zoomActions.setZoomLevel(val / 100)}
+        onRotate={() => rotationActions.rotateForward()}
         highlightColor={highlightColor}
         highlightColors={[
           { id: "1", hex: "#fde047", name: "Yellow" },

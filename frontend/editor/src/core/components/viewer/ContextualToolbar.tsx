@@ -42,6 +42,8 @@ type Props = {
   onFitPage: () => void;
   onActualSize: () => void;
   onZoomSlider: (scale: number) => void;
+  // Rotate
+  onRotate: () => void;
   // Highlight
   highlightColor: string;
   highlightColors: { id: string; hex: string; name: string }[];
@@ -67,6 +69,7 @@ export const ContextualToolbar: React.FC<Props> = ({
   onFitPage,
   onActualSize,
   onZoomSlider,
+  onRotate,
   highlightColor,
   highlightColors,
   onHighlightColor,
@@ -138,7 +141,12 @@ export const ContextualToolbar: React.FC<Props> = ({
       </div>
       <div className="tb-sep" />
       <div className="tb-group">
-        <button className="tb-btn" title="Rotate" aria-label="Rotate">
+        <button
+          className="tb-btn"
+          onClick={onRotate}
+          title="Rotate clockwise"
+          aria-label="Rotate clockwise"
+        >
           <RotateCw size={18} />
         </button>
       </div>

@@ -520,6 +520,7 @@ const EmbedPdfViewerContent = ({
     // getZoomFactor converts the stored zoomPercent (e.g. 100) to a factor (1.333).
     setZoomLevel: zoomActions.setZoomLevel,
     getZoomFactor: () => getZoomState().zoomPercent / 75,
+    requireModifierKey: false, // Allow normal wheel to scroll, Ctrl+wheel to zoom
   });
 
   const viewerKeyCommand = useViewerKeyCommand();

@@ -119,6 +119,13 @@ function normalizeZoomRequest(level: any): any {
     case "fitPage":
     case "fit-page":
       return ZoomMode.FitPage;
+    case "actualSize":
+    case "actual-size":
+      return ZoomMode.Automatic; // Use Automatic mode which resolves to 100%
+    case "100":
+    case 1:
+    case 1.0:
+      return 1; // Custom zoom level of 100%
     case "automatic":
     case "auto":
       return ZoomMode.Automatic;
