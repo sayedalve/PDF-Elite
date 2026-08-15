@@ -19,7 +19,7 @@ const buildParameters = (
 export const Default: Story = {
   args: {
     parameters: buildParameters(),
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -30,14 +30,14 @@ export const WithCertFile: Story = {
         type: "application/x-x509-ca-cert",
       }),
     }),
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: buildParameters(),
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

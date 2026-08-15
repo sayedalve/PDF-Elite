@@ -38,8 +38,7 @@ export const URL_TO_TOOL_MAP: Record<string, ToolId> = {
   "/add-password": "addPassword",
   "/remove-password": "removePassword",
   "/change-permissions": "changePermissions",
-  "/cert-sign": "certSign",
-  "/manage-signatures": "certSign",
+
   "/remove-certificate-sign": "removeCertSign",
   "/remove-cert-sign": "removeCertSign",
   "/unlock-pdf-forms": "unlockPDFForms",
@@ -52,7 +51,7 @@ export const URL_TO_TOOL_MAP: Record<string, ToolId> = {
   "/ocr-pdf": "ocr",
   "/watermark": "watermark",
   "/add-watermark": "watermark",
-  "/add-image": "addImage",
+
   "/add-stamp": "addStamp",
   "/add-page-numbers": "addPageNumbers",
   "/redact": "redact",
@@ -73,8 +72,7 @@ export const URL_TO_TOOL_MAP: Record<string, ToolId> = {
   "/scanner-image-split": "scannerImageSplit",
 
   // Annotation and content removal
-  "/annotations": "annotate",
-  "/annotate": "annotate",
+
   "/remove-annotations": "removeAnnotations",
   "/remove-image": "removeImage",
 
@@ -100,8 +98,7 @@ export const URL_TO_TOOL_MAP: Record<string, ToolId> = {
   // Special/utility tools
   "/read": "read",
   "/automate": "automate",
-  "/sign": "sign",
-  "/add-text": "addText",
+
   "/pdf-text-editor": "pdfTextEditor",
 
   // Developer tools

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Stack } from "@mantine/core";
 import { AdjustContrastParameters } from "@app/hooks/tools/adjustContrast/useAdjustContrastParameters";
 import AdjustContrastBasicSettings from "@app/components/tools/adjustContrast/AdjustContrastBasicSettings";

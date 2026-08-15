@@ -15,14 +15,14 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: baseParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: baseParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

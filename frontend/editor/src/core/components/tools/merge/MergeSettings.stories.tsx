@@ -11,14 +11,14 @@ const meta = {
       removeDigitalSignature: false,
       generateTableOfContents: false,
     },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof MergeSettings>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function MergeSettingsDemo({ disabled }: { disabled?: boolean }) {
+function MergeSettingsDemo({ disabled }: { disabled: boolean }) {
   const [parameters, setParameters] = useState<MergeParameters>({
     removeDigitalSignature: false,
     generateTableOfContents: false,

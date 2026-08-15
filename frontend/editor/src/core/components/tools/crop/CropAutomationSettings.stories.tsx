@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof CropAutomationSettings>;
 export default meta;
@@ -22,8 +22,8 @@ function SettingsDemo({
   initialParameters = defaultParameters,
   disabled,
 }: {
-  initialParameters?: CropParameters;
-  disabled?: boolean;
+  initialParameters: CropParameters;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] =
     useState<CropParameters>(initialParameters);

@@ -11,7 +11,7 @@ const meta = {
   component: CompressSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof CompressSettings>;
 export default meta;
@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 // stateful shim to keep the sliders/inputs interactive in the canvas.
 const CompressSettingsDemo = (props: {
   initialParameters: CompressParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<CompressParameters>(
     props.initialParameters,

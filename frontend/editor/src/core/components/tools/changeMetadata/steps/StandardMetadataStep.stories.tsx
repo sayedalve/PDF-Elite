@@ -11,7 +11,7 @@ const meta = {
   component: StandardMetadataStep,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof StandardMetadataStep>;
 export default meta;
@@ -21,8 +21,8 @@ function StandardMetadataStepDemo({
   disabled,
   filled = false,
 }: {
-  disabled?: boolean;
-  filled?: boolean;
+  disabled: boolean;
+  filled: boolean;
 }) {
   const [parameters, setParameters] = useState<ChangeMetadataParameters>({
     ...defaultParameters,

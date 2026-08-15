@@ -18,8 +18,8 @@ function ConvertToEpubSettingsDemo({
   toExtension = "epub",
   disabled,
 }: {
-  toExtension?: string;
-  disabled?: boolean;
+  toExtension: string;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] = useState<ConvertParameters>({
     ...defaultParameters,

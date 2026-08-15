@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof AdjustContrastSingleStepSettings>;
 export default meta;
@@ -22,8 +22,8 @@ function Demo({
   initialParameters = defaultParameters,
   disabled,
 }: {
-  initialParameters?: AdjustContrastParameters;
-  disabled?: boolean;
+  initialParameters: AdjustContrastParameters;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] =
     useState<AdjustContrastParameters>(initialParameters);

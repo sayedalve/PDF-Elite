@@ -13,7 +13,7 @@ const meta: Meta<typeof WatermarkStyleSettings> = {
 export default meta;
 type Story = StoryObj<typeof WatermarkStyleSettings>;
 
-function WatermarkStyleSettingsDemo({ disabled }: { disabled?: boolean }) {
+function WatermarkStyleSettingsDemo({ disabled }: { disabled: boolean }) {
   const [parameters, setParameters] = useState<AddWatermarkParameters>({
     ...defaultParameters,
     watermarkType: "text",

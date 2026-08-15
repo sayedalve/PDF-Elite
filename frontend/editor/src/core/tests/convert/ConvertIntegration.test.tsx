@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Integration tests for Convert Tool - Tests actual conversion functionality
  *

@@ -10,7 +10,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function IconSelectorDemo({ size }: { size?: "sm" | "md" | "lg" }) {
+function IconSelectorDemo({ size }: { size: "sm" | "md" | "lg" }) {
   const [value, setValue] = useState("SettingsIcon");
   return <IconSelector value={value} onChange={setValue} size={size} />;
 }

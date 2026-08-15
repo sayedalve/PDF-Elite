@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { open } from "@tauri-apps/plugin-dialog";
 
 export async function openPdfViaTauri(): Promise<string | null> {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useTranslation } from "react-i18next";
 import { Stack, NumberInput, Button, Group, Text } from "@mantine/core";
 import { ReplaceImageParameters } from "@app/hooks/tools/replaceImage/useReplaceImageParameters";

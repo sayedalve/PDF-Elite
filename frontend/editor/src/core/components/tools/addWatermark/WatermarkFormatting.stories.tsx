@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: { ...defaultParameters, watermarkType: "text" },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 

@@ -14,7 +14,7 @@ const meta: Meta<typeof ConvertToImageSettings> = {
 export default meta;
 type Story = StoryObj<typeof ConvertToImageSettings>;
 
-function ConvertToImageSettingsDemo({ disabled }: { disabled?: boolean }) {
+function ConvertToImageSettingsDemo({ disabled }: { disabled: boolean }) {
   const [parameters, setParameters] =
     useState<ConvertParameters>(defaultParameters);
 

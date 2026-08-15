@@ -170,6 +170,7 @@
 /* ── Hero actions area ──────────────────────────────────────── */
 .home-hero {
   margin-bottom: 2.5rem;
+  animation: home-fade-in 0.2s ease-out both;
 }
 
 .home-hero__title {
@@ -198,6 +199,7 @@
 /* ── Section header ──────────────────────────────────────── */
 .home-section {
   margin-bottom: 2rem;
+  animation: home-fade-in 0.2s ease-out 0.1s both;
 }
 
 .home-section__header {
@@ -338,14 +340,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.home-hero {
-  animation: home-fade-in 0.2s ease-out both;
-}
-
-.home-section {
-  animation: home-fade-in 0.2s ease-out 0.1s both;
 }
 
 .home-section:nth-child(3) {

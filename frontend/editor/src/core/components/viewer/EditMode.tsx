@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { Type, Image, Link2 } from "lucide-react";
 

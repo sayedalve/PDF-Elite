@@ -13,7 +13,7 @@ export const Default: Story = {
   args: {
     advancedOptions: [],
     ocrRenderType: "hocr",
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -21,7 +21,7 @@ export const OptionsSelected: Story = {
   args: {
     advancedOptions: ["sidecar", "deskew"],
     ocrRenderType: "hocr",
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -29,7 +29,7 @@ export const CompatibilityMode: Story = {
   args: {
     advancedOptions: [],
     ocrRenderType: "sandwich",
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -37,7 +37,7 @@ export const Disabled: Story = {
   args: {
     advancedOptions: ["clean"],
     ocrRenderType: "hocr",
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

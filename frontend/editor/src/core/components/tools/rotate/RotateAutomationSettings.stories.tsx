@@ -9,7 +9,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: { angle: 0 },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof RotateAutomationSettings>;
 export default meta;
@@ -19,8 +19,8 @@ function RotateDemo({
   disabled,
   initialAngle = 0,
 }: {
-  disabled?: boolean;
-  initialAngle?: number;
+  disabled: boolean;
+  initialAngle: number;
 }) {
   const [parameters, setParameters] = useState<RotateParameters>({
     angle: initialAngle,

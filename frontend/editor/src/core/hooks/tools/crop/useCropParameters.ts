@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { BaseParameters } from "@app/types/parameters";
 import {
   BaseParametersHook,

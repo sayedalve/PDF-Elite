@@ -1,12 +1,15 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 
-export type ToolMode = "view" | "comment" | "edit" | "organize" | "search";
+export type ToolMode = "view" | "comment" | "edit" | "organize" | "search" | "tools";
 export type TempTool =
   | "highlight"
   | "note"
   | "draw"
   | "select"
   | "area-highlight"
+  | "underline"
+  | "strikeout"
+  | "text"
   | null;
 
 type ToolState = {
@@ -43,7 +46,9 @@ export function useToolLifecycle() {
     }));
     try {
       localStorage.setItem("pdf-elite:highlight-color", color);
-    } catch {}
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   // Restore persisted color
@@ -57,7 +62,9 @@ export function useToolLifecycle() {
           lastHighlightColor: saved,
         }));
       }
-    } catch {}
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   const setMode = useCallback(

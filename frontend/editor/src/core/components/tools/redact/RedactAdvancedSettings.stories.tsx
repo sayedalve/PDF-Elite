@@ -12,13 +12,13 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof RedactAdvancedSettings>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function AdvancedSettingsDemo({ disabled }: { disabled?: boolean }) {
+function AdvancedSettingsDemo({ disabled }: { disabled: boolean }) {
   const [parameters, setParameters] =
     useState<RedactParameters>(defaultParameters);
 

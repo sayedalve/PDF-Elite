@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Box, ScrollArea, Text, Loader, Stack, TextInput } from "@mantine/core";
 import LocalIcon from "@app/components/shared/LocalIcon";

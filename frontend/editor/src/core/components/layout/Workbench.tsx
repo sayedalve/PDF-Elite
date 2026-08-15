@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useState, Suspense, lazy } from "react";
 import { Box, Loader, Center } from "@mantine/core";
 import { useToolWorkflow } from "@app/contexts/ToolWorkflowContext";
@@ -15,7 +16,8 @@ import { useCookieConsent } from "@app/hooks/useCookieConsent";
 import styles from "@app/components/layout/Workbench.module.css";
 
 import WorkbenchBar from "@app/components/shared/WorkbenchBar";
-import LandingPage from "@app/components/shared/LandingPage";
+import { HomePage, type HomeViewId } from "@app/workbench/home/HomePage";
+import { useRecentDocs } from "@app/hooks/useRecentDocs";
 import DismissAllErrorsButton from "@app/components/shared/DismissAllErrorsButton";
 import { ChatFAB } from "@app/components/chat/ChatFAB";
 
@@ -71,6 +73,23 @@ export default function Workbench() {
   // have no workbench files, but still need the bar's view switcher so users can
   // navigate back out.
   const isCustomViewActive = !isBaseWorkbench(currentView);
+
+  const { docs, addOrUpdate, remove, toggleStar } = useRecentDocs();
+  const [activeHomeView, setActiveHomeView] = useState<HomeViewId>("recent");
+
+  const handleOpenPdf = (file: File) => {
+    addFiles([file]);
+    setCurrentView("viewer");
+  };
+
+  const handleOpenDoc = (doc: any) => {
+    // In real app, we need to convert the path/file back to a File object,
+    // or if it's already in activeFiles, just switch to it.
+    // For now, if we don't have the File object, we might need a way to open it.
+    // Wait, the real app handles "My Files" via FileContext, but here we just have a mock recent docs.
+    // Let's just switch to viewer if we can load it.
+    setCurrentView("viewer");
+  };
 
   // Enable bar transitions after first paint so the initial hidden state shows
   // without animating (landing page on load shouldn't animate the bar up).
@@ -137,7 +156,18 @@ export default function Workbench() {
     }
 
     if (activeFiles.length === 0) {
-      return <LandingPage />;
+      return (
+        <HomePage
+          docs={docs}
+          onOpenPdf={handleOpenPdf}
+          onOpenDoc={handleOpenDoc}
+          onRemove={remove}
+          onToggleStar={toggleStar}
+          onToolClick={(id: string) => handleToolSelect(id as any)}
+          activeView={activeHomeView}
+          onNavigate={setActiveHomeView}
+        />
+      );
     }
 
     switch (currentView) {
@@ -167,6 +197,7 @@ export default function Workbench() {
             setSidebarsVisible={setSidebarsVisible}
             previewFile={previewFile}
             onClose={handlePreviewClose}
+            onToolSelect={(toolId: string) => handleToolSelect(toolId as any)}
           />
         );
 

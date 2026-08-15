@@ -13,7 +13,7 @@ const meta: Meta<typeof ConvertFromWebSettings> = {
 export default meta;
 type Story = StoryObj<typeof ConvertFromWebSettings>;
 
-function ConvertFromWebSettingsDemo({ disabled }: { disabled?: boolean }) {
+function ConvertFromWebSettingsDemo({ disabled }: { disabled: boolean }) {
   const [parameters, setParameters] = useState<ConvertParameters>({
     ...defaultParameters,
     fromExtension: "html",

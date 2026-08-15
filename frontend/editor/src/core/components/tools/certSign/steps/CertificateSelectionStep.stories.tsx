@@ -38,10 +38,10 @@ function StepDemo({
   withUploadedFile = false,
   disabled,
 }: {
-  initialCertType?: CertificateType;
-  initialUploadFormat?: UploadFormat;
-  withUploadedFile?: boolean;
-  disabled?: boolean;
+  initialCertType: CertificateType;
+  initialUploadFormat: UploadFormat;
+  withUploadedFile: boolean;
+  disabled: boolean;
 }) {
   const [certType, setCertType] = useState<CertificateType>(initialCertType);
   const [uploadFormat, setUploadFormat] =

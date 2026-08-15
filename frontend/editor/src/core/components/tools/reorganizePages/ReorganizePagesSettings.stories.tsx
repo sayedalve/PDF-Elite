@@ -25,8 +25,8 @@ function SettingsDemo({
   initial,
   disabled,
 }: {
-  initial?: Partial<ReorganizePagesParameters>;
-  disabled?: boolean;
+  initial: Partial<ReorganizePagesParameters>;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] = useState<ReorganizePagesParameters>({
     ...defaultReorganizePagesParameters,

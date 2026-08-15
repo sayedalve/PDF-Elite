@@ -20,8 +20,8 @@ function SettingsDemo({
   initialValue = {},
   disabled,
 }: {
-  initialValue?: SignatureSettings;
-  disabled?: boolean;
+  initialValue: SignatureSettings;
+  disabled: boolean;
 }) {
   const [value, setValue] = useState<SignatureSettings>(initialValue);
 

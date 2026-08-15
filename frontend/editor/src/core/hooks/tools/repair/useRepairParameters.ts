@@ -4,7 +4,6 @@ import {
   useBaseParameters,
 } from "@app/hooks/tools/shared/useBaseParameters";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RepairParameters extends BaseParameters {}
 
 export const defaultParameters: RepairParameters = {};

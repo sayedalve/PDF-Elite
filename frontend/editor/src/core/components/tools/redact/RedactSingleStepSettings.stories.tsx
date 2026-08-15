@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof RedactSingleStepSettings>;
 export default meta;
@@ -22,8 +22,8 @@ function SettingsDemo({
   initialParameters = defaultParameters,
   disabled,
 }: {
-  initialParameters?: RedactParameters;
-  disabled?: boolean;
+  initialParameters: RedactParameters;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] =
     useState<RedactParameters>(initialParameters);

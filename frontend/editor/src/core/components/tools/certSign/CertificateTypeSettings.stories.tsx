@@ -13,7 +13,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof CertificateTypeSettings>;
 export default meta;
@@ -25,10 +25,10 @@ function SettingsDemo({
   serverCertificateEnabled = false,
   hardwareSigningAvailable = false,
 }: {
-  initialParameters?: CertSignParameters;
-  disabled?: boolean;
-  serverCertificateEnabled?: boolean;
-  hardwareSigningAvailable?: boolean;
+  initialParameters: CertSignParameters;
+  disabled: boolean;
+  serverCertificateEnabled: boolean;
+  hardwareSigningAvailable: boolean;
 }) {
   const [parameters, setParameters] =
     useState<CertSignParameters>(initialParameters);

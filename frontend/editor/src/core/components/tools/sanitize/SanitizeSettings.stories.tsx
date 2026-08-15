@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -27,14 +27,14 @@ export const AllSelected: Story = {
       removeLinks: true,
       removeFonts: true,
     },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

@@ -11,7 +11,7 @@ const meta = {
   component: ConvertFromEmailSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof ConvertFromEmailSettings>;
 export default meta;

@@ -11,7 +11,7 @@ const meta = {
   component: DeleteAllStep,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof DeleteAllStep>;
 export default meta;
@@ -21,8 +21,8 @@ function DeleteAllStepDemo({
   disabled,
   deleteAll = false,
 }: {
-  disabled?: boolean;
-  deleteAll?: boolean;
+  disabled: boolean;
+  deleteAll: boolean;
 }) {
   const [parameters, setParameters] = useState<ChangeMetadataParameters>({
     ...defaultParameters,

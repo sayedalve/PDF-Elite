@@ -8,7 +8,7 @@ const meta = {
   component: AddPasswordSettings,
   args: {
     parameters: { password: "", ownerPassword: "", keyLength: 128 },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof AddPasswordSettings>;
 export default meta;
@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
 // stateful shim to keep the password/key-length inputs interactive in the canvas.
 const AddPasswordSettingsDemo = (props: {
   initialParameters: AddPasswordParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<AddPasswordParameters>(
     props.initialParameters,

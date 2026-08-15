@@ -403,7 +403,9 @@ export function PipelineBuilder() {
     if (isIntegrationStep(step))
       return t("portal.pipelines.builder.sendToSystem");
     const entry = step.toolId
-      ? catalog.getToolById(step.toolId as any)
+      ? catalog.getToolById(
+          step.toolId as Parameters<typeof catalog.getToolById>[0],
+        )
       : undefined;
     return entry?.name ?? humanizeOperation(step.operation);
   }
@@ -982,11 +984,19 @@ export function PipelineBuilder() {
                           {t("portal.pipelines.builder.needsConfiguring")}
                         </span>
                       ) : (step.toolId
-                          ? catalog.getToolById(step.toolId as any)
+                          ? catalog.getToolById(
+                              step.toolId as Parameters<
+                                typeof catalog.getToolById
+                              >[0],
+                            )
                           : undefined) &&
                         !(
                           step.toolId
-                            ? catalog.getToolById(step.toolId as any)
+                            ? catalog.getToolById(
+                                step.toolId as Parameters<
+                                  typeof catalog.getToolById
+                                >[0],
+                              )
                             : undefined
                         )?.automationSettings ? (
                         <span className="portal-builder__step-note">
@@ -994,7 +1004,11 @@ export function PipelineBuilder() {
                         </span>
                       ) : !isIntegrationStep(step) &&
                         step.toolId &&
-                        !catalog.getToolById(step.toolId as any) ? (
+                        !catalog.getToolById(
+                          step.toolId as Parameters<
+                            typeof catalog.getToolById
+                          >[0],
+                        ) ? (
                         <span className="portal-builder__step-note">
                           {t("portal.pipelines.builder.unknownStep")}
                         </span>

@@ -9,7 +9,7 @@ const meta: Meta<typeof WatermarkTypeSettings> = {
 export default meta;
 type Story = StoryObj<typeof WatermarkTypeSettings>;
 
-function WatermarkTypeSettingsDemo({ disabled }: { disabled?: boolean }) {
+function WatermarkTypeSettingsDemo({ disabled }: { disabled: boolean }) {
   const [watermarkType, setWatermarkType] = useState<"text" | "image">("text");
 
   return (

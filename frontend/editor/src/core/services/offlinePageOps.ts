@@ -194,3 +194,60 @@ export async function rotatePagesLocal(
     type: "application/pdf",
   });
 }
+
+/**
+ * Apply a complete set of organize operations (reorder, duplicate, remove, rotate)
+ * to a PDF document in a single pass.
+ *
+ * @param file        Source PDF File
+ * @param pages       Array describing the desired final state of the document.
+ *                    Each entry contains the 1-indexed original page number and
+ *                    its desired absolute rotation (0, 90, 180, 270).
+ * @returns           New PDF Blob with the changes applied
+ */
+export async function applyOrganizeChangesLocal(
+  file: File,
+  pages: { originalId: number; rotation: number }[],
+): Promise<Blob> {
+  const bytes = await file.arrayBuffer();
+  const srcDoc = await PDFDocument.load(bytes);
+  const total = srcDoc.getPageCount();
+
+  // Validate all requested indices are within bounds (convert to 0-indexed)
+  const order = pages
+    .map((p) => p.originalId - 1)
+    .filter((i) => i >= 0 && i < total);
+
+  if (order.length === 0) {
+    throw new Error("No valid pages specified for the reorganized document.");
+  }
+
+  const outDoc = await PDFDocument.create();
+
+  // Copy all requested pages in order (this handles duplicates correctly)
+  const copied = await outDoc.copyPages(srcDoc, order);
+
+  for (let i = 0; i < copied.length; i++) {
+    const page = copied[i];
+    const targetRot = pages[i].rotation;
+
+    // Calculate new angle based on existing rotation + target rotation
+    // Wait, the `rotation` from OrganizeMode is absolute?
+    // Yes, OrganizeMode stores absolute rotation 0, 90, 180, 270 relative to the *original* page's current orientation.
+    // Actually, OrganizeMode starts with rotation=0 for every page.
+    // So `rotation` is the DELTA we need to apply on top of the page's original rotation.
+    const currentRotation = page.getRotation().angle;
+    const newAngle = (((currentRotation + targetRot) % 360) + 360) % 360;
+
+    page.setRotation({ type: "degrees", angle: newAngle } as Parameters<
+      typeof page.setRotation
+    >[0]);
+
+    outDoc.addPage(page);
+  }
+
+  const outBytes = await outDoc.save();
+  return new Blob([outBytes.buffer as ArrayBuffer], {
+    type: "application/pdf",
+  });
+}

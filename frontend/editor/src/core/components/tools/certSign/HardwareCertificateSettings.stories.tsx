@@ -20,7 +20,7 @@ const meta = {
   component: HardwareCertificateSettings,
   args: {
     parameters: baseParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof HardwareCertificateSettings>;
 export default meta;
@@ -34,7 +34,7 @@ type Story = StoryObj<typeof meta>;
 // and still renders the picker.
 const HardwareCertificateSettingsDemo = (props: {
   initialParameters: CertSignParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<CertSignParameters>(
     props.initialParameters,

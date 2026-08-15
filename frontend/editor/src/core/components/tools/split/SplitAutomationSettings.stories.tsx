@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -28,7 +28,7 @@ export const MethodSelected: Story = {
       method: SPLIT_METHODS.BY_PAGES,
       pages: "1,3,5",
     } satisfies SplitParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -39,7 +39,7 @@ export const Disabled: Story = {
       method: SPLIT_METHODS.BY_PAGES,
       pages: "1,3,5",
     } satisfies SplitParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

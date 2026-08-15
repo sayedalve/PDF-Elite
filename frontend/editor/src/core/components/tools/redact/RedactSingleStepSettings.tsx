@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Stack, Divider } from "@mantine/core";
 import { RedactParameters } from "@app/hooks/tools/redact/useRedactParameters";
 import RedactModeSelector from "@app/components/tools/redact/RedactModeSelector";

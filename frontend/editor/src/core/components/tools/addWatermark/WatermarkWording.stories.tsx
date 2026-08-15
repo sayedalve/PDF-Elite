@@ -18,8 +18,8 @@ function WatermarkWordingDemo({
   initialText = "",
   disabled,
 }: {
-  initialText?: string;
-  disabled?: boolean;
+  initialText: string;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] = useState<AddWatermarkParameters>({
     ...defaultParameters,

@@ -31,8 +31,8 @@ function LanguagePickerDemo({
   initialValue = [],
   disabled,
 }: {
-  initialValue?: string[];
-  disabled?: boolean;
+  initialValue: string[];
+  disabled: boolean;
 }) {
   const [value, setValue] = useState<string[]>(initialValue);
   return (

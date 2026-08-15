@@ -22,7 +22,7 @@ const defaultParameters: AdjustPageScaleParameters = {
 export const Default: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -33,14 +33,14 @@ export const CustomPageSize: Story = {
       pageSize: PageSize.A4,
       orientation: "LANDSCAPE",
     },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

@@ -22,21 +22,21 @@ const manualDuplexParameters: BookletImpositionParameters = {
 export const Default: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const ManualDuplex: Story = {
   args: {
     parameters: manualDuplexParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

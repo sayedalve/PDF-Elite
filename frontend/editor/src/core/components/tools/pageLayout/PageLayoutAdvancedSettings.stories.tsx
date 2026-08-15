@@ -19,7 +19,7 @@ const meta = {
   ],
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof PageLayoutAdvancedSettings>;
 export default meta;
@@ -29,8 +29,8 @@ function AdvancedSettingsDemo({
   disabled,
   initialParameters,
 }: {
-  disabled?: boolean;
-  initialParameters?: PageLayoutParameters;
+  disabled: boolean;
+  initialParameters: PageLayoutParameters;
 }) {
   const [parameters, setParameters] = useState<PageLayoutParameters>(
     initialParameters ?? defaultParameters,

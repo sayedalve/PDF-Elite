@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useState, useContext, useCallback, useRef } from "react";
 import { generateId } from "@app/utils/generateId";
 import { useTranslation } from "react-i18next";

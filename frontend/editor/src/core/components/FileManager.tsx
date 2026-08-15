@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { Modal } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";

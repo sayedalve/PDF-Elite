@@ -10,7 +10,7 @@ const meta = {
   component: ReplaceColorSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof ReplaceColorSettings>;
 export default meta;

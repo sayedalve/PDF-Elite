@@ -111,7 +111,10 @@ function describeStandardOperation<TParams>(
     defaultParameters,
     toApi: (params) => {
       if (isRedact) {
-        const { wordsToRedact, mode, ...rest } = params as any;
+        const { wordsToRedact, mode, ...rest } = params as Record<
+          string,
+          unknown
+        >;
         return {
           ...rest,
           listOfText: Array.isArray(wordsToRedact)
@@ -123,13 +126,13 @@ function describeStandardOperation<TParams>(
     },
     fromApi: (api) => {
       if (isRedact) {
-        const { listOfText, ...rest } = api as any;
+        const { listOfText, ...rest } = api as Record<string, unknown>;
         return {
           ...rest,
           mode: "automatic",
           wordsToRedact:
             typeof listOfText === "string" ? listOfText.split("\n") : [],
-        } as TParams;
+        } as unknown as TParams;
       }
       return api as TParams;
     },

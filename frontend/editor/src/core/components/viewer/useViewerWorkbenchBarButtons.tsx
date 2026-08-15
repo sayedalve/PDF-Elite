@@ -602,7 +602,7 @@ export function useViewerWorkbenchBarButtons(
                         backgroundColor: color,
                         border:
                           highlightColor === color
-                            ? "2px solid var(--c-border-active)"
+                            ? "2px solid var(--c-border-active, #3b82f6)"
                             : "1px solid var(--c-border-subtle)",
                       }}
                     />
@@ -741,7 +741,7 @@ export function useViewerWorkbenchBarButtons(
                         backgroundColor: color,
                         border:
                           noteColor === color
-                            ? "2px solid var(--c-border-active)"
+                            ? "2px solid var(--c-border-active, #3b82f6)"
                             : "1px solid var(--c-border-subtle)",
                       }}
                     />

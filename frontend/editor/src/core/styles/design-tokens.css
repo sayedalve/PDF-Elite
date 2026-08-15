@@ -28,12 +28,12 @@
   --border-subtle: #262a40;
 
   /* Accent - PDF Elite Blue */
-  --accent: #79AEFF;
+  --accent: #79aeff;
   --accent-hover: #8ab8ff;
   --accent-pressed: #5e9bf0;
   --accent-subtle: rgba(121, 174, 255, 0.12);
   --accent-strong: rgba(121, 174, 255, 0.2);
-  --focus-ring: #79AEFF;
+  --focus-ring: #79aeff;
   --focus-ring-offset: #1e2130;
 
   /* Semantic */
@@ -71,8 +71,8 @@
 
   /* Page */
   --page-bg: #ffffff;
-  --page-shadow: 0 4px 24px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
-  --page-shadow-hover: 0 8px 32px rgba(0,0,0,0.4);
+  --page-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --page-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4);
   --page-gap: 24px;
 
   /* Scrollbar */
@@ -99,7 +99,8 @@
   --radius-full: 9999px;
 
   /* Typography */
-  --font-sans: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans:
+    "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", "Cascadia Code", monospace;
 
   /* Type Scale */
@@ -159,7 +160,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
@@ -205,7 +207,9 @@ html, body {
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

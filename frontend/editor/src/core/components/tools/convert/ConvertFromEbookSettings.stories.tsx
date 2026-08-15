@@ -11,14 +11,14 @@ const meta = {
   component: ConvertFromEbookSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof ConvertFromEbookSettings>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-function ConvertFromEbookSettingsDemo({ disabled }: { disabled?: boolean }) {
+function ConvertFromEbookSettingsDemo({ disabled }: { disabled: boolean }) {
   const [parameters, setParameters] =
     useState<ConvertParameters>(defaultParameters);
 

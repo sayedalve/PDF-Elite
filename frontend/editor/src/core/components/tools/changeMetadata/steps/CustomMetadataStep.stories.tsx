@@ -13,7 +13,7 @@ const meta = {
   component: CustomMetadataStep,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     addCustomMetadata: () => {},
     removeCustomMetadata: () => {},
     updateCustomMetadata: () => {},
@@ -26,8 +26,8 @@ function CustomMetadataStepDemo({
   disabled,
   customMetadata = [],
 }: {
-  disabled?: boolean;
-  customMetadata?: CustomMetadataEntry[];
+  disabled: boolean;
+  customMetadata: CustomMetadataEntry[];
 }) {
   const [parameters, setParameters] = useState<ChangeMetadataParameters>({
     ...defaultParameters,

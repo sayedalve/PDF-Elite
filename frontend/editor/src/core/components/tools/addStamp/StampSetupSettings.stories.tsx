@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof StampSetupSettings>;
 export default meta;
@@ -23,9 +23,9 @@ function Demo({
   disabled,
   filename,
 }: {
-  initialParameters?: AddStampParameters;
-  disabled?: boolean;
-  filename?: string;
+  initialParameters: AddStampParameters;
+  disabled: boolean;
+  filename: string;
 }) {
   const [parameters, setParameters] =
     useState<AddStampParameters>(initialParameters);

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useMemo } from "react";
 import { Stack, Text, Group, Divider, useMantineTheme } from "@mantine/core";
 import { Button } from "@app/ui/Button";

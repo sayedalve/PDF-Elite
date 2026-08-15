@@ -11,7 +11,7 @@ const meta = {
   component: WatermarkImageFile,
   args: {
     parameters: { ...defaultParameters, watermarkType: "image" },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof WatermarkImageFile>;
 export default meta;
@@ -25,7 +25,7 @@ const makeImageFile = (name: string, sizeBytes: number): File =>
 // stateful shim to keep the file picker interaction working in the canvas.
 const WatermarkImageFileDemo = (props: {
   initialParameters: AddWatermarkParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<AddWatermarkParameters>(
     props.initialParameters,

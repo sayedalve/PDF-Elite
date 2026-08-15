@@ -47,8 +47,8 @@ function Demo({
   initialCropArea = { x: 50, y: 50, width: 300, height: 400 },
   disabled,
 }: {
-  initialCropArea?: Rectangle;
-  disabled?: boolean;
+  initialCropArea: Rectangle;
+  disabled: boolean;
 }) {
   const [cropArea, setCropArea] = useState<Rectangle>(initialCropArea);
 

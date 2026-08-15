@@ -97,7 +97,7 @@
 
 .document-tab__dirty {
   font-size: 8px;
-  color: var(--p-amber-400, #fbbf24);
+  color: var(--p-amber-400);
   margin-left: 4px;
   flex-shrink: 0;
   line-height: 1;

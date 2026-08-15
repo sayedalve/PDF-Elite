@@ -21,28 +21,28 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: buildParameters(),
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const FlattenOnlyForms: Story = {
   args: {
     parameters: buildParameters({ flattenOnlyForms: true }),
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const CustomRenderDpi: Story = {
   args: {
     parameters: buildParameters({ renderDpi: 300 }),
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: buildParameters(),
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

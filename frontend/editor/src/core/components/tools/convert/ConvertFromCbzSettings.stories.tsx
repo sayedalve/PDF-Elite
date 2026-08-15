@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof ConvertFromCbzSettings>;
 export default meta;
@@ -22,8 +22,8 @@ function CbzSettingsDemo({
   disabled,
   initialOptimize = false,
 }: {
-  disabled?: boolean;
-  initialOptimize?: boolean;
+  disabled: boolean;
+  initialOptimize: boolean;
 }) {
   const [parameters, setParameters] = useState<ConvertParameters>({
     ...defaultParameters,

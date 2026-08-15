@@ -49,17 +49,25 @@ export function useOpenedFile() {
     // Rust emits via window.emit(...) / app.emit_to(label, ...) so each
     // Tauri window sees only its own queue updates.
     let unlisten: (() => void) | undefined;
-    const currentWindow = getCurrentWebviewWindow();
-    currentWindow
-      .listen("files-changed", async () => {
-        console.log(
-          `📂 files-changed event received on window '${currentWindow.label}', re-reading storage...`,
-        );
-        await readFilesFromStorage();
-      })
-      .then((unlistenFn) => {
-        unlisten = unlistenFn;
-      });
+
+    // Safety check for browser environment
+    if (typeof window !== "undefined" && "__TAURI_INTERNALS__" in window) {
+      try {
+        const currentWindow = getCurrentWebviewWindow();
+        currentWindow
+          .listen("files-changed", async () => {
+            console.log(
+              `📂 files-changed event received on window '${currentWindow?.label}', re-reading storage...`,
+            );
+            await readFilesFromStorage();
+          })
+          .then((unlistenFn) => {
+            unlisten = unlistenFn;
+          });
+      } catch (e) {
+        console.warn("Tauri getCurrentWebviewWindow failed:", e);
+      }
+    }
 
     return () => {
       if (unlisten) unlisten();

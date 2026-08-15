@@ -12,7 +12,7 @@ const meta = {
   component: ConvertToPdfxSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     selectedFiles: [],
   },
 } satisfies Meta<typeof ConvertToPdfxSettings>;
@@ -25,8 +25,8 @@ type Story = StoryObj<typeof meta>;
 // throwing.
 const ConvertToPdfxSettingsDemo = (props: {
   initialParameters: ConvertParameters;
-  selectedFiles?: StirlingFile[];
-  disabled?: boolean;
+  selectedFiles: StirlingFile[];
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<ConvertParameters>(
     props.initialParameters,

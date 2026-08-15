@@ -29,7 +29,7 @@ export const TOOL_CREDIT_COSTS: Partial<Record<ToolId, number>> = {
   // Small operations (1 credit)
   rotate: CREDIT_COSTS.SMALL,
   removePages: CREDIT_COSTS.SMALL,
-  addText: CREDIT_COSTS.SMALL,
+
   addPassword: CREDIT_COSTS.SMALL,
   removePassword: CREDIT_COSTS.SMALL,
   changePermissions: CREDIT_COSTS.SMALL,
@@ -42,7 +42,7 @@ export const TOOL_CREDIT_COSTS: Partial<Record<ToolId, number>> = {
   reorganizePages: CREDIT_COSTS.SMALL,
   scalePages: CREDIT_COSTS.SMALL,
   editTableOfContents: CREDIT_COSTS.SMALL,
-  sign: CREDIT_COSTS.SMALL,
+
   removeAnnotations: CREDIT_COSTS.SMALL,
   removeImage: CREDIT_COSTS.SMALL,
   scannerImageSplit: CREDIT_COSTS.SMALL,
@@ -65,7 +65,7 @@ export const TOOL_CREDIT_COSTS: Partial<Record<ToolId, number>> = {
   removeBlanks: CREDIT_COSTS.MEDIUM,
   autoRename: CREDIT_COSTS.MEDIUM,
   sanitize: CREDIT_COSTS.MEDIUM,
-  addImage: CREDIT_COSTS.MEDIUM,
+
   addStamp: CREDIT_COSTS.MEDIUM,
   extractImages: CREDIT_COSTS.MEDIUM,
   overlayPdfs: CREDIT_COSTS.MEDIUM,
@@ -74,14 +74,14 @@ export const TOOL_CREDIT_COSTS: Partial<Record<ToolId, number>> = {
   removeCertSign: CREDIT_COSTS.MEDIUM,
   scannerEffect: CREDIT_COSTS.MEDIUM,
   replaceColor: CREDIT_COSTS.MEDIUM,
-  annotate: CREDIT_COSTS.MEDIUM,
+
   formFill: CREDIT_COSTS.MEDIUM,
 
   // Large operations (5 credits)
   compress: CREDIT_COSTS.LARGE,
   convert: CREDIT_COSTS.LARGE,
   ocr: CREDIT_COSTS.LARGE,
-  certSign: CREDIT_COSTS.LARGE,
+
   timestampPdf: CREDIT_COSTS.LARGE,
 
   // Extra large operations (10 credits)

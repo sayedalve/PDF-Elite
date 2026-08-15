@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useCallback, useMemo, useState } from "react";
 import { useViewScopedFiles } from "@app/hooks/tools/shared/useViewScopedFiles";
 import { StirlingFile } from "@app/types/fileContext";

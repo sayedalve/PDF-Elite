@@ -14,7 +14,7 @@ const meta: Meta<typeof ConvertFromSvgSettings> = {
 export default meta;
 type Story = StoryObj<typeof ConvertFromSvgSettings>;
 
-function ConvertFromSvgSettingsDemo({ disabled }: { disabled?: boolean }) {
+function ConvertFromSvgSettingsDemo({ disabled }: { disabled: boolean }) {
   const [parameters, setParameters] =
     useState<ConvertParameters>(defaultParameters);
 

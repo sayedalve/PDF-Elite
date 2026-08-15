@@ -11,7 +11,7 @@ const meta = {
   component: ExtractImagesSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof ExtractImagesSettings>;
 export default meta;
@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 // stateful shim to keep the dropdown interactive in the canvas.
 const ExtractImagesSettingsDemo = (props: {
   initialParameters: ExtractImagesParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<ExtractImagesParameters>(
     props.initialParameters,

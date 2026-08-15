@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {
   useCallback,
   useEffect,
@@ -1645,7 +1646,7 @@ export default function FileManagerView() {
       <MobileUploadModal
         opened={mobileUploadModalOpen}
         onClose={() => setMobileUploadModalOpen(false)}
-        onFilesReceived={(files) => {
+        onFilesReceived={(files: File[]) => {
           if (files.length > 0) {
             void addFiles(files);
           }

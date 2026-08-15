@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof CertSignAutomationSettings>;
 export default meta;
@@ -22,8 +22,8 @@ function SettingsDemo({
   initialParameters = defaultParameters,
   disabled,
 }: {
-  initialParameters?: CertSignParameters;
-  disabled?: boolean;
+  initialParameters: CertSignParameters;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] =
     useState<CertSignParameters>(initialParameters);

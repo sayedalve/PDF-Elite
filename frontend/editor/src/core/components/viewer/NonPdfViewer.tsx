@@ -25,6 +25,7 @@ export interface ViewerProps {
   setSidebarsVisible: (v: boolean) => void;
   onClose?: () => void;
   previewFile?: File | null;
+  onToolSelect?: (toolId: string) => void;
 }
 
 export interface NonPdfViewerProps extends ViewerProps {

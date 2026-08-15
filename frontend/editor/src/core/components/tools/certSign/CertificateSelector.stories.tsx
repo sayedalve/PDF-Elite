@@ -35,9 +35,9 @@ function SelectorDemo({
   initialUploadFormat = "PKCS12",
   disabled,
 }: {
-  initialCertType?: CertificateType;
-  initialUploadFormat?: UploadFormat;
-  disabled?: boolean;
+  initialCertType: CertificateType;
+  initialUploadFormat: UploadFormat;
+  disabled: boolean;
 }) {
   const [certType, setCertType] = useState<CertificateType>(initialCertType);
   const [uploadFormat, setUploadFormat] =

@@ -18,8 +18,8 @@ function WatermarkTextStyleDemo({
   initialParameters = defaultParameters,
   disabled,
 }: {
-  initialParameters?: AddWatermarkParameters;
-  disabled?: boolean;
+  initialParameters: AddWatermarkParameters;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] =
     useState<AddWatermarkParameters>(initialParameters);

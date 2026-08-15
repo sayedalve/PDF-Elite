@@ -47,7 +47,7 @@ function ToolItemDemo({
   isSelected = false,
 }: {
   toolId: ToolId;
-  isSelected?: boolean;
+  isSelected: boolean;
 }) {
   const { toolRegistry } = useToolWorkflow();
   const tool = toolRegistry[toolId];

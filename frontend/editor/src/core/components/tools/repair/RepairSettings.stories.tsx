@@ -9,7 +9,7 @@ const meta = {
   component: RepairSettings,
   args: {
     parameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof RepairSettings>;
 export default meta;

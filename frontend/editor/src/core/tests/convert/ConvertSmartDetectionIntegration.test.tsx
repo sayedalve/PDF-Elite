@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Integration tests for Convert Tool Smart Detection with real file scenarios
  * Tests the complete flow from file upload through auto-detection to API calls

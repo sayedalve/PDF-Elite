@@ -13,21 +13,21 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Selected: Story = {
   args: {
     parameters: { ...defaultParameters, certType: "PKCS12" },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

@@ -31,10 +31,10 @@ function Demo({
   showAutomationInfo,
   withBounds = true,
 }: {
-  initialCropArea?: Rectangle;
-  disabled?: boolean;
-  showAutomationInfo?: boolean;
-  withBounds?: boolean;
+  initialCropArea: Rectangle;
+  disabled: boolean;
+  showAutomationInfo: boolean;
+  withBounds: boolean;
 }) {
   const [cropArea, setCropArea] = useState<Rectangle>(initialCropArea);
 

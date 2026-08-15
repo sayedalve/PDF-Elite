@@ -1,4 +1,5 @@
-import { Center, Loader, Stack, Text, Button } from "@mantine/core";
+import { Center, Loader, Stack, Text } from "@mantine/core";
+import { Button } from "@app/ui/Button";
 import { useTranslation } from "react-i18next";
 
 interface DesktopStartupScreenProps {

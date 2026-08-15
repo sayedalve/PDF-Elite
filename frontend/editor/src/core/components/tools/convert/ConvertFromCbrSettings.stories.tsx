@@ -11,7 +11,7 @@ const meta = {
   component: ConvertFromCbrSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof ConvertFromCbrSettings>;
 export default meta;
@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 // stateful shim to keep the checkbox interactive in the canvas.
 const ConvertFromCbrSettingsDemo = (props: {
   initialParameters: ConvertParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<ConvertParameters>(
     props.initialParameters,

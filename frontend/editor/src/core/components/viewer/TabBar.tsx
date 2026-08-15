@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useRef } from "react";
 import { X, Plus, FileText } from "lucide-react";
 

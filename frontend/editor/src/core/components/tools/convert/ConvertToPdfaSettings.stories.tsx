@@ -7,7 +7,7 @@ const meta = {
   component: ConvertToPdfaSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     selectedFiles: [],
     disabled: false,
   },

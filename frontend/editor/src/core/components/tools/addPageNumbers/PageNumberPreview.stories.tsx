@@ -13,14 +13,14 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const WithQuickGrid: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     showQuickGrid: true,
   },
 };

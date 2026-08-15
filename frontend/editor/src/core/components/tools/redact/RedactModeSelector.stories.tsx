@@ -26,8 +26,8 @@ function ModeDemo({
   disabled,
   hasAnyFiles,
 }: {
-  disabled?: boolean;
-  hasAnyFiles?: boolean;
+  disabled: boolean;
+  hasAnyFiles: boolean;
 }) {
   const [mode, setMode] = useState<RedactMode>("automatic");
   return (

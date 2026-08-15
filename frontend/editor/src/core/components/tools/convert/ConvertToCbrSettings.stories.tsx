@@ -11,7 +11,7 @@ const meta = {
   component: ConvertToCbrSettings,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof ConvertToCbrSettings>;
 export default meta;
@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 // stateful shim to keep the DPI input interactive in the canvas.
 const ConvertToCbrSettingsDemo = (props: {
   initialParameters: ConvertParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) => {
   const [parameters, setParameters] = useState<ConvertParameters>(
     props.initialParameters,

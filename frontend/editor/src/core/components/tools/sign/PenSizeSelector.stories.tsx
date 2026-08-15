@@ -15,7 +15,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function PenSizeSelectorDemo({ disabled }: { disabled?: boolean }) {
+function PenSizeSelectorDemo({ disabled }: { disabled: boolean }) {
   const [value, setValue] = useState(5);
   const [inputValue, setInputValue] = useState("5");
   return (

@@ -31,28 +31,28 @@ const withBorderParameters: PageLayoutParameters = {
 export const Default: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const WithMargins: Story = {
   args: {
     parameters: withMarginsParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const WithBorder: Story = {
   args: {
     parameters: withBorderParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

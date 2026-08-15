@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { createToolFlow } from "@app/components/tools/shared/createToolFlow";

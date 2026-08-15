@@ -26,7 +26,7 @@ function SettingsDemo({
   disabled,
 }: {
   initial: PageLayoutParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] = useState(initial);
 

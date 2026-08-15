@@ -8,7 +8,7 @@ const meta = {
   component: AdvancedOptionsStep,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     addCustomMetadata: () => {},
     removeCustomMetadata: () => {},
     updateCustomMetadata: () => {},

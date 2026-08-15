@@ -11,7 +11,7 @@ const meta = {
   component: DocumentDatesStep,
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof DocumentDatesStep>;
 export default meta;
@@ -22,9 +22,9 @@ function DocumentDatesStepDemo({
   creationDate = null,
   modificationDate = null,
 }: {
-  disabled?: boolean;
-  creationDate?: Date | null;
-  modificationDate?: Date | null;
+  disabled: boolean;
+  creationDate: Date | null;
+  modificationDate: Date | null;
 }) {
   const [parameters, setParameters] = useState<ChangeMetadataParameters>({
     ...defaultParameters,

@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     parameters: mockParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
@@ -35,14 +35,14 @@ export const SomeRestricted: Story = {
       preventPrinting: true,
       preventModify: true,
     },
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 };
 
 export const Disabled: Story = {
   args: {
     parameters: mockParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
     disabled: true,
   },
 };

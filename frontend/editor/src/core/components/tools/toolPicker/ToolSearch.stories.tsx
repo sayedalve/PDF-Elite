@@ -30,8 +30,8 @@ function ToolSearchDemo({
   mode = "filter",
   initialValue = "",
 }: {
-  mode?: "filter" | "dropdown" | "unstyled";
-  initialValue?: string;
+  mode: "filter" | "dropdown" | "unstyled";
+  initialValue: string;
 }) {
   const { toolRegistry } = useToolWorkflow();
   const [value, setValue] = useState(initialValue);

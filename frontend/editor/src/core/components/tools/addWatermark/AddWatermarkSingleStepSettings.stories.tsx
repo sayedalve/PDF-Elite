@@ -12,7 +12,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
 } satisfies Meta<typeof AddWatermarkSingleStepSettings>;
 export default meta;
@@ -24,10 +24,10 @@ function SettingsDemo({
   showFlatten,
   textOnly,
 }: {
-  initialParameters?: AddWatermarkParameters;
-  disabled?: boolean;
-  showFlatten?: boolean;
-  textOnly?: boolean;
+  initialParameters: AddWatermarkParameters;
+  disabled: boolean;
+  showFlatten: boolean;
+  textOnly: boolean;
 }) {
   const [parameters, setParameters] =
     useState<AddWatermarkParameters>(initialParameters);

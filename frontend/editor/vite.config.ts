@@ -121,8 +121,7 @@ function prerenderOgPlugin(isSaas: boolean): PluginOption {
           { type: string; source?: string | Uint8Array; fileName?: string }
         >,
       ) {
-        const { buildOgTags, injectOg } =
-          await import("./scripts/og-prerender.mjs");
+        const { injectOg } = await import("./scripts/og-prerender.mjs");
 
         const ogBase = (
           process.env.VITE_OG_BASE_URL ||

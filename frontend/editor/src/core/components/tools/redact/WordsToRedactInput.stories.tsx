@@ -17,8 +17,8 @@ function WordsToRedactInputDemo({
   initialWords = [],
   disabled,
 }: {
-  initialWords?: string[];
-  disabled?: boolean;
+  initialWords: string[];
+  disabled: boolean;
 }) {
   const [words, setWords] = useState<string[]>(initialWords);
   return (

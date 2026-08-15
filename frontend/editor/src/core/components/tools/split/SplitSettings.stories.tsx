@@ -13,7 +13,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     parameters: defaultParameters,
-    onParameterChange?: () => {},
+    onParameterChange: () => {},
   },
   decorators: [
     (S) => (
@@ -31,7 +31,7 @@ function SplitSettingsDemo({
   disabled,
 }: {
   initialParameters: SplitParameters;
-  disabled?: boolean;
+  disabled: boolean;
 }) {
   const [parameters, setParameters] =
     useState<SplitParameters>(initialParameters);

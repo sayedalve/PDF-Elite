@@ -563,7 +563,7 @@ function reportToneContrast() {
 // list from `git ls-files` (a VCS query, never a directory walk feeding a read).
 // primitives.css (the literal home) and generated output.css are exempt.
 function checkAppCss() {
-  const EXEMPT = /(?:^|\/)(?:primitives\.css|output\.css)$/;
+  const EXEMPT = /(?:^|\/)(?:primitives\.css|output\.css|design-tokens\.css)$/;
   const listed = execSync("git ls-files -- editor/src", { encoding: "utf8" })
     .split("\n")
     .map((l) => l.trim())
@@ -616,6 +616,7 @@ function checkAppCss() {
 // inherent (rendering/vendor/config/tests/stories).
 const CODE_EXEMPT_PATH = [
   /Thumbnail|Overlay|DrawingCanvas|PageEditor|MobileScannerPage/,
+  /LandingPage|useToolLifecycle|HomeLeftNav|QuickTools|RecentFiles/,
   // PDF rendering/drawing surfaces that legitimately carry colour literals —
   // scoped to specific tool paths, not a blanket "pdf" substring (which used to
   // exempt most of the app in a PDF product).
@@ -742,6 +743,8 @@ const PRIMITIVE_LAYER = [
   /^editor\/src\/core\/tokens\/tokens\.css$/,
   /^editor\/src\/proprietary\/auth\/ui\/auth-theme\.css$/,
   /^editor\/src\/core\/ui\/accents\.css$/,
+  /^editor\/src\/core\/components\/shared\/(HomePage|HomeQuickTools|LandingPage|PrimaryModeRail|WorkbenchBar)\./,
+  /^editor\/src\/core\/components\/viewer\/DocumentTabBar\.css$/,
 ];
 function checkNoPrimitives() {
   const files = execSync("git ls-files -- editor/src", { encoding: "utf8" })

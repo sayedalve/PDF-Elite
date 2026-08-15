@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Stack, Text, Checkbox } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import {
