@@ -1,0 +1,44 @@
+services:
+  pdf-elite:
+    build:
+      context: ../..
+      dockerfile: docker/embedded/Dockerfile
+    container_name: pdf-elite-Security
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080$${SYSTEM_ROOTURIPATH:-''}/api/v1/info/status | grep -q 'UP'"]
+      interval: 5s
+      timeout: 10s
+      retries: 16
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../../PDFElite/latest/data:/usr/share/tessdata:rw
+      - ../../PDFElite/latest/config:/configs:rw
+      - ../../PDFElite/latest/logs:/logs:rw
+    environment:
+      DISABLE_ADDITIONAL_FEATURES: "false"
+      SECURITY_ENABLELOGIN: "false"
+      SYSTEM_DEFAULTLOCALE: en-US
+      UI_APPNAME: pdf-elite
+      UI_HOMEDESCRIPTION: Demo site for pdf-elite Latest with Security
+      UI_APPNAMENAVBAR: pdf-elite Latest
+      SYSTEM_MAXFILESIZE: "100"
+      METRICS_ENABLED: "true"
+      SYSTEM_GOOGLEVISIBILITY: "true"
+      SHOW_SURVEY: "true"
+    networks:
+      - PDFElite-network
+
+networks:
+  PDFElite-network:
+    driver: bridge
+
+volumes:
+  PDFElite-data:
+  PDFElite-config:
+  PDFElite-logs:
